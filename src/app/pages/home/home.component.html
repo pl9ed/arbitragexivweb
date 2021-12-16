@@ -1,2 +1,13 @@
 Home Component
 <p>{{this.testString}}</p>
+
+<table class="mat-elevation-z8">
+    <th *ngFor = "let column of headers">
+        {{ column }}
+    </th>
+    <tr *ngFor = "let row of itemData">
+        <td *ngFor = "let col of headers">
+            {{row[col]}}
+        </td>
+    </tr>
+</table>
