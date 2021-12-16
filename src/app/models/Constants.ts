@@ -1,3 +1,4 @@
+import { Item } from "./Item"
 import { Region } from "./Region"
 
 export abstract class Constants {
@@ -12,11 +13,11 @@ export abstract class Constants {
             "Ultros"
     ]
     public static DEFAULT_HOMEWORLD = "lamia"
-    public static TEST_ITEM_IDS = [
-        33923,
-        36080,
-        30812,
-        36079
+    public static TEST_ITEM_IDS: Item[] = [
+        {name: "Test1", id: 33923} ,
+        {name: "Test2", id: 36080},
+        {name: "Test3", id: 30812},
+        {name: "Test4", id: 36079}
     ]
     public static GEMSTONE_ITEMS_LVL1: GemstoneItem[] = [
         {name: "Gaja Hide", id: 36242, area: Region.THAVNAIR, cost: 2},

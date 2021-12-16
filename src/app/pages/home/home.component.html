@@ -1,18 +1,12 @@
-Home Component
-
 <button (click)="fillFlipTable()">Flip Items</button>
 
 <table class="mat-elevation-z8">
     <th *ngFor = "let column of headers">
         {{ column }}
     </th>
-    <tr *ngFor = "let row of flipItemIDs">
-        <td *ngFor = "let col of headers">
-           
-        </td>
+    <tr *ngFor = "let row of dataArray; index as i">
     </tr>
 </table>
-
 
 <button (click)="getGemstoneData()">Gemstones</button>
 
