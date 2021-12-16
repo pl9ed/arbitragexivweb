@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Constants } from 'src/app/models/Constants';
+import { Constants, GemstoneItem } from 'src/app/models/Constants';
+import { GemstoneItemPrice } from 'src/app/models/GemstoneItemPrice';
 import { ItemResponse } from 'src/app/models/ItemResponse';
 import { ComparisonService } from 'src/app/services/comparison.service';
+import { UniversalisService } from 'src/app/services/universalis.service';
 
 export interface ItemRow {
   item: string,
@@ -25,7 +27,6 @@ export interface ItemRow {
 })
 export class HomeComponent implements OnInit {
 
-  testString = "My test string!"
   headers = [
     "Item",
     "ROI (NQ)",
@@ -39,29 +40,53 @@ export class HomeComponent implements OnInit {
     "Min Price World (HQ)",
     "Velocity (HQ)",
   ]
-  items: number[] = []
+  gemstoneHeaders = [
+    "Item",
+    "ID",
+    "Unit Price (NQ)",
+    "Price (NQ)",
+    "Velocity (NQ)",
+    // "Price (HQ)",
+    // "Velocity (HQ)",
+    "Region"
+  ]
+  flipItemIDs = Constants.TEST_ITEM_IDS
+  gemstoneItems: GemstoneItemPrice[] = []
 
   constructor(
     private router: Router,
-    private comparison: ComparisonService
+    private comparison: ComparisonService,
+    private mbAPI: UniversalisService
   ) {
 
   }
 
   ngOnInit() {
-    this.items = Constants.TEST_ITEM_IDS
-    this.items.forEach((id, i) => {
-      setTimeout(() => 
-      this.getData(id)
-      , 500 * i)
+
+  }
+
+  fillFlipTable() {
+    Constants.TEST_ITEM_IDS.forEach((id, i) => {
+      setTimeout(() =>
+        this.getFlipData(id)
+        , 500 * i)
     })
   }
 
-  getData(id: number): void {
-      let nqMap = this.comparison.getNQPrices(id)
-      let hqMap = this.comparison.getHQPrices(id)
+  getFlipData(id: number): void {
+    let nqMap = this.comparison.getNQPrices(id)
+    let hqMap = this.comparison.getHQPrices(id)
+  }
 
-    
+  getGemstoneData(world: string = Constants.DEFAULT_HOMEWORLD): void {
+    Constants.GEMSTONE_ITEMS_LVL1.forEach((item, i) => {
+      setTimeout(() => {
+        this.mbAPI.getItem(world, item.id).then(response => {
+          let itemInfo = new GemstoneItemPrice(item.name, item.id, response.minPriceNQ, response.nqSaleVelocity, item.area, (response.minPriceNQ / item.cost))
+          this.gemstoneItems[i] = itemInfo
+        })
+      }, 500 * i)
+    })
   }
 
 }

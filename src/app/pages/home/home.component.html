@@ -1,13 +1,33 @@
 Home Component
-<p>{{this.testString}}</p>
+
+<button (click)="fillFlipTable()">Flip Items</button>
 
 <table class="mat-elevation-z8">
     <th *ngFor = "let column of headers">
         {{ column }}
     </th>
-    <tr *ngFor = "let row of itemData">
+    <tr *ngFor = "let row of flipItemIDs">
         <td *ngFor = "let col of headers">
-            {{row[col]}}
+           
         </td>
+    </tr>
+</table>
+
+
+<button (click)="getGemstoneData()">Gemstones</button>
+
+<table class="mat-elevation-z8">
+    <th *ngFor = "let column of gemstoneHeaders">
+        {{ column }}
+    </th>
+    <tr *ngFor = "let row of gemstoneItems">
+        <td>{{row.name}}</td>
+        <td>{{row.id}}</td>
+        <td>{{row.unitCost}}</td>
+        <td>{{row.minPriceNQ}}</td>
+        <td>{{row.velocityNQ}}</td>
+        <!-- <td>{{row.minPriceHQ}}</td>
+        <td>{{row.velocityHQ}}</td> -->
+        <td>{{row.areaName}}</td>
     </tr>
 </table>
