@@ -47,7 +47,7 @@ export class FlipComponent implements OnInit {
   fillFlipTable() {
     this.dataArray = []
     let i = 0;
-    let interval = this.flipItemIDs.length * 40
+    let interval = 25 + (this.flipItemIDs.length * 40)
     for (const item of this.flipItemIDs) {
       setTimeout(async () => {
         let prices = await this.getPrices(item, Constants.DEFAULT_HOMEWORLD)
