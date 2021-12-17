@@ -36,7 +36,24 @@ export abstract class Constants {
         { name: "Endtide Aethersand", id: 36226 }
     ]
     public static CRAFTING_GEAR_IDS: Item[] = [
-
+        { name: "Chondrite Saw", id: 35383 },
+        { name: "Chondrite Cross-pein Hammer", id: 35384 },
+        { name: "Chondrite Raising Hammer", id: 35385 },
+        { name: "Chondrite Lapidary Hammer", id: 35386 },
+        { name: "Chondrite Round Knife", id: 35387 },
+        { name: "Chondrite Needle", id: 35388 },
+        { name: "Chondrite Alembic", id: 35389 },
+        { name: "Chondrite Bomb Frypan", id: 35390 },
+        { name: "Chondrite Pickaxe", id: 35391 },
+        { name: "Chondrite Hatchet", id: 35392 },
+        { name: "Chondrite Claw Hammer", id: 35394 },
+        { name: "Chondrite File", id: 35395 },
+        { name: "Chondrite Pliers", id: 35396 },
+        { name: "Chondrite Awl", id: 35398 },
+        { name: "Chondrite Mortar", id: 35400 },
+        { name: "Chondrite Culinary Knife", id: 35401 },
+        { name: "Chondrite Sledgehammer", id: 35402 },
+        { name: "Chondrite Garden Scythe", id: 35403 },
     ]
     public static GEMSTONE_ITEMS_LVL1: GemstoneItem[] = [
         { name: "Gaja Hide", id: 36242, area: Region.THAVNAIR, cost: 2 },

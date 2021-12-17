@@ -1,6 +1,15 @@
-<button (click)="fillFlipTable()">Flip Items</button>
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="flipTableDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      {{ this.dropdownText }}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" (click)="togglePrices(0)">{{ dropdownTextOptions[0] }}</a>
+      <a class="dropdown-item" (click)="togglePrices(1)">{{ dropdownTextOptions[1] }}</a>
+      <a class="dropdown-item" (click)="togglePrices(2)">{{ dropdownTextOptions[2] }}</a>
+    </div>
+  </div>
 
-<table class="mat-elevation-z8">
+<table class="table">
     <th *ngFor = "let column of headers">
         {{ column }}
     </th>

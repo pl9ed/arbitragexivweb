@@ -27,6 +27,18 @@ export interface ItemRow {
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  dropdownText = "Select Items"
+  dropdownTextOptions = [
+    "Raid Consumables",
+    "Crafting Mats",
+    "Crafting Weapons"
+  ]
+  toggleItems = [
+    Constants.CONSUMABLE_ITEM_IDS,
+    Constants.CRAFTING_ITEM_IDS,
+    Constants.CRAFTING_GEAR_IDS
+  ]
+
   homeworld = Constants.DEFAULT_HOMEWORLD
   headers = [
     'Item',
@@ -57,12 +69,15 @@ export class HomeComponent implements OnInit {
   ];
   gemstoneItems: GemstoneItemPrice[] = [];
 
-  constructor(private router: Router, private mbAPI: UniversalisService) {}
+  constructor(private router: Router, private mbAPI: UniversalisService) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   fillFlipTable() {
+    this.dataArray = []
     let i = 0;
+    let interval = this.flipItemIDs.length * 40
+    console.log(`${interval}`)
     for (const item of this.flipItemIDs) {
       setTimeout(async () => {
         let prices = await this.getPrices(item, Constants.DEFAULT_HOMEWORLD)
@@ -78,7 +93,6 @@ export class HomeComponent implements OnInit {
         let nqVelocity: number = this.velocityMap.get(item.name)[0]
         let hqVelocity: number = this.velocityMap.get(item.name)[1]
 
-
         let row = [
           item.name,
           nqROI.toFixed(2),
@@ -91,12 +105,18 @@ export class HomeComponent implements OnInit {
           hqPrices.get(this.homeworld),
           hqWorld,
           hqVelocity.toFixed(3)
-      ]
+        ]
         this.dataArray.push(row)
 
-      }, i * 200);
+      }, i * interval);
       i++;
     }
+  }
+
+  togglePrices(index: number) {
+    this.flipItemIDs = this.toggleItems[index]
+    this.dropdownText = this.dropdownTextOptions[index]
+    this.fillFlipTable()
   }
 
   async getPrices(item: Item, homeworld: string): Promise<Map<string, number>[]> {
@@ -115,9 +135,9 @@ export class HomeComponent implements OnInit {
     // remove with no price
     let filteredNQ = new Map<string, number>([...nqMap].filter(([k, v]) => v > 0))
     let filteredHQ = new Map<string, number>([...hqMap].filter(([k, v]) => v > 0))
-    
-    let sortedNQ = new Map<string, number>([...filteredNQ.entries()].sort((a,b) => a[1] - b[1]))
-    let sortedHQ = new Map<string, number>([...filteredHQ.entries()].sort((a,b) => a[1] - b[1]))
+
+    let sortedNQ = new Map<string, number>([...filteredNQ.entries()].sort((a, b) => a[1] - b[1]))
+    let sortedHQ = new Map<string, number>([...filteredHQ.entries()].sort((a, b) => a[1] - b[1]))
 
     return [sortedNQ, sortedHQ]
   }
