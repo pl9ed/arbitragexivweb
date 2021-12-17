@@ -27,6 +27,7 @@ export interface ItemRow {
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  homeworld = Constants.DEFAULT_HOMEWORLD
   headers = [
     'Item',
     'ROI (NQ)',
@@ -40,6 +41,10 @@ export class HomeComponent implements OnInit {
     'Min Price World (HQ)',
     'Velocity (HQ)',
   ];
+  velocityMap: Map<string, number[]> = new Map<string, number[]>();
+  dataArray: any[] = [];
+  flipItemIDs = Constants.TEST_ITEM_IDS;
+
   gemstoneHeaders = [
     'Item',
     'ID',
@@ -50,8 +55,6 @@ export class HomeComponent implements OnInit {
     // "Velocity (HQ)",
     'Region',
   ];
-  dataArray: ItemRow[] = [];
-  flipItemIDs = Constants.TEST_ITEM_IDS;
   gemstoneItems: GemstoneItemPrice[] = [];
 
   constructor(private router: Router, private mbAPI: UniversalisService) {}
@@ -61,14 +64,42 @@ export class HomeComponent implements OnInit {
   fillFlipTable() {
     let i = 0;
     for (const item of Constants.TEST_ITEM_IDS) {
-      setTimeout(() => {
-        this.getPrices(item, Constants.DEFAULT_HOMEWORLD)
+      setTimeout(async () => {
+        let prices = await this.getPrices(item, Constants.DEFAULT_HOMEWORLD)
+        let nqPrices = prices[0]
+        let hqPrices = prices[1]
+
+        const nqWorld = [...nqPrices.keys()][0]
+        const hqWorld = [...hqPrices.keys()][0]
+
+        let nqROI = nqPrices.get(this.homeworld) / nqPrices.get(nqWorld)
+        let hqROI = hqPrices.get(this.homeworld) / hqPrices.get(hqWorld)
+
+        let nqVelocity: number = this.velocityMap?.get(item.name)[0]
+        let hqVelocity: number = this.velocityMap?.get(item.name)[1]
+
+
+        let row = [
+          item.name,
+          nqROI.toFixed(2),
+          nqPrices.get(nqWorld),
+          nqPrices.get(this.homeworld),
+          nqWorld,
+          nqVelocity.toFixed(3),
+          hqROI.toFixed(2),
+          hqPrices.get(hqWorld),
+          hqPrices.get(this.homeworld),
+          hqWorld,
+          hqVelocity.toFixed(3)
+      ]
+        this.dataArray.push(row)
+
       }, i * 200);
       i++;
     }
   }
 
-  async getPrices(item: Item, homeworld: string) {
+  async getPrices(item: Item, homeworld: string): Promise<Map<string, number>[]> {
     let nqMap = new Map<string, number>();
     let hqMap = new Map<string, number>();
 
@@ -76,12 +107,19 @@ export class HomeComponent implements OnInit {
       let world = Constants.PRIMAL[i]
       let prices = await this.mbAPI.getItem(world, item.id)
       nqMap.set(world, prices.minPriceNQ)
+      hqMap.set(world, prices.minPriceHQ)
+      this.velocityMap.set(item.name, [prices.nqSaleVelocity, prices.hqSaleVelocity])
       await this.sleep(500)
     }
+
+    // remove with no price
+    let filteredNQ = new Map<string, number>([...nqMap].filter(([k, v]) => v > 0))
+    let filteredHQ = new Map<string, number>([...hqMap].filter(([k, v]) => v > 0))
     
-    let sortedNQ = new Map<string, number>([...nqMap.entries()].sort((a,b) => b[1] - a[1]))
-    console.log(sortedNQ)
-    console.log(`${item.name} , ${sortedNQ.get(Constants.DEFAULT_HOMEWORLD)} , ${[...sortedNQ.keys()][0]}`)
+    let sortedNQ = new Map<string, number>([...filteredNQ.entries()].sort((a,b) => a[1] - b[1]))
+    let sortedHQ = new Map<string, number>([...filteredHQ.entries()].sort((a,b) => a[1] - b[1]))
+
+    return [sortedNQ, sortedHQ]
   }
 
   // GEMSTONE

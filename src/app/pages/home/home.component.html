@@ -5,6 +5,9 @@
         {{ column }}
     </th>
     <tr *ngFor = "let row of dataArray; index as i">
+        <td *ngFor = "let data of row">
+            {{ data }}
+        </td>
     </tr>
 </table>
 
