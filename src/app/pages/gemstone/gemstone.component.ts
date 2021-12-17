@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Constants } from 'src/app/models/Constants';
 import { GemstoneItemPrice } from 'src/app/models/GemstoneItemPrice';
+import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
 
 @Component({
@@ -23,15 +24,15 @@ export class GemstoneComponent implements OnInit {
   ];
   gemstoneItems: GemstoneItemPrice[] = [];
 
-  constructor(private router: Router, private mbAPI: UniversalisService) { }
+  constructor(private router: Router, private mbAPI: UniversalisService, private settings: SettingsService) { }
 
   ngOnInit(): void {
   }
 
-  getGemstoneData(world: string = Constants.DEFAULT_HOMEWORLD): void {
+  getGemstoneData(): void {
     Constants.GEMSTONE_ITEMS_LVL1.forEach((item, i) => {
       setTimeout(() => {
-        this.mbAPI.getItem(world, item.id).then((response) => {
+        this.mbAPI.getItem(this.settings.homeworld, item.id).then((response) => {
           let itemInfo = new GemstoneItemPrice(
             item.name,
             item.id,
