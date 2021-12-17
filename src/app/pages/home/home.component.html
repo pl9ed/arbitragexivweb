@@ -1,0 +1,39 @@
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="flipTableDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      {{ this.dropdownText }}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" (click)="togglePrices(0)">{{ dropdownTextOptions[0] }}</a>
+      <a class="dropdown-item" (click)="togglePrices(1)">{{ dropdownTextOptions[1] }}</a>
+      <a class="dropdown-item" (click)="togglePrices(2)">{{ dropdownTextOptions[2] }}</a>
+    </div>
+  </div>
+
+<table class="table">
+    <th *ngFor = "let column of headers">
+        {{ column }}
+    </th>
+    <tr *ngFor = "let row of dataArray; index as i">
+        <td *ngFor = "let data of row">
+            {{ data }}
+        </td>
+    </tr>
+</table>
+
+<button class="btn btn-secondary" (click)="getGemstoneData()">Get Gemstone Prices</button>
+
+<table class="table">
+    <th *ngFor = "let column of gemstoneHeaders">
+        {{ column }}
+    </th>
+    <tr *ngFor = "let row of gemstoneItems">
+        <td>{{row.name}}</td>
+        <td>{{row.id}}</td>
+        <td>{{row.unitCost}}</td>
+        <td>{{row.minPriceNQ}}</td>
+        <td>{{row.velocityNQ}}</td>
+        <!-- <td>{{row.minPriceHQ}}</td>
+        <td>{{row.velocityHQ}}</td> -->
+        <td>{{row.areaName}}</td>
+    </tr>
+</table>

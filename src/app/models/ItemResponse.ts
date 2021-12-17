@@ -1,4 +1,7 @@
-type ItemResponse = {
-    id: Number,
-    minPrice: Number
+export interface ItemResponse {
+    id: number,
+    minPriceNQ: number,
+    minPriceHQ: number,
+    nqSaleVelocity: number,
+    hqSaleVelocity: number
 }

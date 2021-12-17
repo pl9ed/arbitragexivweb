@@ -1,4 +1,4 @@
-type Item = {
-    id: number,
-    name: string
+export interface Item {
+    name: string,
+    id: number
 }
