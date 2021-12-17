@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
+import { SettingsService } from 'src/app/services/settings.service';
+import { Constants } from 'src/app/models/Constants';
 
 @Component({
   selector: 'app-navbar',
@@ -15,17 +17,18 @@ export class NavbarComponent implements OnInit {
   activeLink = this.links[0];
   background: ThemePalette = undefined;
 
-  constructor() { }
+  homeworldBtnDefaultText = "Select Home World"
+  homeworldSelection = Constants.PRIMAL
+  homeworldBtnText = this.homeworldBtnDefaultText
+
+  constructor(private settings: SettingsService) { }
 
   ngOnInit(): void {
   }
 
-  toggleBackground() {
-    this.background = this.background ? undefined : 'primary';
-  }
-
-  addLink() {
-    this.links.push(`Link ${this.links.length + 1}`);
+  setHomeworld(world: string) {
+    this.homeworldBtnText = world
+    this.settings.homeworld = world
   }
 
 }
