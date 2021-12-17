@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
   ];
   velocityMap: Map<string, number[]> = new Map<string, number[]>();
   dataArray: any[] = [];
-  flipItemIDs = Constants.TEST_ITEM_IDS;
+  flipItemIDs = Constants.CONSUMABLE_ITEM_IDS;
 
   gemstoneHeaders = [
     'Item',
@@ -63,7 +63,7 @@ export class HomeComponent implements OnInit {
 
   fillFlipTable() {
     let i = 0;
-    for (const item of Constants.TEST_ITEM_IDS) {
+    for (const item of this.flipItemIDs) {
       setTimeout(async () => {
         let prices = await this.getPrices(item, Constants.DEFAULT_HOMEWORLD)
         let nqPrices = prices[0]
@@ -75,8 +75,8 @@ export class HomeComponent implements OnInit {
         let nqROI = nqPrices.get(this.homeworld) / nqPrices.get(nqWorld)
         let hqROI = hqPrices.get(this.homeworld) / hqPrices.get(hqWorld)
 
-        let nqVelocity: number = this.velocityMap?.get(item.name)[0]
-        let hqVelocity: number = this.velocityMap?.get(item.name)[1]
+        let nqVelocity: number = this.velocityMap.get(item.name)[0]
+        let hqVelocity: number = this.velocityMap.get(item.name)[1]
 
 
         let row = [
@@ -128,6 +128,7 @@ export class HomeComponent implements OnInit {
     Constants.GEMSTONE_ITEMS_LVL1.forEach((item, i) => {
       setTimeout(() => {
         this.mbAPI.getItem(world, item.id).then((response) => {
+          console.log(response)
           let itemInfo = new GemstoneItemPrice(
             item.name,
             item.id,
