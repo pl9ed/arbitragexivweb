@@ -5,11 +5,11 @@ import { Item } from 'src/app/models/Item';
 import { UniversalisService } from 'src/app/services/universalis.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  selector: 'app-flip',
+  templateUrl: './flip.component.html',
+  styleUrls: ['./flip.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class FlipComponent implements OnInit {
   dropdownText = "Select Items"
   dropdownTextOptions = [
     "Raid Consumables",
