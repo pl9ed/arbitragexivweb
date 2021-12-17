@@ -1,10 +1,10 @@
 <button class="btn btn-secondary" (click)="getGemstoneData()">Get Gemstone Prices</button>
 
 <table class="table">
-    <th *ngFor = "let column of gemstoneHeaders">
+    <th *ngFor="let column of gemstoneHeaders">
         {{ column }}
     </th>
-    <tr *ngFor = "let row of gemstoneItems">
+    <tr *ngFor="let row of gemstoneItems">
         <td>{{row.name}}</td>
         <td>{{row.id}}</td>
         <td>{{row.unitCost}}</td>
