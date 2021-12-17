@@ -8,6 +8,7 @@ import { GemstoneComponent } from './pages/gemstone/gemstone.component';
 import { NavbarComponent } from './nav/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
+import { HomeComponent } from './pages/home/home.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { MatSliderModule } from '@angular/material/slider';
     FlipComponent,
     GemstoneComponent,
     NavbarComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
