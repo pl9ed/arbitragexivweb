@@ -41,18 +41,6 @@ export class HomeComponent implements OnInit {
   dataArray: any[] = [];
   flipItemIDs = Constants.CONSUMABLE_ITEM_IDS;
 
-  gemstoneHeaders = [
-    'Item',
-    'ID',
-    'Unit Price (NQ)',
-    'Price (NQ)',
-    'Velocity (NQ)',
-    // "Price (HQ)",
-    // "Velocity (HQ)",
-    'Region',
-  ];
-  gemstoneItems: GemstoneItemPrice[] = [];
-
   constructor(private router: Router, private mbAPI: UniversalisService) { }
 
   ngOnInit() { }
@@ -126,25 +114,6 @@ export class HomeComponent implements OnInit {
   }
 
   // GEMSTONE
-
-  getGemstoneData(world: string = Constants.DEFAULT_HOMEWORLD): void {
-    Constants.GEMSTONE_ITEMS_LVL1.forEach((item, i) => {
-      setTimeout(() => {
-        this.mbAPI.getItem(world, item.id).then((response) => {
-          let itemInfo = new GemstoneItemPrice(
-            item.name,
-            item.id,
-            response.minPriceNQ,
-            response.nqSaleVelocity,
-            item.area,
-            response.minPriceNQ / item.cost
-          );
-          this.gemstoneItems[i] = itemInfo;
-        });
-      }, 500 * i);
-    });
-  }
-
   sleep(timer: number) {
     return new Promise(resolve => setTimeout(resolve, timer))
   }
