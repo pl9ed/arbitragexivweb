@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Constants, GemstoneItem } from 'src/app/models/Constants';
-import { GemstoneItemPrice } from 'src/app/models/GemstoneItemPrice';
 import { Item } from 'src/app/models/Item';
 import { UniversalisService } from 'src/app/services/universalis.service';
 
@@ -58,11 +57,11 @@ export class HomeComponent implements OnInit {
         const nqWorld = [...nqPrices.keys()][0]
         const hqWorld = [...hqPrices.keys()][0]
 
-        let nqROI = nqPrices.get(this.homeworld) / nqPrices.get(nqWorld)
-        let hqROI = hqPrices.get(this.homeworld) / hqPrices.get(hqWorld)
+        let nqROI = (nqPrices.get(this.homeworld) || 0) / (nqPrices.get(nqWorld) || 0)
+        let hqROI = (hqPrices.get(this.homeworld) || 0) / (hqPrices.get(hqWorld) || 0)
 
-        let nqVelocity: number = this.velocityMap.get(item.name)[0]
-        let hqVelocity: number = this.velocityMap.get(item.name)[1]
+        let nqVelocity: number = (this.velocityMap.get(item.name) || [])[0]
+        let hqVelocity: number = (this.velocityMap.get(item.name) || [])[1]
 
         let row = [
           item.name,
