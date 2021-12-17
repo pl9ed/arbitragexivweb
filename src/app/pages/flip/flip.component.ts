@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Constants, GemstoneItem } from 'src/app/models/Constants';
-import { GemstoneItemPrice } from 'src/app/models/GemstoneItemPrice';
 import { Item } from 'src/app/models/Item';
 import { UniversalisService } from 'src/app/services/universalis.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  selector: 'app-flip',
+  templateUrl: './flip.component.html',
+  styleUrls: ['./flip.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class FlipComponent implements OnInit {
   dropdownText = "Select Items"
   dropdownTextOptions = [
     "Raid Consumables",
@@ -41,18 +40,6 @@ export class HomeComponent implements OnInit {
   dataArray: any[] = [];
   flipItemIDs = Constants.CONSUMABLE_ITEM_IDS;
 
-  gemstoneHeaders = [
-    'Item',
-    'ID',
-    'Unit Price (NQ)',
-    'Price (NQ)',
-    'Velocity (NQ)',
-    // "Price (HQ)",
-    // "Velocity (HQ)",
-    'Region',
-  ];
-  gemstoneItems: GemstoneItemPrice[] = [];
-
   constructor(private router: Router, private mbAPI: UniversalisService) { }
 
   ngOnInit() { }
@@ -70,11 +57,11 @@ export class HomeComponent implements OnInit {
         const nqWorld = [...nqPrices.keys()][0]
         const hqWorld = [...hqPrices.keys()][0]
 
-        let nqROI = nqPrices.get(this.homeworld) / nqPrices.get(nqWorld)
-        let hqROI = hqPrices.get(this.homeworld) / hqPrices.get(hqWorld)
+        let nqROI = (nqPrices.get(this.homeworld) || 0) / (nqPrices.get(nqWorld) || 0)
+        let hqROI = (hqPrices.get(this.homeworld) || 0) / (hqPrices.get(hqWorld) || 0)
 
-        let nqVelocity: number = this.velocityMap.get(item.name)[0]
-        let hqVelocity: number = this.velocityMap.get(item.name)[1]
+        let nqVelocity: number = (this.velocityMap.get(item.name) || [])[0]
+        let hqVelocity: number = (this.velocityMap.get(item.name) || [])[1]
 
         let row = [
           item.name,
@@ -126,25 +113,6 @@ export class HomeComponent implements OnInit {
   }
 
   // GEMSTONE
-
-  getGemstoneData(world: string = Constants.DEFAULT_HOMEWORLD): void {
-    Constants.GEMSTONE_ITEMS_LVL1.forEach((item, i) => {
-      setTimeout(() => {
-        this.mbAPI.getItem(world, item.id).then((response) => {
-          let itemInfo = new GemstoneItemPrice(
-            item.name,
-            item.id,
-            response.minPriceNQ,
-            response.nqSaleVelocity,
-            item.area,
-            response.minPriceNQ / item.cost
-          );
-          this.gemstoneItems[i] = itemInfo;
-        });
-      }, 500 * i);
-    });
-  }
-
   sleep(timer: number) {
     return new Promise(resolve => setTimeout(resolve, timer))
   }
