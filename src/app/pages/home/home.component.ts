@@ -68,6 +68,24 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  async getPrices(item: Item, homeworld: string) {
+    let nqMap = new Map<string, number>();
+    let hqMap = new Map<string, number>();
+
+    for (let i = 0; i < Constants.PRIMAL.length; i++) {
+      let world = Constants.PRIMAL[i]
+      let prices = await this.mbAPI.getItem(world, item.id)
+      nqMap.set(world, prices.minPriceNQ)
+      await this.sleep(500)
+    }
+    
+    let sortedNQ = new Map<string, number>([...nqMap.entries()].sort((a,b) => b[1] - a[1]))
+    console.log(sortedNQ)
+    console.log(`${item.name} , ${sortedNQ.get(Constants.DEFAULT_HOMEWORLD)} , ${[...sortedNQ.keys()][0]}`)
+  }
+
+  // GEMSTONE
+
   getGemstoneData(world: string = Constants.DEFAULT_HOMEWORLD): void {
     Constants.GEMSTONE_ITEMS_LVL1.forEach((item, i) => {
       setTimeout(() => {
@@ -84,22 +102,6 @@ export class HomeComponent implements OnInit {
         });
       }, 500 * i);
     });
-  }
-
-  async getPrices(item: Item, homeworld: string) {
-    let nqMap = new Map<string, number>();
-    let hqMap = new Map<string, number>();
-
-    for (let i = 0; i < Constants.PRIMAL.length; i++) {
-      let world = Constants.PRIMAL[i]
-      let prices = await this.mbAPI.getItem(world, item.id)
-      nqMap.set(world, prices.minPriceNQ)
-      this.sleep(500)
-    }
-    
-    console.log(nqMap);
-    let sortedNQ = new Map<string, number>([...nqMap.entries()].sort((a,b) => b[1] - a[1]))
-    console.log(sortedNQ)
   }
 
   sleep(timer: number) {

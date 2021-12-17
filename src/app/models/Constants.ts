@@ -12,7 +12,7 @@ export abstract class Constants {
             "Leviathan",
             "Ultros"
     ]
-    public static DEFAULT_HOMEWORLD = "lamia"
+    public static DEFAULT_HOMEWORLD = "Lamia"
     public static TEST_ITEM_IDS: Item[] = [
         {name: "Test1", id: 33923} ,
         {name: "Test2", id: 36080},
