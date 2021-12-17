@@ -17,7 +17,6 @@ export class UniversalisService {
 
   async getItem(world: string, id: Number): Promise<ItemResponse> {
     let url = `${this.baseURL}/api/${world}/${id}`
-    console.log(`Making request to ${url}`)
     return this.http.get<ItemResponse>(url).toPromise()
   }
 

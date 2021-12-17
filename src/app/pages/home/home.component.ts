@@ -3,23 +3,7 @@ import { Router } from '@angular/router';
 import { Constants, GemstoneItem } from 'src/app/models/Constants';
 import { GemstoneItemPrice } from 'src/app/models/GemstoneItemPrice';
 import { Item } from 'src/app/models/Item';
-import { ItemResponse } from 'src/app/models/ItemResponse';
-import { ComparisonService } from 'src/app/services/comparison.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
-
-export interface ItemRow {
-  item: string;
-  nqROI: number;
-  nqMinPrice: number;
-  nqHomePrice: number;
-  nqMinPriceWorld: string;
-  nqVelocity: number;
-  hqROI: number;
-  hqMinPrice: number;
-  hqHomePrice: number;
-  hqMinPriceWorld: string;
-  hqVelocity: number;
-}
 
 @Component({
   selector: 'app-home',
@@ -77,7 +61,6 @@ export class HomeComponent implements OnInit {
     this.dataArray = []
     let i = 0;
     let interval = this.flipItemIDs.length * 40
-    console.log(`${interval}`)
     for (const item of this.flipItemIDs) {
       setTimeout(async () => {
         let prices = await this.getPrices(item, Constants.DEFAULT_HOMEWORLD)
@@ -148,7 +131,6 @@ export class HomeComponent implements OnInit {
     Constants.GEMSTONE_ITEMS_LVL1.forEach((item, i) => {
       setTimeout(() => {
         this.mbAPI.getItem(world, item.id).then((response) => {
-          console.log(response)
           let itemInfo = new GemstoneItemPrice(
             item.name,
             item.id,

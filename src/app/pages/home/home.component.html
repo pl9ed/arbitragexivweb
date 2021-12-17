@@ -20,9 +20,9 @@
     </tr>
 </table>
 
-<button (click)="getGemstoneData()">Gemstones</button>
+<button class="btn btn-secondary" (click)="getGemstoneData()">Get Gemstone Prices</button>
 
-<table class="mat-elevation-z8">
+<table class="table">
     <th *ngFor = "let column of gemstoneHeaders">
         {{ column }}
     </th>
