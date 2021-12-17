@@ -10,5 +10,13 @@
       <a class="nav-item nav-link" [routerLinkActive]="['active']" [routerLink]="['gemstone']">Gemstones</a>
     </div>
   </div>
-  <p class="text-right font-weight-bold text-white" >Homeworld: {{ this.settings.homeworld }}</p>
+  <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="homeworldBtn" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        {{ this.homeworldBtnText }}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
+        <a class="dropdown-item" *ngFor="let world of this.homeworldSelection" (click)="setHomeworld(world)">{{ world }}</a>
+    </div>
+</div>
 </nav>

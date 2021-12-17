@@ -10,18 +10,12 @@ import { SettingsService } from 'src/app/services/settings.service';
 })
 export class HomeComponent implements OnInit {
 
-  homeworldBtnDefaultText = "Select Home World"
-  homeworldSelection = Constants.PRIMAL
-  homeworldBtnText = this.homeworldBtnDefaultText
+
 
   constructor(private router: Router, private settings: SettingsService) { }
 
   ngOnInit(): void {
   }
 
-  setHomeworld(world: string) {
-    this.homeworldBtnText = world
-    this.settings.homeworld = world
-  }
 
 }
