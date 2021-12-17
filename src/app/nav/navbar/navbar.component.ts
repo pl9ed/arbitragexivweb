@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
+import { SettingsService } from 'src/app/services/settings.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +16,7 @@ export class NavbarComponent implements OnInit {
   activeLink = this.links[0];
   background: ThemePalette = undefined;
 
-  constructor() { }
+  constructor(private settings: SettingsService) { }
 
   ngOnInit(): void {
   }

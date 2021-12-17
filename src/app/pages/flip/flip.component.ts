@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Constants, GemstoneItem } from 'src/app/models/Constants';
+import { Constants } from 'src/app/models/Constants';
 import { Item } from 'src/app/models/Item';
+import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
 
 @Component({
@@ -22,7 +23,6 @@ export class FlipComponent implements OnInit {
     Constants.CRAFTING_GEAR_IDS
   ]
 
-  homeworld = Constants.DEFAULT_HOMEWORLD
   headers = [
     'Item',
     'ROI (NQ)',
@@ -40,7 +40,7 @@ export class FlipComponent implements OnInit {
   dataArray: any[] = [];
   flipItemIDs = Constants.CONSUMABLE_ITEM_IDS;
 
-  constructor(private router: Router, private mbAPI: UniversalisService) { }
+  constructor(private router: Router, private mbAPI: UniversalisService, private settings: SettingsService) { }
 
   ngOnInit() { }
 
@@ -57,8 +57,8 @@ export class FlipComponent implements OnInit {
         const nqWorld = [...nqPrices.keys()][0]
         const hqWorld = [...hqPrices.keys()][0]
 
-        let nqROI = (nqPrices.get(this.homeworld) || 0) / (nqPrices.get(nqWorld) || 0)
-        let hqROI = (hqPrices.get(this.homeworld) || 0) / (hqPrices.get(hqWorld) || 0)
+        let nqROI = (nqPrices.get(this.settings.homeworld) || 0) / (nqPrices.get(nqWorld) || 0)
+        let hqROI = (hqPrices.get(this.settings.homeworld) || 0) / (hqPrices.get(hqWorld) || 0)
 
         let nqVelocity: number = (this.velocityMap.get(item.name) || [])[0]
         let hqVelocity: number = (this.velocityMap.get(item.name) || [])[1]
@@ -67,12 +67,12 @@ export class FlipComponent implements OnInit {
           item.name,
           nqROI.toFixed(2),
           nqPrices.get(nqWorld),
-          nqPrices.get(this.homeworld),
+          nqPrices.get(this.settings.homeworld),
           nqWorld,
           nqVelocity.toFixed(3),
           hqROI.toFixed(2),
           hqPrices.get(hqWorld),
-          hqPrices.get(this.homeworld),
+          hqPrices.get(this.settings.homeworld),
           hqWorld,
           hqVelocity.toFixed(3)
         ]
