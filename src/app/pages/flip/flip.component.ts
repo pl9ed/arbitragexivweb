@@ -15,12 +15,14 @@ export class FlipComponent implements OnInit {
   dropdownTextOptions = [
     "Raid Consumables",
     "Crafting Mats",
-    "Crafting Weapons"
+    "Crafting Weapons",
+    "Materia"
   ]
   toggleItems = [
     Constants.CONSUMABLE_ITEM_IDS,
     Constants.CRAFTING_ITEM_IDS,
-    Constants.CRAFTING_GEAR_IDS
+    Constants.CRAFTING_GEAR_IDS,
+    Constants.MATERIA
   ]
 
   headers = [

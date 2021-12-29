@@ -71,6 +71,18 @@ export abstract class Constants {
         { name: "Bicolor Gemstone Voucher", id: 35833, area: Region.OLD_SHARLAYAN, cost: 100 }
 
     ]
+    public static MATERIA: Item[] = [
+        { name: "Savage Aim (Crit) IX", id: 33919},
+        { name: "Savage Aim (Crit) X", id: 33932},
+        { name: "Heavens' Eye (DH) IX", id: 33918},
+        { name: "Heavens' Eye (DH) X", id: 33931},
+        { name: "Savage Might (Det) IX", id: 33920},
+        { name: "Savage Might (Det) X", id: 33933},
+        { name: "Quicktongue (SpS) IX", id: 33929},
+        { name: "Quicktongue (SpS) X", id: 33942},
+        { name: "Quickarm (SkS) IX", id: 33928},
+        { name: "Quickarm (SkS) X", id: 33941}
+    ]
 }
 
 export interface GemstoneItem {
