@@ -83,6 +83,10 @@ export abstract class Constants {
         { name: "Quickarm (SkS) IX", id: 33928},
         { name: "Quickarm (SkS) X", id: 33941}
     ]
+
+    public static DEFAULT_PRICECHECK_ITEMS: Item[] = Constants.MATERIA.concat([
+        
+    ])
 }
 
 export interface GemstoneItem {

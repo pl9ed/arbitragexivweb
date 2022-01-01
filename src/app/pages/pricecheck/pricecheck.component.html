@@ -1,5 +1,6 @@
 <input #itemName (keyup.enter)="addItem(itemName.value, itemID.value)">
-<input #itemID (keyup.enter)="addItem(itemName.value, itemID.value)">
+<input #itemID type="number" (keyup.enter)="addItem(itemName.value, itemID.value)">
 <button (click)="clearItems()">Clear Items</button>
+<button (click)="loadDefaults()">Load Defaults</button>
 <p>{{itemName.value}} - {{itemID.value}}</p>
 <li *ngFor="let item of items; let i = index">{{i}} {{item.name}}</li>
