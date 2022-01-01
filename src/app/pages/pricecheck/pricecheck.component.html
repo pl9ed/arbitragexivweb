@@ -1,1 +1,5 @@
-<p>pricecheck works!</p>
+<input #itemName (keyup.enter)="addItem(itemName.value, itemID.value)">
+<input #itemID (keyup.enter)="addItem(itemName.value, itemID.value)">
+<button (click)="clearItems()">Clear Items</button>
+<p>{{itemName.value}} - {{itemID.value}}</p>
+<li *ngFor="let item of items; let i = index">{{i}} {{item.name}}</li>
