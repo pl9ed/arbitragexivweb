@@ -101,7 +101,7 @@ export class FlipComponent implements OnInit {
       nqMap.set(world, prices.minPriceNQ)
       hqMap.set(world, prices.minPriceHQ)
       this.velocityMap.set(item.name, [prices.nqSaleVelocity, prices.hqSaleVelocity])
-      await this.sleep(500)
+      await this.mbAPI.sleep(500)
     }
 
     // remove with no price
@@ -112,10 +112,5 @@ export class FlipComponent implements OnInit {
     let sortedHQ = new Map<string, number>([...filteredHQ.entries()].sort((a, b) => a[1] - b[1]))
 
     return [sortedNQ, sortedHQ]
-  }
-
-  // GEMSTONE
-  sleep(timer: number) {
-    return new Promise(resolve => setTimeout(resolve, timer))
   }
 }

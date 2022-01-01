@@ -20,4 +20,8 @@ export class UniversalisService {
     return this.http.get<ItemResponse>(url).toPromise()
   }
 
+  sleep(timer: number) {
+    return new Promise(resolve => setTimeout(resolve, timer))
+  }
+
 }
