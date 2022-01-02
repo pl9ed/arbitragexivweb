@@ -4,6 +4,7 @@ import { Constants } from 'src/app/models/Constants';
 import { Item } from 'src/app/models/Item';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
+import { XivAPIService } from 'src/app/services/xiv-api.service';
 
 @Component({
   selector: 'app-pricecheck',
@@ -24,7 +25,12 @@ export class PricecheckComponent implements OnInit {
     "Price (HQ)"
   ]
 
-  constructor(private router: Router, private mbAPI: UniversalisService, private settings: SettingsService) { }
+  constructor(
+    private router: Router, 
+    private mbAPI: UniversalisService, 
+    private settings: SettingsService,
+    private xivAPI: XivAPIService
+    ) { }
 
   ngOnInit(): void {
     const itemsString = localStorage.getItem(PricecheckComponent.itemKey)
@@ -40,14 +46,26 @@ export class PricecheckComponent implements OnInit {
     this.populatePrices()
   }
 
-  addItem(name: string, idString: string) {
+  async addItem(idString: string) {
     const id: number = Number(idString)
-    if (name && id) {
-      const item: Item = { name, id }
-      this.items.push(item)
-      localStorage.setItem(PricecheckComponent.itemKey, JSON.stringify(this.items))
-      console.log(this.items)
+    try {
+      let itemName = (await this.xivAPI.getName(id)).Name
+      if (id && itemName) {
+        const item: Item = { name: itemName, id }
+  
+        let itemResponse = await this.mbAPI.getItem(this.settings.homeworld, id)
+  
+        this.items.push(item)
+        this.pricesNQ.push(itemResponse.minPriceNQ)
+        this.pricesHQ.push(itemResponse.minPriceHQ)
+        localStorage.setItem(PricecheckComponent.itemKey, JSON.stringify(this.items))
+        console.log(this.items)
+      }
+    } catch (e) {
+      console.log(`Unable to find item name for id ${id}`)
+      console.log(e)
     }
+
   }
 
   removeItem(index: number) {

@@ -1,6 +1,5 @@
 <div id="newItem">
-    <input #itemName (keyup.enter)="addItem(itemName.value, itemID.value)" placeholder="Item Name">
-    <input #itemID type="number" (keyup.enter)="addItem(itemName.value, itemID.value)" placeholder="Item ID">
+    <input #itemID type="number" (keyup.enter)="addItem(itemID.value)" placeholder="Item ID">
     <button id="clearBtn" class="btn btn-secondary btn-sm" (click)="clearItems()">Clear Items</button>
     <button id="defaultBtn" class="btn btn-secondary btn-sm" (click)="loadDefaults()">Load Defaults</button>
 </div>
