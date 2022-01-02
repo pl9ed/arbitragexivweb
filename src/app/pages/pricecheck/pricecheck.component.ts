@@ -88,7 +88,7 @@ export class PricecheckComponent implements OnInit {
       let prices = await this.mbAPI.getItem(this.settings.homeworld, item.id)
       this.pricesNQ[i] = prices.minPriceNQ
       this.pricesHQ[i] = prices.minPriceHQ
-      await this.mbAPI.sleep(500)
+      await this.mbAPI.sleep(200)
     }
   }
 
