@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit {
 
   homeworldBtnDefaultText = "Select Home World"
   homeworldSelection = Constants.PRIMAL
-  homeworldBtnText = this.homeworldBtnDefaultText
+  homeworldBtnText = Constants.DEFAULT_HOMEWORLD
 
   constructor(private settings: SettingsService) { }
 

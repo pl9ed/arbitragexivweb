@@ -1,7 +1,10 @@
-<input #itemName (keyup.enter)="addItem(itemName.value, itemID.value)">
-<input #itemID type="number" (keyup.enter)="addItem(itemName.value, itemID.value)">
-<button (click)="clearItems()">Clear Items</button>
-<button (click)="loadDefaults()">Load Defaults</button>
+<div id="newItem">
+    <input #itemName (keyup.enter)="addItem(itemName.value, itemID.value)" placeholder="Item Name">
+    <input #itemID type="number" (keyup.enter)="addItem(itemName.value, itemID.value)" placeholder="Item ID">
+    <button id="clearBtn" class="btn btn-secondary btn-sm" (click)="clearItems()">Clear Items</button>
+    <button id="defaultBtn" class="btn btn-secondary btn-sm" (click)="loadDefaults()">Load Defaults</button>
+</div>
+
 
 <table class="table">
     <th *ngFor="let header of headers">

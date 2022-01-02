@@ -16,9 +16,12 @@
       aria-haspopup="true" aria-expanded="false">
       {{ this.homeworldBtnText }}
     </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" *ngFor="let world of this.homeworldSelection" (click)="setHomeworld(world)">{{ world
-        }}</a>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" 
+      *ngFor="let world of this.homeworldSelection" 
+      (click)="setHomeworld(world)">
+        {{ world }}
+      </a>
     </div>
   </div>
 </nav>
