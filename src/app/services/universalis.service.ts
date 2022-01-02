@@ -7,16 +7,16 @@ import { ItemResponse } from '../models/ItemResponse';
 })
 export class UniversalisService {
 
-  MIN_PRICE_NQ_KEY: string = "minPriceNQ"
-  MIN_PRICE_HQ_KEY: string = "minPriceHQ"
-  NQ_VELOCITY_KEY: string = "nqSaleVelocity"
-  HQ_VELOCITY_KEY: string = "hqSaleVelocity"
-  BASE_URL: string = "https://universalis.app"
+  MIN_PRICE_NQ_KEY = "minPriceNQ"
+  MIN_PRICE_HQ_KEY = "minPriceHQ"
+  NQ_VELOCITY_KEY = "nqSaleVelocity"
+  HQ_VELOCITY_KEY = "hqSaleVelocity"
+  BASE_URL = "https://universalis.app"
 
   constructor(private http: HttpClient) { }
 
-  async getItem(world: string, id: Number): Promise<ItemResponse> {
-    let url = `${this.BASE_URL}/api/${world}/${id}`
+  async getItem(world: string, id: number): Promise<ItemResponse> {
+    const url = `${this.BASE_URL}/api/${world}/${id}`
     return this.http.get<ItemResponse>(url).toPromise()
   }
 

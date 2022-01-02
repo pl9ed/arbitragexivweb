@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class XivAPIService {
 
-  BASE_URL: string = "https://xivapi.com"
+  BASE_URL = "https://xivapi.com"
 
   constructor(private http: HttpClient) { }
 

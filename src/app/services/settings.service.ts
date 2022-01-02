@@ -8,5 +8,5 @@ export class SettingsService {
 
   homeworld: string = Constants.DEFAULT_HOMEWORLD
 
-  constructor() { }
+  constructor() {}
 }

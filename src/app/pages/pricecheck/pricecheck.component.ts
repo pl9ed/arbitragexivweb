@@ -35,7 +35,7 @@ export class PricecheckComponent implements OnInit {
   ngOnInit(): void {
     const itemsString = localStorage.getItem(PricecheckComponent.itemKey)
     try {
-      let itemArr = JSON.parse(itemsString!)
+      const itemArr = JSON.parse(itemsString!)
       if (itemArr.length > 0) {
         this.items = itemArr
       }
@@ -47,13 +47,13 @@ export class PricecheckComponent implements OnInit {
   }
 
   async addItem(idString: string) {
-    const id: number = Number(idString)
+    const id = Number(idString)
     try {
-      let itemName = (await this.xivAPI.getName(id)).Name
+      const itemName = (await this.xivAPI.getName(id)).Name
       if (id && itemName) {
         const item: Item = { name: itemName, id }
   
-        let itemResponse = await this.mbAPI.getItem(this.settings.homeworld, id)
+        const itemResponse = await this.mbAPI.getItem(this.settings.homeworld, id)
   
         this.items.push(item)
         this.pricesNQ.push(itemResponse.minPriceNQ)
@@ -84,8 +84,8 @@ export class PricecheckComponent implements OnInit {
 
   async populatePrices() {
     for (let i = 0; i < this.items.length; i++) {
-      let item = this.items[i]
-      let prices = await this.mbAPI.getItem(this.settings.homeworld, item.id)
+      const item = this.items[i]
+      const prices = await this.mbAPI.getItem(this.settings.homeworld, item.id)
       this.pricesNQ[i] = prices.minPriceNQ
       this.pricesHQ[i] = prices.minPriceHQ
       await this.mbAPI.sleep(200)

@@ -33,7 +33,7 @@ export class GemstoneComponent implements OnInit {
     Constants.GEMSTONE_ITEMS_LVL1.forEach((item, i) => {
       setTimeout(() => {
         this.mbAPI.getItem(this.settings.homeworld, item.id).then((response) => {
-          let itemInfo = new GemstoneItemPrice(
+          const itemInfo = new GemstoneItemPrice(
             item.name,
             item.id,
             response.minPriceNQ,
