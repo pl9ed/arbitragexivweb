@@ -1,0 +1,17 @@
+<div id="newItem">
+    <input #itemID type="number" (keyup.enter)="addItem(itemID.value)" placeholder="Item ID">
+    <button id="clearBtn" class="btn btn-secondary btn-sm" (click)="clearItems()">Clear Items</button>
+    <button id="defaultBtn" class="btn btn-secondary btn-sm" (click)="loadDefaults()">Load Defaults</button>
+</div>
+
+
+<table class="table">
+    <th *ngFor="let header of headers">
+        {{header}}
+    </th>
+    <tr *ngFor="let item of items; let i = index">
+        <td>{{item.name}}</td>
+        <td>{{pricesNQ[i]}}</td>
+        <td>{{pricesHQ[i]}}</td>
+    </tr>
+</table>

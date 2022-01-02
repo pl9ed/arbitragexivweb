@@ -15,12 +15,14 @@ export class FlipComponent implements OnInit {
   dropdownTextOptions = [
     "Raid Consumables",
     "Crafting Mats",
-    "Crafting Weapons"
+    "Crafting Weapons",
+    "Materia"
   ]
   toggleItems = [
     Constants.CONSUMABLE_ITEM_IDS,
     Constants.CRAFTING_ITEM_IDS,
-    Constants.CRAFTING_GEAR_IDS
+    Constants.CRAFTING_GEAR_IDS,
+    Constants.MATERIA
   ]
 
   headers = [
@@ -47,23 +49,23 @@ export class FlipComponent implements OnInit {
   fillFlipTable() {
     this.dataArray = []
     let i = 0;
-    let interval = 25 + (this.flipItemIDs.length * 40)
+    const interval = 25 + (this.flipItemIDs.length * 40)
     for (const item of this.flipItemIDs) {
       setTimeout(async () => {
-        let prices = await this.getPrices(item, Constants.DEFAULT_HOMEWORLD)
-        let nqPrices = prices[0]
-        let hqPrices = prices[1]
+        const prices = await this.getPrices(item, Constants.DEFAULT_HOMEWORLD)
+        const nqPrices = prices[0]
+        const hqPrices = prices[1]
 
         const nqWorld = [...nqPrices.keys()][0]
         const hqWorld = [...hqPrices.keys()][0]
 
-        let nqROI = (nqPrices.get(this.settings.homeworld) || 0) / (nqPrices.get(nqWorld) || 0)
-        let hqROI = (hqPrices.get(this.settings.homeworld) || 0) / (hqPrices.get(hqWorld) || 0)
+        const nqROI = (nqPrices.get(this.settings.homeworld) || 0) / (nqPrices.get(nqWorld) || 0)
+        const hqROI = (hqPrices.get(this.settings.homeworld) || 0) / (hqPrices.get(hqWorld) || 0)
 
-        let nqVelocity: number = (this.velocityMap.get(item.name) || [])[0]
-        let hqVelocity: number = (this.velocityMap.get(item.name) || [])[1]
+        const nqVelocity: number = (this.velocityMap.get(item.name) || [])[0]
+        const hqVelocity: number = (this.velocityMap.get(item.name) || [])[1]
 
-        let row = [
+        const row = [
           item.name,
           nqROI.toFixed(2),
           nqPrices.get(nqWorld),
@@ -90,30 +92,25 @@ export class FlipComponent implements OnInit {
   }
 
   async getPrices(item: Item, homeworld: string): Promise<Map<string, number>[]> {
-    let nqMap = new Map<string, number>();
-    let hqMap = new Map<string, number>();
+    const nqMap = new Map<string, number>();
+    const hqMap = new Map<string, number>();
 
     for (let i = 0; i < Constants.PRIMAL.length; i++) {
-      let world = Constants.PRIMAL[i]
-      let prices = await this.mbAPI.getItem(world, item.id)
+      const world = Constants.PRIMAL[i]
+      const prices = await this.mbAPI.getItem(world, item.id)
       nqMap.set(world, prices.minPriceNQ)
       hqMap.set(world, prices.minPriceHQ)
       this.velocityMap.set(item.name, [prices.nqSaleVelocity, prices.hqSaleVelocity])
-      await this.sleep(500)
+      await this.mbAPI.sleep(500)
     }
 
     // remove with no price
-    let filteredNQ = new Map<string, number>([...nqMap].filter(([k, v]) => v > 0))
-    let filteredHQ = new Map<string, number>([...hqMap].filter(([k, v]) => v > 0))
+    const filteredNQ = new Map<string, number>([...nqMap].filter(([k, v]) => v > 0))
+    const filteredHQ = new Map<string, number>([...hqMap].filter(([k, v]) => v > 0))
 
-    let sortedNQ = new Map<string, number>([...filteredNQ.entries()].sort((a, b) => a[1] - b[1]))
-    let sortedHQ = new Map<string, number>([...filteredHQ.entries()].sort((a, b) => a[1] - b[1]))
+    const sortedNQ = new Map<string, number>([...filteredNQ.entries()].sort((a, b) => a[1] - b[1]))
+    const sortedHQ = new Map<string, number>([...filteredHQ.entries()].sort((a, b) => a[1] - b[1]))
 
     return [sortedNQ, sortedHQ]
-  }
-
-  // GEMSTONE
-  sleep(timer: number) {
-    return new Promise(resolve => setTimeout(resolve, timer))
   }
 }
