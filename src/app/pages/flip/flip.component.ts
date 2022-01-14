@@ -4,6 +4,7 @@ import { Constants } from 'src/app/models/Constants';
 import { Item } from 'src/app/models/Item';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
+import { XivAPIService } from 'src/app/services/xiv-api.service';
 
 @Component({
   selector: 'app-flip',
@@ -42,7 +43,12 @@ export class FlipComponent implements OnInit {
   dataArray: any[] = [];
   flipItemIDs = Constants.CONSUMABLE_ITEM_IDS;
 
-  constructor(private router: Router, private mbAPI: UniversalisService, private settings: SettingsService) { }
+  constructor(
+    private router: Router, 
+    private mbAPI: UniversalisService, 
+    private settings: SettingsService,
+    private xivAPI: XivAPIService
+    ) { }
 
   ngOnInit() { }
 
@@ -52,7 +58,9 @@ export class FlipComponent implements OnInit {
     const interval = 25 + (this.flipItemIDs.length * 40)
     for (const item of this.flipItemIDs) {
       setTimeout(async () => {
-        const prices = await this.getPrices(item, Constants.DEFAULT_HOMEWORLD)
+        const itemName = await (await this.xivAPI.getName(item)).Name
+
+        const prices = await this.getPrices({name: itemName, id: item}, Constants.DEFAULT_HOMEWORLD)
         const nqPrices = prices[0]
         const hqPrices = prices[1]
 
@@ -62,11 +70,11 @@ export class FlipComponent implements OnInit {
         const nqROI = (nqPrices.get(this.settings.homeworld) || 0) / (nqPrices.get(nqWorld) || 0)
         const hqROI = (hqPrices.get(this.settings.homeworld) || 0) / (hqPrices.get(hqWorld) || 0)
 
-        const nqVelocity: number = (this.velocityMap.get(item.name) || [])[0]
-        const hqVelocity: number = (this.velocityMap.get(item.name) || [])[1]
+        const nqVelocity: number = (this.velocityMap.get(itemName) || [])[0]
+        const hqVelocity: number = (this.velocityMap.get(itemName) || [])[1]
 
         const row = [
-          item.name,
+          itemName,
           nqROI.toFixed(2),
           nqPrices.get(nqWorld),
           nqPrices.get(this.settings.homeworld),

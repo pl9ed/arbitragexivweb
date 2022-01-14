@@ -72,8 +72,8 @@ export class PricecheckComponent implements OnInit {
     this.items.splice(index, 1)
   }
 
-  loadDefaults() {
-    this.items = Constants.DEFAULT_PRICECHECK_ITEMS
+  async loadDefaults() {
+    this.items = await this.xivAPI.getNames(Constants.DEFAULT_PRICECHECK_ITEMS)
     localStorage.setItem(PricecheckComponent.itemKey, JSON.stringify(this.items))
   }
 
