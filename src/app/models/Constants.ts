@@ -70,6 +70,7 @@ export abstract class Constants {
         { name: "Bicolor Gemstone Voucher", id: 35833, area: Region.OLD_SHARLAYAN, cost: 100 }
 
     ]
+
     public static MATERIA: number[] = [
         33919,
         33932,
@@ -83,7 +84,15 @@ export abstract class Constants {
         33941,
     ]
 
-    public static DEFAULT_PRICECHECK_ITEMS: number[] = Constants.MATERIA.concat([
+    public static TOME_MATS: number[] = [
+        36219,
+        36221,
+        36222,
+        36220,
+        36218,
+    ]
+
+    public static DEFAULT_PRICECHECK_ITEMS: number[] = Constants.TOME_MATS.concat([
         
     ])
 }
