@@ -13,47 +13,46 @@ export abstract class Constants {
         "Ultros"
     ]
     public static DEFAULT_HOMEWORLD = "Lamia"
-    public static CONSUMABLE_ITEM_IDS: Item[] = [
-        { name: "Grade 5 Tincture of Strength", id: 36104 },
-        { name: "Grade 5 Tincture of Dexterity", id: 36105 },
-        { name: "Grade 5 Tincture of Intelligence", id: 36107 },
-        { name: "Grade 5 Tincture of Mind", id: 36108 },
-        { name: "Baked Alien Soup", id: 36063 },
-        { name: "Sykon Bavarois", id: 36066 },
-        { name: "Elpis Deipnon", id: 36062 },
-        { name: "Sykon Compote", id: 36065 },
-        { name: "Sykon Salad", id: 36064 },
+    public static CONSUMABLE_ITEM_IDS: number[] = [
+        36109,
+        36110,
+        36112,
+        36113,
+        36070,
+        36067,
+        36069,
+        36074,
 
     ]
-    public static CRAFTING_ITEM_IDS: Item[] = [
-        { name: "Grade 5 Strength Alkahest", id: 36227 },
-        { name: "Grade 5 Dexterity Alkahest", id: 36228 },
-        { name: "Grade 5 Intelligence Alkahest", id: 36230 },
-        { name: "Grade 5 Mind Alkahest", id: 36231 },
-        { name: "Moonlight Aethersand", id: 36223 },
-        { name: "Endstone Aethersand", id: 36224 },
-        { name: "Endwood Aethersand", id: 36225 },
-        { name: "Endtide Aethersand", id: 36226 }
+    public static CRAFTING_ITEM_IDS: number[] = [
+        36227,
+        36228,
+        36230,
+        36231,
+        36223,
+        36224,
+        36225,
+        36226,
     ]
-    public static CRAFTING_GEAR_IDS: Item[] = [
-        { name: "Chondrite Saw", id: 35383 },
-        { name: "Chondrite Cross-pein Hammer", id: 35384 },
-        { name: "Chondrite Raising Hammer", id: 35385 },
-        { name: "Chondrite Lapidary Hammer", id: 35386 },
-        { name: "Chondrite Round Knife", id: 35387 },
-        { name: "Chondrite Needle", id: 35388 },
-        { name: "Chondrite Alembic", id: 35389 },
-        { name: "Chondrite Bomb Frypan", id: 35390 },
-        { name: "Chondrite Pickaxe", id: 35391 },
-        { name: "Chondrite Hatchet", id: 35392 },
-        { name: "Chondrite Claw Hammer", id: 35394 },
-        { name: "Chondrite File", id: 35395 },
-        { name: "Chondrite Pliers", id: 35396 },
-        { name: "Chondrite Awl", id: 35398 },
-        { name: "Chondrite Mortar", id: 35400 },
-        { name: "Chondrite Culinary Knife", id: 35401 },
-        { name: "Chondrite Sledgehammer", id: 35402 },
-        { name: "Chondrite Garden Scythe", id: 35403 },
+    public static CRAFTING_GEAR_IDS: number[] = [
+        35383,
+        35384,
+        35385,
+        35386,
+        35387,
+        35388,
+        35389,
+        35390,
+        35391,
+        35392,
+        35394,
+        35395,
+        35396,
+        35398,
+        35400,
+        35401,
+        35402,
+        35403,
     ]
     public static GEMSTONE_ITEMS_LVL1: GemstoneItem[] = [
         { name: "Gaja Hide", id: 36242, area: Region.THAVNAIR, cost: 2 },
@@ -71,22 +70,29 @@ export abstract class Constants {
         { name: "Bicolor Gemstone Voucher", id: 35833, area: Region.OLD_SHARLAYAN, cost: 100 }
 
     ]
-    public static MATERIA: Item[] = [
-        { name: "Savage Aim (Crit) IX", id: 33919},
-        { name: "Savage Aim (Crit) X", id: 33932},
-        { name: "Heavens' Eye (DH) IX", id: 33918},
-        { name: "Heavens' Eye (DH) X", id: 33931},
-        { name: "Savage Might (Det) IX", id: 33920},
-        { name: "Savage Might (Det) X", id: 33933},
-        { name: "Quicktongue (SpS) IX", id: 33929},
-        { name: "Quicktongue (SpS) X", id: 33942},
-        { name: "Quickarm (SkS) IX", id: 33928},
-        { name: "Quickarm (SkS) X", id: 33941}
+
+    public static MATERIA: number[] = [
+        33919,
+        33932,
+        33918,
+        33931,
+        33920,
+        33933,
+        33929,
+        33942,
+        33928,
+        33941,
     ]
 
-    public static DEFAULT_PRICECHECK_ITEMS: Item[] = Constants.MATERIA.concat([
-        
-    ])
+    public static TOME_MATS: number[] = [
+        36219,
+        36221,
+        36222,
+        36220,
+        36218,
+    ]
+
+    public static DEFAULT_PRICECHECK_ITEMS: number[] = Constants.TOME_MATS
 }
 
 export interface GemstoneItem {
