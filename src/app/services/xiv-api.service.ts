@@ -18,13 +18,13 @@ export class XivAPIService {
 
   async getNames(ids: number[]): Promise<Item[]> {
     var retArr: Item[] = []
-    ids.forEach(async (id) => {
+    for(let i = 0; i < ids.length; i++) {
+      const id = ids[i]
       const name = (await this.getName(id)).Name;
       retArr.push({ name, id });
-    })
+    }
     return retArr
   }
-
 }
 
 interface ItemName {
