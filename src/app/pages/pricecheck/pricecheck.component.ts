@@ -17,12 +17,16 @@ export class PricecheckComponent implements OnInit {
 
   items: Item[] = []
   pricesNQ: number[] = []
+  veloNQ: number[] = []
   pricesHQ: number[] = []
+  veloHQ: number[] = []
 
   headers = [
     "Item",
     "Price (NQ)",
-    "Price (HQ)"
+    "Velocity (NQ)",
+    "Price (HQ)",
+    "Velocity (HQ)"
   ]
 
   constructor(
@@ -57,7 +61,9 @@ export class PricecheckComponent implements OnInit {
   
         this.items.push(item)
         this.pricesNQ.push(itemResponse.minPriceNQ)
+        this.veloNQ.push(itemResponse.nqSaleVelocity)
         this.pricesHQ.push(itemResponse.minPriceHQ)
+        this.veloHQ.push(itemResponse.hqSaleVelocity)
         localStorage.setItem(PricecheckComponent.itemKey, JSON.stringify(this.items))
         console.log(this.items)
       }
@@ -75,6 +81,7 @@ export class PricecheckComponent implements OnInit {
   async loadDefaults() {
     this.items = await this.xivAPI.getNames(Constants.DEFAULT_PRICECHECK_ITEMS)
     localStorage.setItem(PricecheckComponent.itemKey, JSON.stringify(this.items))
+    this.populatePrices()
   }
 
   clearItems() {
@@ -87,7 +94,9 @@ export class PricecheckComponent implements OnInit {
       const item = this.items[i]
       const prices = await this.mbAPI.getItem(this.settings.homeworld, item.id)
       this.pricesNQ[i] = prices.minPriceNQ
+      this.veloNQ[i] = prices.nqSaleVelocity
       this.pricesHQ[i] = prices.minPriceHQ
+      this.veloHQ[i] = prices.hqSaleVelocity
       await this.mbAPI.sleep(200)
     }
   }

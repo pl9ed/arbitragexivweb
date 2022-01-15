@@ -92,9 +92,7 @@ export abstract class Constants {
         36218,
     ]
 
-    public static DEFAULT_PRICECHECK_ITEMS: number[] = Constants.TOME_MATS.concat([
-        
-    ])
+    public static DEFAULT_PRICECHECK_ITEMS: number[] = Constants.TOME_MATS
 }
 
 export interface GemstoneItem {
