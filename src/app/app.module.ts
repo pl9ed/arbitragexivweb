@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { HomeComponent } from './pages/home/home.component';
 import { PricecheckComponent } from './pages/pricecheck/pricecheck.component';
+import { CraftingComponent } from './pages/crafting/crafting.component';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { PricecheckComponent } from './pages/pricecheck/pricecheck.component';
     NavbarComponent,
     HomeComponent,
     PricecheckComponent,
+    CraftingComponent,
   ],
   imports: [
     BrowserModule,
