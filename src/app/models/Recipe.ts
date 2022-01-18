@@ -16,3 +16,27 @@ export class Recipe {
         this.materialAmounts = materialAmounts
     }
 }
+
+export const GRADE6_STR_POT = new Recipe(
+    36109,
+    [ 36227, 36215, 36223 ],
+    [ 1, 1, 1 ]
+)
+
+export const GRADE6_MND_POT = new Recipe(
+    36113,
+    [ 36231, 36215, 36223 ],
+    [ 1, 1, 1 ]
+)
+
+export const GRADE6_INT_POT = new Recipe(
+    36112,
+    [ 36230, 36215, 36223 ],
+    [ 1, 1, 1 ]
+)
+
+export const GRADE6_DEX_POT = new Recipe(
+    36110,
+    [ 36228, 36215, 36223 ],
+    [ 1, 1, 1 ]
+)

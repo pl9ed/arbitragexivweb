@@ -1,4 +1,5 @@
 import { Item } from "./Item"
+import { GRADE6_DEX_POT, GRADE6_INT_POT, GRADE6_MND_POT, GRADE6_STR_POT, Recipe } from "./Recipe"
 import { Region } from "./Region"
 
 export abstract class Constants {
@@ -93,6 +94,17 @@ export abstract class Constants {
     ]
 
     public static DEFAULT_PRICECHECK_ITEMS: number[] = Constants.TOME_MATS
+
+    public static DEFAULT_ALC_ITEMS: Recipe[] = [
+        GRADE6_STR_POT,
+        GRADE6_INT_POT,
+        GRADE6_MND_POT,
+        GRADE6_DEX_POT
+    ]
+
+    public static DEFAULT_CUL_ITEMS: Recipe[] = [
+
+    ]
 }
 
 export interface GemstoneItem {
