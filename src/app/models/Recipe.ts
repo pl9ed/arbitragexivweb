@@ -40,3 +40,21 @@ export const GRADE6_DEX_POT = new Recipe(
     [ 36228, 36215, 36223 ],
     [ 1, 1, 1 ]
 )
+
+export const PUMPKIN_POTAGE = new Recipe(
+    36070,
+    [ 36078, 36100, 36263, 36214, 36255, 36097 ],
+    [ 2, 1, 1, 1, 1, 1 ]
+)
+
+export const THAVNAIRIAN_CHAI = new Recipe(
+    36074,
+    [ 36080, 36214, 36214, 36094, 27836, 36255 ],
+    [ 2, 1, 1, 1, 1, 1 ]
+)
+
+export const PUMPKIN_RATATOUILLE = new Recipe(
+    36069,
+    [ 36079, 36100, 36214, 36091, 27825, 4829 ],
+    [ 2, 1, 1, 1, 1, 1 ]
+)
