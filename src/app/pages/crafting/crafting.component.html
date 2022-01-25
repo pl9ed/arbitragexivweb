@@ -1,1 +1,18 @@
-<p>crafting works!</p>
+<table *ngFor="let entry of dataMap | keyvalue">
+    <th>{{entry.key}}</th>
+    <tbody>
+        <tr *ngFor="let mat of entry.value[0]; let i = index" [attr.data-index]="i">
+            <td>{{mat}}</td>
+            <td>{{entry.value[1][i]}}</td>
+            <td>{{entry.value[2][i]}}</td>
+        </tr>
+        <tr>
+            <td>Total Cost</td>
+            <td>ROI</td>
+        </tr>
+        <tr>
+            <td>{{this.roiMap.get(entry.key)[0]!}}</td>
+            <td>{{this.roiMap.get(entry.key)[1]!.toFixed(2)}}</td>
+        </tr>
+    </tbody>
+</table>
