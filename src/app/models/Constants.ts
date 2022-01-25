@@ -1,5 +1,5 @@
 import { Item } from "./Item"
-import { GRADE6_DEX_POT, GRADE6_INT_POT, GRADE6_MND_POT, GRADE6_STR_POT, Recipe } from "./Recipe"
+import { GRADE6_DEX_POT, GRADE6_INT_POT, GRADE6_MND_POT, GRADE6_STR_POT, PUMPKIN_POTAGE, PUMPKIN_RATATOUILLE, Recipe, THAVNAIRIAN_CHAI } from "./Recipe"
 import { Region } from "./Region"
 
 export abstract class Constants {
@@ -110,7 +110,9 @@ export abstract class Constants {
     ]
 
     public static DEFAULT_CUL_ITEMS: Recipe[] = [
-
+        PUMPKIN_POTAGE,
+        PUMPKIN_RATATOUILLE,
+        THAVNAIRIAN_CHAI
     ]
 }
 
