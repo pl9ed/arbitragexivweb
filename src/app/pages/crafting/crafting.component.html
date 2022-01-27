@@ -11,8 +11,10 @@
             <td>ROI</td>
         </tr>
         <tr>
-            <td>{{this.roiMap.get(entry.key)[0]!}}</td>
-            <td>{{this.roiMap.get(entry.key)[1]!.toFixed(2)}}</td>
+            <td>{{this.roiMap!.get(entry.key)[0]!}}</td>
+            <td>{{this.roiMap!.get(entry.key)[1]!.toFixed(2)!}}</td>
+            <!-- <td>{{this.roiMap}}</td>
+            <td>{{this.roiMap.get(entry.key)[1]}}</td> -->
         </tr>
     </tbody>
 </table>

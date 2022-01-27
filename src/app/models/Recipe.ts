@@ -49,7 +49,7 @@ export const PUMPKIN_POTAGE = new Recipe(
 
 export const THAVNAIRIAN_CHAI = new Recipe(
     36074,
-    [ 36080, 36214, 36214, 36094, 27836, 36255 ],
+    [ 36080, 36102, 36214, 36094, 27836, 36255 ],
     [ 2, 1, 1, 1, 1, 1 ]
 )
 
