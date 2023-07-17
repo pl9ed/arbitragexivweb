@@ -22,7 +22,8 @@ export abstract class Constants {
         39876,
     ]
     public static CRAFTING_ITEM_IDS: number[] = [
-       
+        37282,
+        36116
     ]
     public static CRAFTING_GEAR_IDS: number[] = [
         38891,
