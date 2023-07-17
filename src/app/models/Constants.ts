@@ -78,11 +78,12 @@ export abstract class Constants {
     ]
 
     public static TOME_MATS: number[] = [
-        36219,
-        36221,
-        36222,
-        36220,
-        36218,
+        39714,
+        39715,
+        39711,
+        39712,
+        39713,
+        39716
     ]
 
     public static DEFAULT_PRICECHECK_ITEMS: number[] = Constants.TOME_MATS
