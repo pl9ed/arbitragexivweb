@@ -4,6 +4,9 @@
   "compilerOptions": {
     "outDir": "../out-tsc/e2e",
     "module": "commonjs",
+    "paths": {
+      "tslib" : ["../node_modules/tslib/tslib.d.ts"]
+    },
     "target": "es2018",
     "types": [
       "jasmine",
