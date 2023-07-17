@@ -16,7 +16,7 @@ export class FlipComponent implements OnInit {
   dropdownTextOptions = [
     "Raid Consumables",
     "Crafting Mats",
-    "Crafting Weapons",
+    "Crafting Gear",
     "Materia"
   ]
   toggleItems = [

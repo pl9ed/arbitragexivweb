@@ -14,45 +14,38 @@ export abstract class Constants {
     ]
     public static DEFAULT_HOMEWORLD = "Lamia"
     public static CONSUMABLE_ITEM_IDS: number[] = [
-        36109,
-        36110,
-        36112,
-        36113,
-        36070,
-        36067,
-        36069,
-        36074,
-
+        39727,
+        39728,
+        39730,
+        39731,
+        39872,
+        39876,
     ]
     public static CRAFTING_ITEM_IDS: number[] = [
-        36227,
-        36228,
-        36230,
-        36231,
-        36223,
-        36224,
-        36225,
-        36226,
+        37282,
+        36116
     ]
     public static CRAFTING_GEAR_IDS: number[] = [
-        35383,
-        35384,
-        35385,
-        35386,
-        35387,
-        35388,
-        35389,
-        35390,
-        35391,
-        35392,
-        35394,
-        35395,
-        35396,
-        35398,
-        35400,
-        35401,
-        35402,
-        35403,
+        38891,
+        38892,
+        38893,
+        38894,
+        38895,
+        38896,
+        38897,
+        38898,
+        38899,
+        38900,
+        38901,
+        38902,
+        38903,
+        38904,
+        38905,
+        38906,
+        38907,
+        38908,
+        38909,
+        38910
     ]
     public static GEMSTONE_ITEMS_LVL1: GemstoneItem[] = [
         { name: "Gaja Hide", id: 36242, area: Region.THAVNAIR, cost: 2 },
@@ -85,11 +78,12 @@ export abstract class Constants {
     ]
 
     public static TOME_MATS: number[] = [
-        36219,
-        36221,
-        36222,
-        36220,
-        36218,
+        39714,
+        39715,
+        39711,
+        39712,
+        39713,
+        39716
     ]
 
     public static DEFAULT_PRICECHECK_ITEMS: number[] = Constants.TOME_MATS
