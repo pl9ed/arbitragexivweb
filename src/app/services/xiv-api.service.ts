@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Item } from '../models/Item';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class XivAPIService {
 
   async getName(id: number): Promise<ItemName> {
     const url = `${this.BASE_URL}/item/${id}`
-    return this.http.get<ItemName>(url).toPromise()
+    return firstValueFrom(this.http.get<ItemName>(url))
   }
 
   async getNames(ids: number[]): Promise<Item[]> {

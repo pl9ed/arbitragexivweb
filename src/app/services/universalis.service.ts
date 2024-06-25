@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ItemResponse } from '../models/ItemResponse';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class UniversalisService {
 
   async getItem(world: string, id: number): Promise<ItemResponse> {
     const url = `${this.BASE_URL}/api/${world}/${id}`
-    return this.http.get<ItemResponse>(url).toPromise()
+    return firstValueFrom(this.http.get<ItemResponse>(url))
   }
 
   sleep(timer: number) {
