@@ -1,13 +1,13 @@
 export interface SettingsConfig {
-  defaultWorld: string,
+  defaultWorld: string;
   flip: {
-    dropDownOptions: string[],
+    dropDownOptions: string[];
     itemLists: {
-      consumables: number[],
-      craftingGear: number[],
-      craftingMats: number[],
-      materia: number[]
-    }
-  }
-  primal: string[]
+      consumables: number[];
+      craftingGear: number[];
+      craftingMats: number[];
+      materia: number[];
+    };
+  };
+  primal: string[];
 }

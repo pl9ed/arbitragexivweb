@@ -16,19 +16,23 @@ import { StoreModule } from '@ngrx/store';
 import { settings } from './services/settings.reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-
-@NgModule({ declarations: [
-        AppComponent,
-        FlipComponent,
-        GemstoneComponent,
-        NavbarComponent,
-        HomeComponent,
-        PricecheckComponent,
-    ],
-    bootstrap: [AppComponent], imports: [
-        AppRoutingModule,
-        BrowserModule,
-        BrowserAnimationsModule,
-        StoreModule.forRoot({settings}, {}),
-        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })], providers: [provideHttpClient(withInterceptorsFromDi())] })
-export class AppModule { }
+@NgModule({
+  declarations: [
+    AppComponent,
+    FlipComponent,
+    GemstoneComponent,
+    NavbarComponent,
+    HomeComponent,
+    PricecheckComponent,
+  ],
+  bootstrap: [AppComponent],
+  imports: [
+    AppRoutingModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    StoreModule.forRoot({ settings }, {}),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+  ],
+  providers: [provideHttpClient(withInterceptorsFromDi())],
+})
+export class AppModule {}

@@ -14,21 +14,8 @@ export class SettingsService {
   constructor(private http: HttpClient) {}
 
   loadConfig(): Observable<SettingsConfig> {
-    return this.http.get('assets/config.yml', { responseType: 'text' })
+    return this.http
+      .get('assets/config.yml', { responseType: 'text' })
       .pipe(map((str) => yaml.parse(str)));
   }
-}
-
-interface SettingsConfig {
-  defaultWorld: string;
-  flip: {
-    dropDownOptions: string[];
-    itemLists: {
-      consumables: number[];
-      craftingGear: number[];
-      craftingMats: number[];
-      materia: number[];
-    };
-  };
-  primal: string[];
 }
