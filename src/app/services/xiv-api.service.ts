@@ -18,7 +18,7 @@ export class XivAPIService {
   }
 
   async getNames(ids: number[]): Promise<Item[]> {
-    var retArr: Item[] = []
+    const retArr: Item[] = []
     for(let i = 0; i < ids.length; i++) {
       const id = ids[i]
       const name = (await this.getName(id)).Name;
