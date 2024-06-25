@@ -7,7 +7,6 @@ import { FlipComponent } from './pages/flip/flip.component';
 import { GemstoneComponent } from './pages/gemstone/gemstone.component';
 import { NavbarComponent } from './nav/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
 import { HomeComponent } from './pages/home/home.component';
 import { PricecheckComponent } from './pages/pricecheck/pricecheck.component';
 
@@ -27,7 +26,6 @@ import { PricecheckComponent } from './pages/pricecheck/pricecheck.component';
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]
