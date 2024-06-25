@@ -5,16 +5,13 @@ import { SettingsService } from 'src/app/services/settings.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  constructor(
+    private router: Router,
+    private settings: SettingsService,
+  ) {}
 
-
-
-  constructor(private router: Router, private settings: SettingsService) { }
-
-  ngOnInit(): void {
-  }
-
-
+  ngOnInit(): void {}
 }

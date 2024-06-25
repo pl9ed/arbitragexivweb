@@ -9,11 +9,11 @@ const routes: Routes = [
   { path: 'flip', component: FlipComponent },
   { path: 'gemstone', component: GemstoneComponent },
   { path: 'prices', component: PricecheckComponent },
-  { path: '**', component: HomeComponent }
+  { path: '**', component: HomeComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

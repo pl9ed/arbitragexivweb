@@ -8,10 +8,9 @@ import { UniversalisService } from 'src/app/services/universalis.service';
 @Component({
   selector: 'app-gemstone',
   templateUrl: './gemstone.component.html',
-  styleUrls: ['./gemstone.component.css']
+  styleUrls: ['./gemstone.component.css'],
 })
 export class GemstoneComponent implements OnInit {
-
   gemstoneHeaders = [
     'Item',
     'ID',
@@ -24,24 +23,29 @@ export class GemstoneComponent implements OnInit {
   ];
   gemstoneItems: GemstoneItemPrice[] = [];
 
-  constructor(private router: Router, private mbAPI: UniversalisService, private settings: SettingsService) { }
+  constructor(
+    private router: Router,
+    private mbAPI: UniversalisService,
+    private settings: SettingsService,
+  ) {}
 
   ngOnInit(): void {
     Constants.GEMSTONE_ITEMS_LVL1.forEach((item, i) => {
       setTimeout(() => {
-        this.mbAPI.getItem(this.settings.homeworld, item.id).then((response) => {
-          const itemInfo = new GemstoneItemPrice(
-            item.name,
-            item.id,
-            response.minPriceNQ,
-            response.nqSaleVelocity,
-            item.area,
-            response.minPriceNQ / item.cost
-          );
-          this.gemstoneItems[i] = itemInfo;
-        });
+        this.mbAPI
+          .getItem(this.settings.homeworld, item.id)
+          .then((response) => {
+            const itemInfo = new GemstoneItemPrice(
+              item.name,
+              item.id,
+              response.minPriceNQ,
+              response.nqSaleVelocity,
+              item.area,
+              response.minPriceNQ / item.cost,
+            );
+            this.gemstoneItems[i] = itemInfo;
+          });
       }, 50 * i);
     });
   }
-
 }

@@ -8,9 +8,8 @@ describe('GemstoneComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GemstoneComponent ]
-    })
-    .compileComponents();
+      declarations: [GemstoneComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
