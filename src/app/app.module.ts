@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FlipComponent } from './pages/flip/flip.component';
@@ -11,23 +11,16 @@ import { HomeComponent } from './pages/home/home.component';
 import { PricecheckComponent } from './pages/pricecheck/pricecheck.component';
 
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    FlipComponent,
-    GemstoneComponent,
-    NavbarComponent,
-    HomeComponent,
-    PricecheckComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        FlipComponent,
+        GemstoneComponent,
+        NavbarComponent,
+        HomeComponent,
+        PricecheckComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserModule,
+        BrowserAnimationsModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
