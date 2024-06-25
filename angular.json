@@ -72,18 +72,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "arbitragexiv:build"
+            "buildTarget": "arbitragexiv:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "arbitragexiv:build:production"
+              "buildTarget": "arbitragexiv:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "arbitragexiv:build"
+            "buildTarget": "arbitragexiv:build"
           }
         },
         "test": {
@@ -131,5 +131,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
