@@ -1,17 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { UniversalisService } from './universalis.service';
-import { HttpClientModule } from '@angular/common/http'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 
 fdescribe('UniversalisService', () => {
   let service: UniversalisService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule],
-      providers: [
-        UniversalisService
-      ]
-    });
+    imports: [],
+    providers: [
+        UniversalisService,
+        provideHttpClient(withInterceptorsFromDi())
+    ]
+});
     service = TestBed.inject(UniversalisService);
   });
 
