@@ -6,29 +6,23 @@ import { Constants } from 'src/app/models/Constants';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
-
-  links = [
-    "Arbitrage",
-    "Gemstones"
-  ]
+  links = ['Arbitrage', 'Gemstones'];
   activeLink = this.links[0];
   background: ThemePalette = undefined;
 
-  homeworldBtnDefaultText = "Select Home World"
-  homeworldSelection = Constants.PRIMAL
-  homeworldBtnText = Constants.DEFAULT_HOMEWORLD
+  homeworldBtnDefaultText = 'Select Home World';
+  homeworldSelection = Constants.PRIMAL;
+  homeworldBtnText = Constants.DEFAULT_HOMEWORLD;
 
-  constructor(private settings: SettingsService) { }
+  constructor(private settings: SettingsService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   setHomeworld(world: string) {
-    this.homeworldBtnText = world
-    this.settings.homeworld = world
+    this.homeworldBtnText = world;
+    this.settings.homeworld = world;
   }
-
 }
