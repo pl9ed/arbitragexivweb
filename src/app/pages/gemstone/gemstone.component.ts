@@ -27,9 +27,6 @@ export class GemstoneComponent implements OnInit {
   constructor(private router: Router, private mbAPI: UniversalisService, private settings: SettingsService) { }
 
   ngOnInit(): void {
-  }
-
-  getGemstoneData(): void {
     Constants.GEMSTONE_ITEMS_LVL1.forEach((item, i) => {
       setTimeout(() => {
         this.mbAPI.getItem(this.settings.homeworld, item.id).then((response) => {
