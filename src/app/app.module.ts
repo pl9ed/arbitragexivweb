@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import {
   provideHttpClient,
   withInterceptorsFromDi,
@@ -12,6 +12,9 @@ import { NavbarComponent } from './nav/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './pages/home/home.component';
 import { PricecheckComponent } from './pages/pricecheck/pricecheck.component';
+import { StoreModule } from '@ngrx/store';
+import { settings } from './services/settings.reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -24,10 +27,11 @@ import { PricecheckComponent } from './pages/pricecheck/pricecheck.component';
   ],
   bootstrap: [AppComponent],
   imports: [
-    BrowserModule,
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
+    StoreModule.forRoot({ settings }, {}),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
 })
