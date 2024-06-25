@@ -97,7 +97,7 @@ export class PricecheckComponent implements OnInit {
       this.veloNQ[i] = prices.nqSaleVelocity
       this.pricesHQ[i] = prices.minPriceHQ
       this.veloHQ[i] = prices.hqSaleVelocity
-      await this.mbAPI.sleep(200)
+      await this.mbAPI.sleep(50)
     }
   }
 

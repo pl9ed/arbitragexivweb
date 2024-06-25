@@ -43,7 +43,7 @@ export class GemstoneComponent implements OnInit {
           );
           this.gemstoneItems[i] = itemInfo;
         });
-      }, 500 * i);
+      }, 50 * i);
     });
   }
 

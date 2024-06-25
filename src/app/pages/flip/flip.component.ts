@@ -109,7 +109,7 @@ export class FlipComponent implements OnInit {
       nqMap.set(world, prices.minPriceNQ)
       hqMap.set(world, prices.minPriceHQ)
       this.velocityMap.set(item.name, [prices.nqSaleVelocity, prices.hqSaleVelocity])
-      await this.mbAPI.sleep(500)
+      await this.mbAPI.sleep(50)
     }
 
     // remove with no price
