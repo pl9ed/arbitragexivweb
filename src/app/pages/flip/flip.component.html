@@ -1,37 +1,43 @@
-<div class="dropdown">
-  <button
-    class="btn btn-secondary dropdown-toggle"
-    type="button"
-    id="flipTableDropdownBtn"
-    data-toggle="dropdown"
-    aria-haspopup="true"
-    aria-expanded="false"
-  >
-    {{ this.dropdownText }}
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" (click)="togglePrices(0)">{{
-      dropdownTextOptions[0]
-    }}</a>
-    <a class="dropdown-item" (click)="togglePrices(1)">{{
-      dropdownTextOptions[1]
-    }}</a>
-    <a class="dropdown-item" (click)="togglePrices(2)">{{
-      dropdownTextOptions[2]
-    }}</a>
-    <a class="dropdown-item" (click)="togglePrices(3)">{{
-      dropdownTextOptions[3]
-    }}</a>
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<ng-container *ngIf="{ config: itemConfig$ | async } as data">
+  <div class="dropdown">
+    <button
+      class="btn btn-secondary dropdown-toggle"
+      type="button"
+      id="flipTableDropdownBtn"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      {{ this.dropdownText }}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" (click)="togglePrices(0)">{{
+        dropdownTextOptions[0]
+      }}</a>
+      <a class="dropdown-item" (click)="togglePrices(1)">{{
+        dropdownTextOptions[1]
+      }}</a>
+      <a class="dropdown-item" (click)="togglePrices(2)">{{
+        dropdownTextOptions[2]
+      }}</a>
+      <a class="dropdown-item" (click)="togglePrices(3)">{{
+        dropdownTextOptions[3]
+      }}</a>
+    </div>
   </div>
-</div>
 
-<table class="table">
-  <th *ngFor="let column of headers">
-    {{ column }}
-  </th>
-  <tr *ngFor="let row of dataArray; index as i">
-    <td *ngFor="let data of row">
-      {{ data }}
-    </td>
-  </tr>
-</table>
+  <table class="table">
+    <th *ngFor="let column of headers">
+      {{ column }}
+    </th>
+    <tr *ngFor="let row of dataArray; index as i">
+      <td *ngFor="let data of row">
+        {{ data }}
+      </td>
+    </tr>
+  </table>
+
+  <p>{{ data.config?.primal }}</p>
+</ng-container>

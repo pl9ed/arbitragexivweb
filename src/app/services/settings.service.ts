@@ -11,10 +11,10 @@ import { SettingsConfig } from './settings.models';
 export class SettingsService {
   homeworld: string = Constants.DEFAULT_HOMEWORLD;
 
-  constructor(private http: HttpClient) {}
+  settingsConfig$: Observable<SettingsConfig>;
 
-  loadConfig(): Observable<SettingsConfig> {
-    return this.http
+  constructor(private http: HttpClient) {
+    this.settingsConfig$ = this.http
       .get('assets/config.yml', { responseType: 'text' })
       .pipe(map((str) => yaml.parse(str)));
   }

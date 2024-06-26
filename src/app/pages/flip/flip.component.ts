@@ -1,10 +1,14 @@
+/* eslint-disable prettier/prettier */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { map, Observable } from 'rxjs';
 import { Constants } from 'src/app/models/Constants';
 import { Item } from 'src/app/models/Item';
+import { SettingsConfig } from 'src/app/services/settings.models';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
 import { XivAPIService } from 'src/app/services/xiv-api.service';
+import { ItemRow } from './flip.models';
 
 @Component({
   selector: 'app-flip',
@@ -43,6 +47,8 @@ export class FlipComponent implements OnInit {
   dataArray: any[] = [];
   flipItemIDs = Constants.CONSUMABLE_ITEM_IDS;
 
+  selectedItems$: Observable<number[]>;
+
   constructor(
     private router: Router,
     private mbAPI: UniversalisService,
@@ -50,7 +56,9 @@ export class FlipComponent implements OnInit {
     private xivAPI: XivAPIService,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.selectedItems$ = this.settings.settingsConfig$.pipe(map(config => config.flip.itemLists.consumables))
+  }
 
   fillFlipTable() {
     this.dataArray = [];

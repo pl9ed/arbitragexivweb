@@ -15,6 +15,7 @@ import { PricecheckComponent } from './pages/pricecheck/pricecheck.component';
 import { StoreModule } from '@ngrx/store';
 import { settings } from './services/settings.reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     BrowserAnimationsModule,
     StoreModule.forRoot({ settings }, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    EffectsModule.forRoot([]),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
 })
