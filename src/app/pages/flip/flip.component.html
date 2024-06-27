@@ -32,12 +32,18 @@
     <th *ngFor="let column of headers">
       {{ column }}
     </th>
-    <tr *ngFor="let row of dataArray; index as i">
-      <td *ngFor="let data of row">
-        {{ data }}
-      </td>
+    <tr *ngFor="let row of data.items; index as i">
+      <td>{{ row.name }}</td>
+      <td>{{ format(emptyIfInvalid(row.roiNq)) }}</td>
+      <td>{{ row.minPriceNq }}</td>
+      <td>{{ row.homePriceNq }}</td>
+      <td>{{ row.worldNq }}</td>
+      <td>{{ format(emptyIfInvalid(row.velocityNq)) }}</td>
+      <td>{{ format(emptyIfInvalid(row.roiHq)) }}</td>
+      <td>{{ row.minPriceHq }}</td>
+      <td>{{ row.homePriceHq }}</td>
+      <td>{{ row.worldHq }}</td>
+      <td>{{ format(emptyIfInvalid(row.velocityHq)) }}</td>
     </tr>
   </table>
-
-  <p>{{ data.items }}</p>
 </ng-container>
