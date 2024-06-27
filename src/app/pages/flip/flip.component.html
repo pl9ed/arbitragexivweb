@@ -1,6 +1,6 @@
 <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
 <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
-<ng-container *ngIf="{ items: selectedItems$ | async } as data">
+<ng-container *ngIf="{ items: rowData$ | async } as data">
   <div class="dropdown">
     <button
       class="btn btn-secondary dropdown-toggle"
@@ -39,5 +39,5 @@
     </tr>
   </table>
 
-  <p>{{ data?.items }}</p>
+  <p>{{ data.items }}</p>
 </ng-container>

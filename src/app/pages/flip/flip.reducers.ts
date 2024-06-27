@@ -1,14 +1,15 @@
 import { createReducer, on } from '@ngrx/store';
 import { pricesLoaded } from './flip.actions';
 import { produce } from 'immer';
-import { ItemRow } from './flip.models';
+import { FlipPriceState } from './flip.models';
 
-export const initialPriceState: PriceState = { items: [] };
+export const initialPriceState: FlipPriceState = { items: [] };
 
 export const flipPrices = createReducer(
   initialPriceState,
   on(pricesLoaded, (state, action) =>
     produce(state, (draft) => {
+      console.log('reducer');
       const existingIndex = draft.items.findIndex(
         (row) => row.name === action.item.name,
       );
@@ -19,7 +20,3 @@ export const flipPrices = createReducer(
     }),
   ),
 );
-
-export interface PriceState {
-  items: ItemRow[];
-}

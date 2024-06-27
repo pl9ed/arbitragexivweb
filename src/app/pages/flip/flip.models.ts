@@ -11,3 +11,7 @@ export interface ItemRow {
   worldHq: string;
   velocityHq: number;
 }
+
+export interface FlipPriceState {
+  items: ItemRow[];
+}

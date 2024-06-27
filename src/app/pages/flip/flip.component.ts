@@ -1,16 +1,16 @@
 /* eslint-disable prettier/prettier */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, mergeMap, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Constants } from 'src/app/models/Constants';
 import { Item } from 'src/app/models/Item';
-import { SettingsConfig } from 'src/app/services/settings.models';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
 import { XivAPIService } from 'src/app/services/xiv-api.service';
 import { ItemRow } from './flip.models';
 import { Store } from '@ngrx/store';
 import { loadPrices } from './flip.actions';
+import { selectItemRows } from './flip.selectors';
 
 @Component({
   selector: 'app-flip',
@@ -51,6 +51,8 @@ export class FlipComponent implements OnInit {
 
   selectedItems$!: Observable<number[]>;
 
+  rowData$!: Observable<readonly ItemRow[]>
+
   constructor(
     private router: Router,
     private mbAPI: UniversalisService,
@@ -66,6 +68,8 @@ export class FlipComponent implements OnInit {
         this.store.dispatch(loadPrices({ itemId: item}))
       })
     })
+
+    this.rowData$ = this.store.select(selectItemRows)
   }
 
   fillFlipTable() {
