@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { map, mergeMap, Observable } from 'rxjs';
 import { Constants } from 'src/app/models/Constants';
 import { Item } from 'src/app/models/Item';
 import { SettingsConfig } from 'src/app/services/settings.models';
@@ -9,6 +9,8 @@ import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
 import { XivAPIService } from 'src/app/services/xiv-api.service';
 import { ItemRow } from './flip.models';
+import { Store } from '@ngrx/store';
+import { loadPrices } from './flip.actions';
 
 @Component({
   selector: 'app-flip',
@@ -47,17 +49,23 @@ export class FlipComponent implements OnInit {
   dataArray: any[] = [];
   flipItemIDs = Constants.CONSUMABLE_ITEM_IDS;
 
-  selectedItems$: Observable<number[]>;
+  selectedItems$!: Observable<number[]>;
 
   constructor(
     private router: Router,
     private mbAPI: UniversalisService,
     private settings: SettingsService,
     private xivAPI: XivAPIService,
+    private store: Store
   ) {}
 
   ngOnInit() {
     this.selectedItems$ = this.settings.settingsConfig$.pipe(map(config => config.flip.itemLists.consumables))
+    this.selectedItems$.subscribe(items => {
+      items.forEach(item => {
+        this.store.dispatch(loadPrices({ itemId: item}))
+      })
+    })
   }
 
   fillFlipTable() {
@@ -66,11 +74,10 @@ export class FlipComponent implements OnInit {
     const interval = 25 + this.flipItemIDs.length * 40;
     for (const item of this.flipItemIDs) {
       setTimeout(async () => {
-        const itemName = await (await this.xivAPI.getName(item)).Name;
+        const itemName = (await this.xivAPI.getName(item)).Name;
 
         const prices = await this.getPrices(
-          { name: itemName, id: item },
-          Constants.DEFAULT_HOMEWORLD,
+          { name: itemName, id: item }
         );
         const nqPrices = prices[0];
         const hqPrices = prices[1];
@@ -115,7 +122,6 @@ export class FlipComponent implements OnInit {
 
   async getPrices(
     item: Item,
-    homeworld: string,
   ): Promise<Map<string, number>[]> {
     const nqMap = new Map<string, number>();
     const hqMap = new Map<string, number>();

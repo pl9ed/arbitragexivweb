@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { loadPrices } from './flip.actions';
+import { pricesLoaded } from './flip.actions';
 import { produce } from 'immer';
 import { ItemRow } from './flip.models';
 
@@ -7,9 +7,16 @@ export const initialPriceState: PriceState = { items: [] };
 
 export const flipPrices = createReducer(
   initialPriceState,
-  on(loadPrices, (state, action) =>
+  on(pricesLoaded, (state, action) =>
     produce(state, (draft) => {
-      draft.items = action.prices;
+      console.log('reducer');
+      const existingIndex = draft.items.findIndex(
+        (row) => row.name === action.item.name,
+      );
+      if (existingIndex !== -1) {
+        draft.items.splice(existingIndex, 1);
+      }
+      draft.items.push(action.item);
     }),
   ),
 );
