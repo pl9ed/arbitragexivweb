@@ -24,7 +24,7 @@ export class FlipPriceEffects {
   checkPrices$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(loadPrices),
-      switchMap((action) => {
+      concatMap((action) => {
         console.log('loading price');
         return this.settings.settingsConfig$.pipe(
           concatMap((config) => {
