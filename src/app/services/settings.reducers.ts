@@ -21,8 +21,8 @@ export const settings = createReducer(
   initialSettingState,
   on(loadConfig, (state, action) =>
     produce(state, (draft) => {
+      console.log(`Load settings ${draft}`);
       draft = action.newState;
-      console.log(`Updated state ${draft}`);
     }),
   ),
 );

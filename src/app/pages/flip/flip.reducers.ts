@@ -9,7 +9,6 @@ export const flipPrices = createReducer(
   initialPriceState,
   on(pricesLoaded, (state, action) =>
     produce(state, (draft) => {
-      console.log('reducer');
       const existingIndex = draft.items.findIndex(
         (row) => row.name === action.item.name,
       );
