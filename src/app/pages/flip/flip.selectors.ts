@@ -6,5 +6,5 @@ export const selectItemPrices =
 
 export const selectItemRows = createSelector(
   selectItemPrices,
-  (state: FlipPriceState) => state.items,
+  (state: FlipPriceState) => state.prices,
 );

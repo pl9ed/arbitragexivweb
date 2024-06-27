@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { loadPrices, pricesLoaded } from './flip.actions';
+import {
+  clearData,
+  loadPrices,
+  pricesLoaded,
+  selectItems,
+} from './flip.actions';
 import { XivAPIService } from '../../services/xiv-api.service';
 import { UniversalisService } from '../../services/universalis.service';
 import { concatMap, from, map, mergeMap, Observable, tap, toArray } from 'rxjs';
@@ -27,6 +32,19 @@ export class FlipPriceEffects {
             );
           }),
         );
+      }),
+    );
+  });
+
+  updateItemSelection$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(selectItems),
+      concatMap((action) => {
+        // eslint-disable-next-line @ngrx/no-multiple-actions-in-effects
+        return [
+          clearData(),
+          ...action.items.map((item) => loadPrices({ itemId: item })),
+        ];
       }),
     );
   });

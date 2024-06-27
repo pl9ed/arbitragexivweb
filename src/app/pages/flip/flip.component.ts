@@ -3,13 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import { Constants } from 'src/app/models/Constants';
-import { Item } from 'src/app/models/Item';
 import { SettingsService } from 'src/app/services/settings.service';
-import { UniversalisService } from 'src/app/services/universalis.service';
-import { XivAPIService } from 'src/app/services/xiv-api.service';
 import { ItemRow } from './flip.models';
 import { Store } from '@ngrx/store';
-import { loadPrices } from './flip.actions';
+import { loadPrices, selectItems } from './flip.actions';
 import { selectItemRows } from './flip.selectors';
 
 @Component({
@@ -46,8 +43,6 @@ export class FlipComponent implements OnInit {
     'Velocity (HQ)',
   ];
 
-  flipItemIDs = Constants.CONSUMABLE_ITEM_IDS;
-
   selectedItems$!: Observable<number[]>;
 
   rowData$!: Observable<readonly ItemRow[]>
@@ -70,8 +65,7 @@ export class FlipComponent implements OnInit {
   }
 
   togglePrices(index: number) {
-    this.flipItemIDs = this.toggleItems[index];
-    this.dropdownText = this.dropdownTextOptions[index];
+    this.store.dispatch(selectItems({ items: this.toggleItems[index]}))
   }
 
   format(num: number | null) {
