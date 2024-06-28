@@ -68,6 +68,7 @@ export class FlipComponent implements OnInit {
   }
 
   togglePrices(index: number) {
+    // TODO: avoid race conditions when user changes toggle before API calls have finished
     this.store.dispatch(selectItems({ dropdownText: this.dropdownTextOptions[index], items: this.toggleItems[index]}))
   }
 
