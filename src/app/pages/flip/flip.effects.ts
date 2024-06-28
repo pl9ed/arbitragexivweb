@@ -27,7 +27,7 @@ export class FlipPriceEffects {
       concatMap((action) => {
         return this.settings.settingsConfig$.pipe(
           concatMap((config) => {
-            return this.createRow(config.defaultWorld, action.itemId).pipe(
+            return this.createRow(config.homeworld, action.itemId).pipe(
               map((row) => pricesLoaded({ item: row })),
             );
           }),

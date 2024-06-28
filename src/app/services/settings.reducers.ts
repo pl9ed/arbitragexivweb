@@ -4,7 +4,7 @@ import { produce } from 'immer';
 import { loadConfig } from './settings.actions';
 
 export const initialSettingState: SettingsConfig = {
-  defaultWorld: 'Lamia',
+  homeworld: 'Lamia',
   flip: {
     dropDownOptions: [],
     itemLists: {
