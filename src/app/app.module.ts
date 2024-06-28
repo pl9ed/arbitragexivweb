@@ -18,6 +18,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { FlipPriceEffects } from './pages/flip/flip.effects';
 import { flipPrices } from './pages/flip/flip.reducers';
+import { gemstonePrices } from './pages/gemstone/gemstone.reducers';
+import { GemstonePriceEffects } from './pages/gemstone/gemstone.effects';
 
 @NgModule({
   declarations: [
@@ -33,9 +35,9 @@ import { flipPrices } from './pages/flip/flip.reducers';
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot({ settings, flipPrices }, {}),
+    StoreModule.forRoot({ settings, flipPrices, gemstonePrices }, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    EffectsModule.forRoot([FlipPriceEffects]),
+    EffectsModule.forRoot([FlipPriceEffects, GemstonePriceEffects]),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
 })

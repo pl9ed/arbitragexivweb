@@ -1,5 +1,8 @@
+import { GemstoneItem } from '../pages/gemstone/gemstone.models';
+
 export interface SettingsConfig {
   homeworld: string;
+  primal: string[];
   flip: {
     dropDownOptions: string[];
     itemLists: {
@@ -9,5 +12,5 @@ export interface SettingsConfig {
       materia: number[];
     };
   };
-  primal: string[];
+  gemstoneItems: GemstoneItem[];
 }

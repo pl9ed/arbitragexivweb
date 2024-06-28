@@ -1,15 +1,17 @@
-<table class="table">
-  <th *ngFor="let column of gemstoneHeaders">
-    {{ column }}
-  </th>
-  <tr *ngFor="let row of gemstoneItems">
-    <td>{{ row.name }}</td>
-    <td>{{ row.id }}</td>
-    <td>{{ row.unitCost }}</td>
-    <td>{{ row.minPriceNQ }}</td>
-    <td>{{ row.velocityNQ }}</td>
-    <!-- <td>{{row.minPriceHQ}}</td>
+<ng-container *ngIf="{ items: gemstonePrices$ | async } as data"
+  ><table class="table">
+    <th *ngFor="let column of gemstoneHeaders">
+      {{ column }}
+    </th>
+    <tr *ngFor="let row of data.items">
+      <td>{{ row.name }}</td>
+      <td>{{ row.id }}</td>
+      <td>{{ row.unitCost }}</td>
+      <td>{{ row.minPriceNQ }}</td>
+      <td>{{ row.velocityNQ }}</td>
+      <!-- <td>{{row.minPriceHQ}}</td>
         <td>{{row.velocityHQ}}</td> -->
-    <td>{{ row.areaName }}</td>
-  </tr>
-</table>
+      <td>{{ row.areaName }}</td>
+    </tr>
+  </table>
+</ng-container>

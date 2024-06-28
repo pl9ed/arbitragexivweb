@@ -14,6 +14,7 @@ export const initialSettingState: SettingsConfig = {
       materia: [],
     },
   },
+  gemstoneItems: [],
   primal: [],
 };
 

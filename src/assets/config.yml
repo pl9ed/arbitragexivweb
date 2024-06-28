@@ -1,4 +1,4 @@
-defaultWorld: Lamia
+homeworld: Lamia
 primal:
   - Behemoth
   - Excalibur
@@ -8,6 +8,20 @@ primal:
   - Lamia
   - Leviathan
   - Ultros
+
+gemstoneItems:
+  - id: 36242
+    name: Gaja Hide
+    area: THAVNAIR
+    cost: 2
+  - id: 36245
+    name: Kumbhira Skin
+    area: THAVNAIR
+    cost: 2
+  - id: 36261
+    name: Berkanan Sap
+    area: LABYRINTHOS
+    cost: 2
 
 flip:
   dropdownOptions:
