@@ -29,4 +29,3 @@ export abstract class Constants {
 
   public static DEFAULT_PRICECHECK_ITEMS: number[] = Constants.TOME_MATS;
 }
-

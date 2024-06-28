@@ -1,4 +1,4 @@
-import { GemstoneItem } from "../pages/gemstone/gemstone.models";
+import { GemstoneItem } from '../pages/gemstone/gemstone.models';
 
 export interface SettingsConfig {
   homeworld: string;
