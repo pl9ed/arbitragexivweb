@@ -15,3 +15,7 @@ export interface GemstoneItemPrice {
   areaName: string;
   unitCost: number;
 }
+
+export interface GemstonePriceState {
+  prices: GemstoneItemPrice[];
+}

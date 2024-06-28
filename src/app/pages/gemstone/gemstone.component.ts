@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Constants } from 'src/app/models/Constants';
-import { GemstoneItemPrice } from 'src/app/models/GemstoneItemPrice';
+import { Store } from '@ngrx/store';
+import { mergeMap, Observable } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
-import { UniversalisService } from 'src/app/services/universalis.service';
+import { checkGemstonePrice } from './gemstone.actions';
+import { GemstoneItemPrice } from './gemstone.models';
 
 @Component({
   selector: 'app-gemstone',
@@ -21,31 +22,19 @@ export class GemstoneComponent implements OnInit {
     // "Velocity (HQ)",
     'Region',
   ];
-  gemstoneItems: GemstoneItemPrice[] = [];
+  gemstonePrices$!: Observable<GemstoneItemPrice[]>;
 
   constructor(
     private router: Router,
-    private mbAPI: UniversalisService,
     private settings: SettingsService,
+    private store: Store,
   ) {}
 
   ngOnInit(): void {
-    Constants.GEMSTONE_ITEMS_LVL1.forEach((item, i) => {
-      setTimeout(() => {
-        this.mbAPI
-          .getItem(this.settings.homeworld, item.id)
-          .then((response) => {
-            const itemInfo = new GemstoneItemPrice(
-              item.name,
-              item.id,
-              response.minPriceNQ,
-              response.nqSaleVelocity,
-              item.area,
-              response.minPriceNQ / item.cost,
-            );
-            this.gemstoneItems[i] = itemInfo;
-          });
-      }, 50 * i);
-    });
+    this.settings.settingsConfig$
+      .pipe(mergeMap((config) => config.gemstoneItems))
+      .subscribe((item) => {
+        this.store.dispatch(checkGemstonePrice({ item: item }));
+      });
   }
 }
