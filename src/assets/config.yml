@@ -12,15 +12,15 @@ primal:
 gemstoneItems:
   - id: 36242
     name: Gaja Hide
-    region: THAVNAIR
+    area: THAVNAIR
     cost: 2
   - id: 36245
     name: Kumbhira Skin
-    region: THAVNAIR
+    area: THAVNAIR
     cost: 2
   - id: 36261
     name: Berkanan Sap
-    region: LABYRINTHOS
+    area: LABYRINTHOS
     cost: 2
 
 flip:
