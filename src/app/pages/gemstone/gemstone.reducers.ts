@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { GemstonePriceState } from './gemstone.models';
-import { gemstonePriceLoaded } from './gemstone.actions';
+import { clearData, gemstonePriceLoaded } from './gemstone.actions';
 import { produce } from 'immer';
 
 export const initialPriceState: GemstonePriceState = {
@@ -21,4 +21,7 @@ export const gemstonePrices = createReducer(
       draft.prices.push(action.item);
     }),
   ),
+  on(clearData, (state) => {
+    return initialPriceState;
+  }),
 );

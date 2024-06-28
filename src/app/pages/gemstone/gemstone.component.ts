@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { mergeMap, Observable } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
-import { checkGemstonePrice } from './gemstone.actions';
+import { checkGemstonePrice, clearData } from './gemstone.actions';
 import { GemstoneItemPrice } from './gemstone.models';
+import { selectGemstonePrices } from './gemstone.selectors';
 
 @Component({
   selector: 'app-gemstone',
   templateUrl: './gemstone.component.html',
   styleUrls: ['./gemstone.component.css'],
 })
-export class GemstoneComponent implements OnInit {
+export class GemstoneComponent implements OnInit, OnDestroy {
   gemstoneHeaders = [
     'Item',
     'ID',
@@ -36,5 +37,13 @@ export class GemstoneComponent implements OnInit {
       .subscribe((item) => {
         this.store.dispatch(checkGemstonePrice({ item: item }));
       });
+
+    this.gemstonePrices$ = this.store.select(selectGemstonePrices);
+  }
+
+  ngOnDestroy(): void {
+    // teardown subscriptions
+    // cache lookups? or maybe better to just update to get most recent prices
+    this.store.dispatch(clearData());
   }
 }
