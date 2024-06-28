@@ -1,5 +1,5 @@
 export interface SettingsConfig {
-  defaultWorld: string;
+  homeworld: string;
   flip: {
     dropDownOptions: string[];
     itemLists: {

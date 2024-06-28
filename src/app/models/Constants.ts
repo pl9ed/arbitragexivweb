@@ -1,4 +1,3 @@
-import { Item } from './Item';
 import { Region } from './Region';
 
 export abstract class Constants {

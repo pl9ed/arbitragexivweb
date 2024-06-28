@@ -1,10 +1,13 @@
+/* eslint-disable prettier/prettier */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { map, Observable } from 'rxjs';
 import { Constants } from 'src/app/models/Constants';
-import { Item } from 'src/app/models/Item';
 import { SettingsService } from 'src/app/services/settings.service';
-import { UniversalisService } from 'src/app/services/universalis.service';
-import { XivAPIService } from 'src/app/services/xiv-api.service';
+import { ItemRow } from './flip.models';
+import { Store } from '@ngrx/store';
+import { loadPrices, selectItems } from './flip.actions';
+import { selectCategory, selectItemRows } from './flip.selectors';
 
 @Component({
   selector: 'app-flip',
@@ -12,13 +15,13 @@ import { XivAPIService } from 'src/app/services/xiv-api.service';
   styleUrls: ['./flip.component.css'],
 })
 export class FlipComponent implements OnInit {
-  dropdownText = 'Select Items';
   dropdownTextOptions = [
     'Raid Consumables',
     'Crafting Mats',
     'Crafting Gear',
     'Materia',
   ];
+
   toggleItems = [
     Constants.CONSUMABLE_ITEM_IDS,
     Constants.CRAFTING_ITEM_IDS,
@@ -39,106 +42,45 @@ export class FlipComponent implements OnInit {
     'Min Price World (HQ)',
     'Velocity (HQ)',
   ];
-  velocityMap: Map<string, number[]> = new Map<string, number[]>();
-  dataArray: any[] = [];
-  flipItemIDs = Constants.CONSUMABLE_ITEM_IDS;
+
+  selectedCategory$!: Observable<string>
+  selectedItems$!: Observable<number[]>;
+
+  rowData$!: Observable<readonly ItemRow[]>
 
   constructor(
     private router: Router,
-    private mbAPI: UniversalisService,
     private settings: SettingsService,
-    private xivAPI: XivAPIService,
+    private store: Store
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.selectedCategory$ = this.store.select(selectCategory)
 
-  fillFlipTable() {
-    this.dataArray = [];
-    let i = 0;
-    const interval = 25 + this.flipItemIDs.length * 40;
-    for (const item of this.flipItemIDs) {
-      setTimeout(async () => {
-        const itemName = await (await this.xivAPI.getName(item)).Name;
+    this.selectedItems$ = this.settings.settingsConfig$.pipe(map(config => config.flip.itemLists.consumables))
+    this.selectedItems$.subscribe(items => {
+      items.forEach(item => {
+        this.store.dispatch(loadPrices({ itemId: item}))
+      })
+    })
 
-        const prices = await this.getPrices(
-          { name: itemName, id: item },
-          Constants.DEFAULT_HOMEWORLD,
-        );
-        const nqPrices = prices[0];
-        const hqPrices = prices[1];
-
-        const nqWorld = [...nqPrices.keys()][0];
-        const hqWorld = [...hqPrices.keys()][0];
-
-        const nqROI =
-          (nqPrices.get(this.settings.homeworld) || 0) /
-          (nqPrices.get(nqWorld) || 0);
-        const hqROI =
-          (hqPrices.get(this.settings.homeworld) || 0) /
-          (hqPrices.get(hqWorld) || 0);
-
-        const nqVelocity: number = (this.velocityMap.get(itemName) || [])[0];
-        const hqVelocity: number = (this.velocityMap.get(itemName) || [])[1];
-
-        const row = [
-          itemName,
-          nqROI.toFixed(2),
-          nqPrices.get(nqWorld),
-          nqPrices.get(this.settings.homeworld),
-          nqWorld,
-          nqVelocity.toFixed(3),
-          hqROI.toFixed(2),
-          hqPrices.get(hqWorld),
-          hqPrices.get(this.settings.homeworld),
-          hqWorld,
-          hqVelocity.toFixed(3),
-        ];
-        this.dataArray.push(row);
-      }, i * interval);
-      i++;
-    }
+    this.rowData$ = this.store.select(selectItemRows)
   }
 
   togglePrices(index: number) {
-    this.flipItemIDs = this.toggleItems[index];
-    this.dropdownText = this.dropdownTextOptions[index];
-    this.fillFlipTable();
+    this.store.dispatch(selectItems({ dropdownText: this.dropdownTextOptions[index], items: this.toggleItems[index]}))
   }
 
-  async getPrices(
-    item: Item,
-    homeworld: string,
-  ): Promise<Map<string, number>[]> {
-    const nqMap = new Map<string, number>();
-    const hqMap = new Map<string, number>();
+  format(num: number | null) {
+    if (num) return num.toFixed(2)
+    return "n/a"
+  }
 
-    for (let i = 0; i < Constants.PRIMAL.length; i++) {
-      const world = Constants.PRIMAL[i];
-      const prices = await this.mbAPI.getItem(world, item.id);
-      nqMap.set(world, prices.minPriceNQ);
-      hqMap.set(world, prices.minPriceHQ);
-      this.velocityMap.set(item.name, [
-        prices.nqSaleVelocity,
-        prices.hqSaleVelocity,
-      ]);
-      await this.mbAPI.sleep(50);
+  emptyIfInvalid(num: number) {
+    if (Number.isNaN(num) || !Number.isFinite(num)) {
+      return null
+    } else {
+      return num
     }
-
-    // remove with no price
-    const filteredNQ = new Map<string, number>(
-      [...nqMap].filter(([k, v]) => v > 0),
-    );
-    const filteredHQ = new Map<string, number>(
-      [...hqMap].filter(([k, v]) => v > 0),
-    );
-
-    const sortedNQ = new Map<string, number>(
-      [...filteredNQ.entries()].sort((a, b) => a[1] - b[1]),
-    );
-    const sortedHQ = new Map<string, number>(
-      [...filteredHQ.entries()].sort((a, b) => a[1] - b[1]),
-    );
-
-    return [sortedNQ, sortedHQ];
   }
 }

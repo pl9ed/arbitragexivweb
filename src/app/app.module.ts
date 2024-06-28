@@ -15,6 +15,9 @@ import { PricecheckComponent } from './pages/pricecheck/pricecheck.component';
 import { StoreModule } from '@ngrx/store';
 import { settings } from './services/settings.reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { FlipPriceEffects } from './pages/flip/flip.effects';
+import { flipPrices } from './pages/flip/flip.reducers';
 
 @NgModule({
   declarations: [
@@ -30,8 +33,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot({ settings }, {}),
+    StoreModule.forRoot({ settings, flipPrices }, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    EffectsModule.forRoot([FlipPriceEffects]),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
 })
