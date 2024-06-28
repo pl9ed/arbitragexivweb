@@ -7,7 +7,7 @@ import { SettingsService } from 'src/app/services/settings.service';
 import { ItemRow } from './flip.models';
 import { Store } from '@ngrx/store';
 import { loadPrices, selectItems } from './flip.actions';
-import { selectItemRows } from './flip.selectors';
+import { selectCategory, selectItemRows } from './flip.selectors';
 
 @Component({
   selector: 'app-flip',
@@ -15,13 +15,13 @@ import { selectItemRows } from './flip.selectors';
   styleUrls: ['./flip.component.css'],
 })
 export class FlipComponent implements OnInit {
-  dropdownText = 'Select Items';
   dropdownTextOptions = [
     'Raid Consumables',
     'Crafting Mats',
     'Crafting Gear',
     'Materia',
   ];
+
   toggleItems = [
     Constants.CONSUMABLE_ITEM_IDS,
     Constants.CRAFTING_ITEM_IDS,
@@ -43,6 +43,7 @@ export class FlipComponent implements OnInit {
     'Velocity (HQ)',
   ];
 
+  selectedCategory$!: Observable<string>
   selectedItems$!: Observable<number[]>;
 
   rowData$!: Observable<readonly ItemRow[]>
@@ -54,6 +55,8 @@ export class FlipComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.selectedCategory$ = this.store.select(selectCategory)
+
     this.selectedItems$ = this.settings.settingsConfig$.pipe(map(config => config.flip.itemLists.consumables))
     this.selectedItems$.subscribe(items => {
       items.forEach(item => {
@@ -65,7 +68,7 @@ export class FlipComponent implements OnInit {
   }
 
   togglePrices(index: number) {
-    this.store.dispatch(selectItems({ items: this.toggleItems[index]}))
+    this.store.dispatch(selectItems({ dropdownText: this.dropdownTextOptions[index], items: this.toggleItems[index]}))
   }
 
   format(num: number | null) {

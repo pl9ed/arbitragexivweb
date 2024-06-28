@@ -13,6 +13,7 @@ export interface ItemRow {
 }
 
 export interface FlipPriceState {
+  itemCategory: string;
   items: number[];
   prices: ItemRow[];
 }

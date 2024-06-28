@@ -15,5 +15,5 @@ export const clearData = createAction('[Flip Prices] Clearing row data');
 
 export const selectItems = createAction(
   '[Flip Prices] Select item category',
-  props<{ items: number[] }>(),
+  props<{ dropdownText: string; items: number[] }>(),
 );

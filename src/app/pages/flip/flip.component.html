@@ -10,7 +10,7 @@
       aria-haspopup="true"
       aria-expanded="false"
     >
-      {{ this.dropdownText }}
+      {{ this.selectedCategory$ | async }}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <a class="dropdown-item" (click)="togglePrices(0)">{{

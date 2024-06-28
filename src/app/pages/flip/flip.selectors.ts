@@ -8,3 +8,8 @@ export const selectItemRows = createSelector(
   selectItemPrices,
   (state: FlipPriceState) => state.prices,
 );
+
+export const selectCategory = createSelector(
+  selectItemPrices,
+  (state: FlipPriceState) => state.itemCategory,
+);
