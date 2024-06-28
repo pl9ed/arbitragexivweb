@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import { Constants } from 'src/app/models/Constants';
 import { SettingsService } from 'src/app/services/settings.service';
 import { ItemRow } from './flip.models';
 import { Store } from '@ngrx/store';
-import { loadPrices, selectItems } from './flip.actions';
+import { clearData, loadPrices, selectItems } from './flip.actions';
 import { selectCategory, selectItemRows } from './flip.selectors';
 
 @Component({
@@ -14,7 +14,7 @@ import { selectCategory, selectItemRows } from './flip.selectors';
   templateUrl: './flip.component.html',
   styleUrls: ['./flip.component.css'],
 })
-export class FlipComponent implements OnInit {
+export class FlipComponent implements OnInit, OnDestroy {
   dropdownTextOptions = [
     'Raid Consumables',
     'Crafting Mats',
@@ -83,5 +83,9 @@ export class FlipComponent implements OnInit {
     } else {
       return num
     }
+  }
+
+  ngOnDestroy(): void {
+      this.store.dispatch(clearData())
   }
 }
