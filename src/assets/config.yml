@@ -10,18 +10,74 @@ primal:
   - Ultros
 
 gemstoneItems:
-  - id: 36242
-    name: Gaja Hide
-    area: THAVNAIR
-    cost: 2
-  - id: 36245
-    name: Kumbhira Skin
-    area: THAVNAIR
-    cost: 2
-  - id: 36261
-    name: Berkanan Sap
-    area: LABYRINTHOS
-    cost: 2
+  - id: 44064
+    name: Swampmonk Thigh
+    area: Kozama'uka
+    cost: 3
+  - id: 44054
+    name: Hammerhead Crocodile Skin
+    area: Kozama'uka
+    cost: 3
+  - id: 44068
+    name: Poison Frog Secretions
+    area: Kozama'uka
+    cost: 3
+  - id: 44069
+    name: Lesser Apollyon Shell
+    area: Kozama'uka
+    cost: 3
+  - id: 44063
+    name: Alpaca Fillet
+    area: Urqopacha
+    cost: 3
+  - id: 44067
+    name: Megamaguey Pineapple
+    area: Urqopacha
+    cost: 3
+  - id: 44053
+    name: Silver Lobo Hide
+    area: Urqopacha
+    cost: 3
+  - id: 44055
+    name: Br'aax Hide
+    area: Yak T'el
+    cost: 3
+  - id: 44065
+    name: Branchbearer Fruit
+    area: Yak T'el
+    cost: 3
+  - id: 44070
+    name: Ty'aitya Wingblade
+    area: Yak T'el
+    cost: 3
+  - id: 44066
+    name: Nopalitender Tuna
+    area: Shaaloani
+    cost: 3
+  - id: 44106
+    name: Rroneek Chuck
+    area: Shaaloani
+    cost: 3
+  - id: 44027
+    name: Rroneek Fleece
+    area: Shaaloani
+    cost: 3
+  - id: 44071
+    name: Tumbleclaw Weeds
+    area: Shaaloani
+    cost: 3
+  - id: 44056
+    name: Gomphotherium Skin
+    area: Heritage Found
+    cost: 3
+  - id: 44072
+    name: Axe Beak Wing
+    area: Heritage Found
+    cost: 3
+  - id: 44057
+    name: Gargantua Hide
+    area: Living Memory
+    cost: 3
 
 flip:
   dropdownOptions:
