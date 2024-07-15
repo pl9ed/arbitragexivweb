@@ -21,7 +21,7 @@ export const gemstonePrices = createReducer(
       draft.prices.push(action.item);
     }),
   ),
-  on(clearData, (state) => {
+  on(clearData, (_) => {
     return initialPriceState;
   }),
 );
