@@ -15,7 +15,6 @@ import { selectGemstonePrices } from './gemstone.selectors';
 export class GemstoneComponent implements OnInit, OnDestroy {
   gemstoneHeaders = [
     'Item',
-    'ID',
     'Unit Price (NQ)',
     'Price (NQ)',
     'Velocity (NQ)',
