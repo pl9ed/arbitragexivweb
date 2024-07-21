@@ -57,7 +57,7 @@ export class PricecheckComponent implements OnInit {
       if (id && itemName) {
         const item: Item = { name: itemName, id };
 
-        this.mbAPI.getItemsFor(
+        this.mbAPI.getAllItemsFor(
           this.settings.homeworld,
           id,
           20
@@ -104,7 +104,7 @@ export class PricecheckComponent implements OnInit {
   async populatePrices() {
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i];
-      this.mbAPI.getItemsFor(this.settings.homeworld, item.id, 20)
+      this.mbAPI.getAllItemsFor(this.settings.homeworld, item.id, 20)
         .pipe(map(prices => {
           this.pricesNQ[i] = prices.minPriceNQ;
           this.veloNQ[i] = prices.nqSaleVelocity;
