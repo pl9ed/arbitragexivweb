@@ -8,7 +8,7 @@ import {
 } from './flip.actions';
 import { XivAPIService } from '../../services/xiv-api.service';
 import { UniversalisService } from '../../services/universalis.service';
-import { concatMap, from, map, mergeMap, Observable, tap, toArray } from 'rxjs';
+import { concatMap, flatMap, from, map, mergeMap, Observable, tap, toArray } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { ItemRow } from './flip.models';
 
@@ -50,60 +50,37 @@ export class FlipPriceEffects {
   });
 
   private createRow(homeworld: string, id: number): Observable<ItemRow> {
-    let minPriceNq: number = Number.MAX_SAFE_INTEGER;
-    let worldNq: string;
-    let minPriceHq: number = Number.MAX_SAFE_INTEGER;
-    let worldHq: string;
-
-    let homePriceNq: number = -1;
-    let velocityNq: number = -1;
-    let homePriceHq: number = -1;
-    let velocityHq: number = -1;
-
     return from(this.xivAPIService.getName(id)).pipe(
-      mergeMap((name) =>
-        this.settings.settingsConfig$.pipe(
-          mergeMap((config) => config.primal),
-          mergeMap((world) =>
-            from(this.universalisService.getItem(world, id)).pipe(
-              tap((response) => {
-                if (response.minPriceNQ < minPriceNq) {
-                  minPriceNq = response.minPriceNQ;
-                  worldNq = world;
-                }
-                if (response.minPriceHQ < minPriceHq) {
-                  minPriceHq = response.minPriceHQ;
-                  worldHq = world;
-                }
+      mergeMap((item) => this.universalisService.getAllItemsFor(homeworld, id, 10)),
+        mergeMap((homePrices) => 
+          this.universalisService.getAllItemsFor("primal", id, 50).pipe(
+          map(dcPrices => {
+          const cheapestNq = dcPrices.listings.filter(listing => listing.hq == false)[0];
+          const cheapestHq = dcPrices.listings.filter(listing => listing.hq == true)[0];
 
-                if (world == homeworld) {
-                  homePriceNq = response.minPriceNQ;
-                  velocityNq = response.nqSaleVelocity;
-                  homePriceHq = response.minPriceHQ;
-                  velocityHq = response.hqSaleVelocity;
-                }
-              }),
-            ),
-          ),
-          toArray(), // Gather all emissions into an array, might be able to reuse this later
-          map(() => {
-            const row: ItemRow = {
-              name: name.name,
-              roiNq: homePriceNq / minPriceNq,
-              homePriceNq: homePriceNq,
-              minPriceNq: minPriceNq,
-              worldNq: worldNq,
-              velocityNq: velocityNq,
-              roiHq: homePriceHq / minPriceHq,
-              homePriceHq: homePriceHq,
-              minPriceHq: minPriceHq,
-              worldHq: worldHq,
-              velocityHq: velocityHq,
-            };
-            return row;
-          }),
-        ),
-      ),
-    );
+          if (cheapestNq.pricePerUnit != dcPrices.minPriceNQ) {
+            console.log(`cheapest HQ item price and minPriceHQ don't match! listing price: ${cheapestNq.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceNQ}`)
+          }
+
+            if (cheapestHq.pricePerUnit != dcPrices.minPriceHQ) {
+            console.log(`cheapest HQ item price and minPriceHQ don't match! 0th listing price: ${cheapestHq.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceHQ}`)
+          }
+
+          const row: ItemRow = {
+            name: homePrices.name,
+            roiNq: homePrices.minPriceNQ / dcPrices.minPriceNQ,
+            homePriceNq: homePrices.minPriceNQ,
+            minPriceNq: dcPrices.minPriceNQ,
+            worldNq: cheapestNq.worldName,
+            velocityNq: homePrices.nqSaleVelocity,
+            roiHq: homePrices.minPriceHQ / dcPrices.minPriceHQ,
+            homePriceHq: homePrices.minPriceHQ,
+            minPriceHq: cheapestHq.pricePerUnit,
+            worldHq: cheapestHq.worldName,
+            velocityHq: homePrices.hqSaleVelocity,
+          };
+          return row;
+      }))
+    ))
   }
 }
