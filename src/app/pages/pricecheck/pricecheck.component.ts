@@ -57,22 +57,20 @@ export class PricecheckComponent implements OnInit {
       if (id && itemName) {
         const item: Item = { name: itemName, id };
 
-        this.mbAPI.getAllItemsFor(
-          this.settings.homeworld,
-          id,
-          20
-        ).pipe(map(response => {
-          this.items.push(item);
-          this.pricesNQ.push(response.minPriceNQ);
-          this.veloNQ.push(response.nqSaleVelocity);
-          this.pricesHQ.push(response.minPriceHQ);
-          this.veloHQ.push(response.hqSaleVelocity);
-          localStorage.setItem(
-            PricecheckComponent.itemKey,
-            JSON.stringify(this.items),
-          );
-          console.log(this.items);
-        }))
+        this.mbAPI.getAllItemsFor(this.settings.homeworld, id, 20).pipe(
+          map((response) => {
+            this.items.push(item);
+            this.pricesNQ.push(response.minPriceNQ);
+            this.veloNQ.push(response.nqSaleVelocity);
+            this.pricesHQ.push(response.minPriceHQ);
+            this.veloHQ.push(response.hqSaleVelocity);
+            localStorage.setItem(
+              PricecheckComponent.itemKey,
+              JSON.stringify(this.items),
+            );
+            console.log(this.items);
+          }),
+        );
       }
     } catch (e) {
       console.log(`Unable to find item name for id ${id}`);
@@ -104,13 +102,14 @@ export class PricecheckComponent implements OnInit {
   async populatePrices() {
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i];
-      this.mbAPI.getAllItemsFor(this.settings.homeworld, item.id, 20)
-        .pipe(map(prices => {
+      this.mbAPI.getAllItemsFor(this.settings.homeworld, item.id, 20).pipe(
+        map((prices) => {
           this.pricesNQ[i] = prices.minPriceNQ;
           this.veloNQ[i] = prices.nqSaleVelocity;
           this.pricesHQ[i] = prices.minPriceHQ;
           this.veloHQ[i] = prices.hqSaleVelocity;
-      }))
+        }),
+      );
 
       await this.mbAPI.sleep(50);
     }

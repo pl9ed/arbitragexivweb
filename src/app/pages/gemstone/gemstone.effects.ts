@@ -24,7 +24,11 @@ export class GemstonePriceEffects {
       ofType(checkGemstonePrice),
       concatMap((action) => {
         return from(
-          this.universalisService.getAllItemsFor(this.homeworld, action.item.id, 20),
+          this.universalisService.getAllItemsFor(
+            this.homeworld,
+            action.item.id,
+            20,
+          ),
         ).pipe(
           map((response) => {
             const price = {

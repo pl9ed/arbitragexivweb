@@ -15,8 +15,12 @@ export class UniversalisService {
 
   constructor(private http: HttpClient) {}
 
-  getAllItemsFor(dataCenter: string, id: number, listings: number): Observable<ItemResponse> {
-    let url = `${this.BASE_URL}/api/v2/${dataCenter}/${id}?listings=${listings}`;
+  getAllItemsFor(
+    dataCenter: string,
+    id: number,
+    listings: number,
+  ): Observable<ItemResponse> {
+    const url = `${this.BASE_URL}/api/v2/${dataCenter}/${id}?listings=${listings}`;
 
     return this.http.get<ItemResponse>(url);
   }
