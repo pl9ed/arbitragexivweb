@@ -8,7 +8,7 @@ import {
 } from './flip.actions';
 import { XivAPIService } from '../../services/xiv-api.service';
 import { UniversalisService } from '../../services/universalis.service';
-import { concatMap, flatMap, from, map, mergeMap, Observable, tap, toArray } from 'rxjs';
+import { concatMap, from, map, mergeMap, Observable, of, withLatestFrom } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { ItemRow } from './flip.models';
 
@@ -50,37 +50,43 @@ export class FlipPriceEffects {
   });
 
   private createRow(homeworld: string, id: number): Observable<ItemRow> {
-    return from(this.xivAPIService.getName(id)).pipe(
-      mergeMap((item) => this.universalisService.getAllItemsFor(homeworld, id, 10)),
-        mergeMap((homePrices) => 
-          this.universalisService.getAllItemsFor("primal", id, 50).pipe(
-          map(dcPrices => {
-          const cheapestNq = dcPrices.listings.filter(listing => listing.hq == false)[0];
-          const cheapestHq = dcPrices.listings.filter(listing => listing.hq == true)[0];
+  return from(this.xivAPIService.getName(id)).pipe(
+    mergeMap((item) =>
+      this.universalisService.getAllItemsFor(homeworld, id, 10).pipe(
+        withLatestFrom(
+          this.universalisService.getAllItemsFor("primal", id, 50),
+          of(item)
+        ),
+        map(([homePrices, dcPrices, item]) => {
+          const cheapestNq = dcPrices.listings.find(listing => !listing.hq);
+          const cheapestHq = dcPrices.listings.find(listing => listing.hq);
 
-          if (cheapestNq.pricePerUnit != dcPrices.minPriceNQ) {
-            console.log(`cheapest HQ item price and minPriceHQ don't match! listing price: ${cheapestNq.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceNQ}`)
+          if (cheapestNq?.pricePerUnit !== dcPrices.minPriceNQ) {
+            console.log(`cheapest HQ item price and minPriceHQ don't match! listing price: ${cheapestNq?.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceNQ}`);
           }
 
-            if (cheapestHq.pricePerUnit != dcPrices.minPriceHQ) {
-            console.log(`cheapest HQ item price and minPriceHQ don't match! 0th listing price: ${cheapestHq.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceHQ}`)
+          if (cheapestHq?.pricePerUnit !== dcPrices.minPriceHQ) {
+            console.log(`cheapest HQ item price and minPriceHQ don't match! 0th listing price: ${cheapestHq?.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceHQ}`);
           }
 
           const row: ItemRow = {
-            name: homePrices.name,
+            name: item.name,
             roiNq: homePrices.minPriceNQ / dcPrices.minPriceNQ,
             homePriceNq: homePrices.minPriceNQ,
             minPriceNq: dcPrices.minPriceNQ,
-            worldNq: cheapestNq.worldName,
+            worldNq: cheapestNq?.worldName ?? "",
             velocityNq: homePrices.nqSaleVelocity,
             roiHq: homePrices.minPriceHQ / dcPrices.minPriceHQ,
             homePriceHq: homePrices.minPriceHQ,
-            minPriceHq: cheapestHq.pricePerUnit,
-            worldHq: cheapestHq.worldName,
+            minPriceHq: dcPrices.minPriceHQ,
+            worldHq: cheapestHq?.worldName ?? "",
             velocityHq: homePrices.hqSaleVelocity,
           };
           return row;
-      }))
-    ))
-  }
+        })
+      )
+    )
+  );
+}
+
 }
