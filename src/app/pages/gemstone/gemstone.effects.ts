@@ -29,7 +29,7 @@ export class GemstonePriceEffects {
           map((response) => {
             const price = {
               name: action.item.name,
-              id: response.id,
+              id: response.itemID,
               minPriceNQ: response.minPriceNQ,
               velocityNQ: response.nqSaleVelocity,
               minPriceHQ: response.minPriceHQ,

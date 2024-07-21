@@ -87,12 +87,9 @@ flip:
     - Materia
   itemLists:
     consumables:
-      - 39727
-      - 39728
-      - 39730
-      - 39731
-      - 39872
-      - 39876
+      - 44096
+      - 44091
+      - 44078
     craftingMats:
       - 37282
       - 36116
