@@ -52,7 +52,7 @@ export class PricecheckComponent implements OnInit {
   async addItem(idString: string) {
     const id = Number(idString);
     try {
-      const itemName = (await this.xivAPI.getName(id)).Name;
+      const itemName = (await this.xivAPI.getName(id)).name;
       if (id && itemName) {
         const item: Item = { name: itemName, id };
 

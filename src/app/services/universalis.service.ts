@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ItemResponse } from '../models/ItemResponse';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +18,12 @@ export class UniversalisService {
   async getItem(world: string, id: number): Promise<ItemResponse> {
     const url = `${this.BASE_URL}/api/${world}/${id}`;
     return firstValueFrom(this.http.get<ItemResponse>(url));
+  }
+
+  getItemsForDC(dataCenter: string, id: number, listings: number): Observable<ItemResponse> {
+    const url = `${this.BASE_URL}/api/v2/${dataCenter}/${id}?listings=50`;
+
+    return this.http.get<ItemResponse>(url);
   }
 
   sleep(timer: number) {

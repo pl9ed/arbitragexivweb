@@ -88,7 +88,7 @@ export class FlipPriceEffects {
           toArray(), // Gather all emissions into an array, might be able to reuse this later
           map(() => {
             const row: ItemRow = {
-              name: name.Name,
+              name: name.name,
               roiNq: homePriceNq / minPriceNq,
               homePriceNq: homePriceNq,
               minPriceNq: minPriceNq,
