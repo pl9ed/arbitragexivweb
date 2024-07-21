@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { map } from 'rxjs';
 import { Constants } from 'src/app/models/Constants';
 import { Item } from 'src/app/models/Item';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -56,21 +57,22 @@ export class PricecheckComponent implements OnInit {
       if (id && itemName) {
         const item: Item = { name: itemName, id };
 
-        const itemResponse = await this.mbAPI.getItem(
+        this.mbAPI.getItemsFor(
           this.settings.homeworld,
           id,
-        );
-
-        this.items.push(item);
-        this.pricesNQ.push(itemResponse.minPriceNQ);
-        this.veloNQ.push(itemResponse.nqSaleVelocity);
-        this.pricesHQ.push(itemResponse.minPriceHQ);
-        this.veloHQ.push(itemResponse.hqSaleVelocity);
-        localStorage.setItem(
-          PricecheckComponent.itemKey,
-          JSON.stringify(this.items),
-        );
-        console.log(this.items);
+          20
+        ).pipe(map(response => {
+          this.items.push(item);
+          this.pricesNQ.push(response.minPriceNQ);
+          this.veloNQ.push(response.nqSaleVelocity);
+          this.pricesHQ.push(response.minPriceHQ);
+          this.veloHQ.push(response.hqSaleVelocity);
+          localStorage.setItem(
+            PricecheckComponent.itemKey,
+            JSON.stringify(this.items),
+          );
+          console.log(this.items);
+        }))
       }
     } catch (e) {
       console.log(`Unable to find item name for id ${id}`);
@@ -102,11 +104,14 @@ export class PricecheckComponent implements OnInit {
   async populatePrices() {
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i];
-      const prices = await this.mbAPI.getItem(this.settings.homeworld, item.id);
-      this.pricesNQ[i] = prices.minPriceNQ;
-      this.veloNQ[i] = prices.nqSaleVelocity;
-      this.pricesHQ[i] = prices.minPriceHQ;
-      this.veloHQ[i] = prices.hqSaleVelocity;
+      this.mbAPI.getItemsFor(this.settings.homeworld, item.id, 20)
+        .pipe(map(prices => {
+          this.pricesNQ[i] = prices.minPriceNQ;
+          this.veloNQ[i] = prices.nqSaleVelocity;
+          this.pricesHQ[i] = prices.minPriceHQ;
+          this.veloHQ[i] = prices.hqSaleVelocity;
+      }))
+
       await this.mbAPI.sleep(50);
     }
   }
