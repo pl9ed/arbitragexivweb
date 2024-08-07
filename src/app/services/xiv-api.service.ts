@@ -14,7 +14,7 @@ export class XivAPIService {
   async getName(id: number): Promise<Item> {
     const url = `${this.BASE_URL}/item/${id}`;
     const result = await firstValueFrom(this.http.get<SearchResult>(url));
-    return { id: result.ID, name: result.Name } as Item
+    return { id: result.ID, name: result.Name } as Item;
   }
 
   async getNames(ids: number[]): Promise<Item[]> {
@@ -28,16 +28,19 @@ export class XivAPIService {
   }
 
   findFirstByName(name: string): Observable<number> {
-    return this.http.get<PaginatedResult<SearchResult>>(this.BASE_URL + "/search?string=" + name)
-    .pipe(map(response => response.Results[0].ID))
+    return this.http
+      .get<
+        PaginatedResult<SearchResult>
+      >(this.BASE_URL + '/search?string=' + name)
+      .pipe(map((response) => response.Results[0].ID));
   }
 }
 
 interface SearchResult {
-  ID: number,
-  Name: string
+  ID: number;
+  Name: string;
 }
 
 interface PaginatedResult<T> {
-  Results: T[]
+  Results: T[];
 }

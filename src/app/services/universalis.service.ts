@@ -15,13 +15,12 @@ export class UniversalisService {
 
   constructor(private http: HttpClient) {}
 
-  async getItem(world: string, id: number): Promise<ItemResponse> {
-    const url = `${this.BASE_URL}/api/${world}/${id}`;
-    return firstValueFrom(this.http.get<ItemResponse>(url));
-  }
-
-  getItemsForDC(dataCenter: string, id: number, listings: number): Observable<ItemResponse> {
-    const url = `${this.BASE_URL}/api/v2/${dataCenter}/${id}?listings=50`;
+  getAllItemsFor(
+    dataCenter: string,
+    id: number,
+    listings: number,
+  ): Observable<ItemResponse> {
+    const url = `${this.BASE_URL}/api/v2/${dataCenter}/${id}?listings=${listings}`;
 
     return this.http.get<ItemResponse>(url);
   }

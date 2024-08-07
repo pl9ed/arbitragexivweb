@@ -1,6 +1,6 @@
 export interface ItemResponse {
   itemID: number;
-  listings: Listing[]
+  listings: Listing[];
   minPriceNQ: number;
   minPriceHQ: number;
   nqSaleVelocity: number;
@@ -9,8 +9,8 @@ export interface ItemResponse {
 }
 
 export interface Listing {
-  pricePerUnit: number,
-  quantity: number,
-  worldName: string,
-  hq: boolean,
+  pricePerUnit: number;
+  quantity: number;
+  worldName: string;
+  hq: boolean;
 }

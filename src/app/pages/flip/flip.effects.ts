@@ -4,11 +4,22 @@ import {
   clearData,
   loadPrices,
   pricesLoaded,
-  selectItems,
+  setCategory,
+  setItems,
 } from './flip.actions';
 import { XivAPIService } from '../../services/xiv-api.service';
 import { UniversalisService } from '../../services/universalis.service';
-import { concatMap, from, map, mergeMap, Observable, tap, toArray } from 'rxjs';
+import {
+  concatMap,
+  delay,
+  from,
+  map,
+  mergeMap,
+  Observable,
+  of,
+  switchMap,
+  withLatestFrom,
+} from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { ItemRow } from './flip.models';
 
@@ -38,7 +49,25 @@ export class FlipPriceEffects {
 
   updateItemSelection$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(selectItems),
+      ofType(setCategory),
+      switchMap((action) => {
+        console.log(action)
+        return this.settings.settingsConfig$.pipe(map((config) => {
+          console.log('fetch config')
+          console.log(config)
+          const category = action.category as keyof typeof config.flip.itemLists
+          const items = config.flip.itemLists[category]
+          console.log(action.category)
+          console.log(items)
+          return setItems({ items: items ?? [] })
+        }))
+      })
+    )
+  })
+
+  updateItemPrices$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setItems),
       concatMap((action) => {
         // eslint-disable-next-line @ngrx/no-multiple-actions-in-effects
         return [
@@ -50,55 +79,42 @@ export class FlipPriceEffects {
   });
 
   private createRow(homeworld: string, id: number): Observable<ItemRow> {
-    let minPriceNq: number = Number.MAX_SAFE_INTEGER;
-    let worldNq: string;
-    let minPriceHq: number = Number.MAX_SAFE_INTEGER;
-    let worldHq: string;
-
-    let homePriceNq: number = -1;
-    let velocityNq: number = -1;
-    let homePriceHq: number = -1;
-    let velocityHq: number = -1;
-
     return from(this.xivAPIService.getName(id)).pipe(
-      mergeMap((name) =>
-        this.settings.settingsConfig$.pipe(
-          mergeMap((config) => config.primal),
-          mergeMap((world) =>
-            from(this.universalisService.getItem(world, id)).pipe(
-              tap((response) => {
-                if (response.minPriceNQ < minPriceNq) {
-                  minPriceNq = response.minPriceNQ;
-                  worldNq = world;
-                }
-                if (response.minPriceHQ < minPriceHq) {
-                  minPriceHq = response.minPriceHQ;
-                  worldHq = world;
-                }
-
-                if (world == homeworld) {
-                  homePriceNq = response.minPriceNQ;
-                  velocityNq = response.nqSaleVelocity;
-                  homePriceHq = response.minPriceHQ;
-                  velocityHq = response.hqSaleVelocity;
-                }
-              }),
-            ),
+      mergeMap((item) =>
+        this.universalisService.getAllItemsFor(homeworld, id, 10).pipe(
+          delay(100),
+          withLatestFrom(
+            this.universalisService.getAllItemsFor('primal', id, 50),
+            of(item),
           ),
-          toArray(), // Gather all emissions into an array, might be able to reuse this later
-          map(() => {
+          map(([homePrices, dcPrices, item]) => {
+            const cheapestNq = dcPrices.listings.find((listing) => !listing.hq);
+            const cheapestHq = dcPrices.listings.find((listing) => listing.hq);
+
+            if (cheapestNq?.pricePerUnit !== dcPrices.minPriceNQ) {
+              console.log(
+                `cheapest HQ item price and minPriceNQ don't match! nq listing price: ${cheapestNq?.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceNQ}`,
+              );
+            }
+
+            if (cheapestHq?.pricePerUnit !== dcPrices.minPriceHQ) {
+              console.log(
+                `cheapest HQ item price and minPriceHQ don't match! hq listing listing price: ${cheapestHq?.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceHQ}`,
+              );
+            }
+
             const row: ItemRow = {
-              name: name.name,
-              roiNq: homePriceNq / minPriceNq,
-              homePriceNq: homePriceNq,
-              minPriceNq: minPriceNq,
-              worldNq: worldNq,
-              velocityNq: velocityNq,
-              roiHq: homePriceHq / minPriceHq,
-              homePriceHq: homePriceHq,
-              minPriceHq: minPriceHq,
-              worldHq: worldHq,
-              velocityHq: velocityHq,
+              name: item.name,
+              roiNq: homePrices.minPriceNQ / dcPrices.minPriceNQ,
+              homePriceNq: homePrices.minPriceNQ,
+              minPriceNq: dcPrices.minPriceNQ,
+              worldNq: cheapestNq?.worldName ?? '',
+              velocityNq: homePrices.nqSaleVelocity,
+              roiHq: homePrices.minPriceHQ / dcPrices.minPriceHQ,
+              homePriceHq: homePrices.minPriceHQ,
+              minPriceHq: dcPrices.minPriceHQ,
+              worldHq: cheapestHq?.worldName ?? '',
+              velocityHq: homePrices.hqSaleVelocity,
             };
             return row;
           }),

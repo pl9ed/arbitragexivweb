@@ -17,3 +17,8 @@ export interface FlipPriceState {
   items: number[];
   prices: ItemRow[];
 }
+
+export interface DropdownOptions {
+  property: string;
+  display: string;
+}

@@ -29,7 +29,7 @@ export class GemstoneComponent implements OnInit, OnDestroy {
     private router: Router,
     private settings: SettingsService,
     private store: Store,
-    private xivApiService: XivAPIService
+    private xivApiService: XivAPIService,
   ) {}
 
   ngOnInit(): void {
@@ -39,12 +39,12 @@ export class GemstoneComponent implements OnInit, OnDestroy {
         if (item.id && item.id > 0) {
           this.store.dispatch(checkGemstonePrice({ item: item }));
         } else {
-          console.log(`No id for ${item.name}, searching`)
-          this.xivApiService.findFirstByName(item.name).subscribe(id => {
-            item.id = id
-            console.log(`Mapping id ${id} to ${item.name}`)
-            this.store.dispatch(checkGemstonePrice({ item }))
-          })
+          console.log(`No id for ${item.name}, searching`);
+          this.xivApiService.findFirstByName(item.name).subscribe((id) => {
+            item.id = id;
+            console.log(`Mapping id ${id} to ${item.name}`);
+            this.store.dispatch(checkGemstonePrice({ item }));
+          });
         }
       });
 
