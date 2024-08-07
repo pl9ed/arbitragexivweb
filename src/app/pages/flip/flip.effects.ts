@@ -85,7 +85,7 @@ export class FlipPriceEffects {
     return from(this.xivAPIService.getName(id)).pipe(
       mergeMap((item) =>
         this.universalisService.getAllItemsFor(homeworld, id, 10).pipe(
-          delay(100),
+          delay(300),
           withLatestFrom(
             this.universalisService.getAllItemsFor('primal', id, 50),
             of(item),
