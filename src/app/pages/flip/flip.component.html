@@ -10,20 +10,20 @@
       aria-haspopup="true"
       aria-expanded="false"
     >
-      {{ this.selectedCategory$ | async }}
+      {{ this.dropdownTextOptions[this.selectedIndex]?.display ?? 'Select Item Category' }}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <a class="dropdown-item" (click)="togglePrices(0)">{{
-        dropdownTextOptions[0]
+        dropdownTextOptions[0].display
       }}</a>
       <a class="dropdown-item" (click)="togglePrices(1)">{{
-        dropdownTextOptions[1]
+        dropdownTextOptions[1].display
       }}</a>
       <a class="dropdown-item" (click)="togglePrices(2)">{{
-        dropdownTextOptions[2]
+        dropdownTextOptions[2].display
       }}</a>
       <a class="dropdown-item" (click)="togglePrices(3)">{{
-        dropdownTextOptions[3]
+        dropdownTextOptions[3].display
       }}</a>
     </div>
   </div>

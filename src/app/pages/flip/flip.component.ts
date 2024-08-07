@@ -2,11 +2,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import { Constants } from 'src/app/models/Constants';
 import { SettingsService } from 'src/app/services/settings.service';
-import { ItemRow } from './flip.models';
+import { DropdownOptions, ItemRow } from './flip.models';
 import { Store } from '@ngrx/store';
-import { clearData, loadPrices, selectItems } from './flip.actions';
+import { clearData, loadPrices, setCategory } from './flip.actions';
 import { selectCategory, selectItemRows } from './flip.selectors';
 
 @Component({
@@ -15,18 +14,12 @@ import { selectCategory, selectItemRows } from './flip.selectors';
   styleUrls: ['./flip.component.css'],
 })
 export class FlipComponent implements OnInit, OnDestroy {
-  dropdownTextOptions = [
-    'Raid Consumables',
-    'Crafting Mats',
-    'Crafting Gear',
-    'Materia',
-  ];
-
-  toggleItems = [
-    Constants.CONSUMABLE_ITEM_IDS,
-    Constants.CRAFTING_ITEM_IDS,
-    Constants.CRAFTING_GEAR_IDS,
-    Constants.MATERIA,
+  selectedIndex: number = 0;
+  dropdownTextOptions: DropdownOptions[] = [
+    { property: "consumables", display: 'Raid Consumables' },
+    { property: 'craftingMats', display: 'Crafting Mats'},
+    { property: 'craftingGear', display: 'Crafting Gear' },
+    { property: 'materia', display: 'Materia' },
   ];
 
   headers = [
@@ -68,8 +61,8 @@ export class FlipComponent implements OnInit, OnDestroy {
   }
 
   togglePrices(index: number) {
-    // TODO: avoid race conditions when user changes toggle before API calls have finished
-    this.store.dispatch(selectItems({ dropdownText: this.dropdownTextOptions[index], items: this.toggleItems[index]}))
+    this.selectedIndex = index;
+    this.store.dispatch(setCategory({ category: this.dropdownTextOptions[index].property}))
   }
 
   format(num: number | null) {

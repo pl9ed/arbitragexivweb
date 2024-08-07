@@ -4,7 +4,8 @@ import {
   clearData,
   loadPrices,
   pricesLoaded,
-  selectItems,
+  setCategory,
+  setItems,
 } from './flip.actions';
 import { XivAPIService } from '../../services/xiv-api.service';
 import { UniversalisService } from '../../services/universalis.service';
@@ -16,6 +17,7 @@ import {
   mergeMap,
   Observable,
   of,
+  switchMap,
   withLatestFrom,
 } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -47,7 +49,25 @@ export class FlipPriceEffects {
 
   updateItemSelection$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(selectItems),
+      ofType(setCategory),
+      switchMap((action) => {
+        console.log(action)
+        return this.settings.settingsConfig$.pipe(map((config) => {
+          console.log('fetch config')
+          console.log(config)
+          const category = action.category as keyof typeof config.flip.itemLists
+          const items = config.flip.itemLists[category]
+          console.log(action.category)
+          console.log(items)
+          return setItems({ items: items ?? [] })
+        }))
+      })
+    )
+  })
+
+  updateItemPrices$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setItems),
       concatMap((action) => {
         // eslint-disable-next-line @ngrx/no-multiple-actions-in-effects
         return [
@@ -62,7 +82,7 @@ export class FlipPriceEffects {
     return from(this.xivAPIService.getName(id)).pipe(
       mergeMap((item) =>
         this.universalisService.getAllItemsFor(homeworld, id, 10).pipe(
-          delay(50),
+          delay(100),
           withLatestFrom(
             this.universalisService.getAllItemsFor('primal', id, 50),
             of(item),

@@ -2,7 +2,8 @@ import { createReducer, on } from '@ngrx/store';
 import {
   clearData as clearPrices,
   pricesLoaded,
-  selectItems,
+  setCategory,
+  setItems,
 } from './flip.actions';
 import { produce } from 'immer';
 import { FlipPriceState } from './flip.models';
@@ -26,9 +27,13 @@ export const flipPrices = createReducer(
       draft.prices.push(action.item);
     }),
   ),
-  on(selectItems, (state, action) =>
+  on(setCategory, (state, action) =>
     produce(state, (draft) => {
-      draft.itemCategory = action.dropdownText;
+      draft.itemCategory = action.category;
+    }),
+  ),
+  on(setItems, (state, action) =>
+    produce(state, (draft) => {
       draft.items = action.items;
     }),
   ),
