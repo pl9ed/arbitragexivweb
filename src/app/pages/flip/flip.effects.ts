@@ -51,19 +51,22 @@ export class FlipPriceEffects {
     return this.actions$.pipe(
       ofType(setCategory),
       switchMap((action) => {
-        console.log(action)
-        return this.settings.settingsConfig$.pipe(map((config) => {
-          console.log('fetch config')
-          console.log(config)
-          const category = action.category as keyof typeof config.flip.itemLists
-          const items = config.flip.itemLists[category]
-          console.log(action.category)
-          console.log(items)
-          return setItems({ items: items ?? [] })
-        }))
-      })
-    )
-  })
+        console.log(action);
+        return this.settings.settingsConfig$.pipe(
+          map((config) => {
+            console.log('fetch config');
+            console.log(config);
+            const category =
+              action.category as keyof typeof config.flip.itemLists;
+            const items = config.flip.itemLists[category];
+            console.log(action.category);
+            console.log(items);
+            return setItems({ items: items ?? [] });
+          }),
+        );
+      }),
+    );
+  });
 
   updateItemPrices$ = createEffect(() => {
     return this.actions$.pipe(

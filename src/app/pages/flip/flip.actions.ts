@@ -13,7 +13,10 @@ export const pricesLoaded = createAction(
 
 export const clearData = createAction('[Flip Prices] Clearing row data');
 
-export const setCategory = createAction('[Flip Prices] Select item category', props<{ category: string }>())
+export const setCategory = createAction(
+  '[Flip Prices] Select item category',
+  props<{ category: string }>(),
+);
 
 export const setItems = createAction(
   '[Flip Prices] Set selected items',

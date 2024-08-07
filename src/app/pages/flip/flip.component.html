@@ -10,7 +10,10 @@
       aria-haspopup="true"
       aria-expanded="false"
     >
-      {{ this.dropdownTextOptions[this.selectedIndex]?.display ?? 'Select Item Category' }}
+      {{
+        this.dropdownTextOptions[this.selectedIndex]?.display ??
+          "Select Item Category"
+      }}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <a class="dropdown-item" (click)="togglePrices(0)">{{
