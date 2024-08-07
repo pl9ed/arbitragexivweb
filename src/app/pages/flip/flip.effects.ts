@@ -10,6 +10,7 @@ import { XivAPIService } from '../../services/xiv-api.service';
 import { UniversalisService } from '../../services/universalis.service';
 import {
   concatMap,
+  delay,
   from,
   map,
   mergeMap,
@@ -61,6 +62,7 @@ export class FlipPriceEffects {
     return from(this.xivAPIService.getName(id)).pipe(
       mergeMap((item) =>
         this.universalisService.getAllItemsFor(homeworld, id, 10).pipe(
+          delay(50),
           withLatestFrom(
             this.universalisService.getAllItemsFor('primal', id, 50),
             of(item),
@@ -71,13 +73,13 @@ export class FlipPriceEffects {
 
             if (cheapestNq?.pricePerUnit !== dcPrices.minPriceNQ) {
               console.log(
-                `cheapest HQ item price and minPriceHQ don't match! listing price: ${cheapestNq?.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceNQ}`,
+                `cheapest HQ item price and minPriceNQ don't match! nq listing price: ${cheapestNq?.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceNQ}`,
               );
             }
 
             if (cheapestHq?.pricePerUnit !== dcPrices.minPriceHQ) {
               console.log(
-                `cheapest HQ item price and minPriceHQ don't match! 0th listing price: ${cheapestHq?.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceHQ}`,
+                `cheapest HQ item price and minPriceHQ don't match! hq listing listing price: ${cheapestHq?.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceHQ}`,
               );
             }
 
