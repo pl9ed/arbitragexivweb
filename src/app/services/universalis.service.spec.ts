@@ -5,7 +5,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 
-fdescribe('UniversalisService', () => {
+describe('UniversalisService', () => {
   let service: UniversalisService;
 
   beforeEach(() => {
