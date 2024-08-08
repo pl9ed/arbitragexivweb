@@ -17,15 +17,38 @@
   </button>
 </div>
 
-<table class="table">
-  <th *ngFor="let header of headers">
-    {{ header }}
-  </th>
-  <tr *ngFor="let item of items; let i = index">
-    <td>{{ item.name }}</td>
-    <td>{{ pricesNQ[i] }}</td>
-    <td>{{ veloNQ[i] }}</td>
-    <td>{{ pricesHQ[i] }}</td>
-    <td>{{ veloHQ[i] }}</td>
-  </tr>
+<table mat-table [dataSource]="dataSource" matSort>
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+  </ng-container>
+
+  <!-- Price Column -->
+  <ng-container matColumnDef="priceNq">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Price (NQ)</th>
+    <td mat-cell *matCellDef="let element">{{ element.priceNq }}</td>
+  </ng-container>
+
+  <!-- Price Column -->
+  <ng-container matColumnDef="velocityNq">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Velocity (NQ)</th>
+    <td mat-cell *matCellDef="let element">{{ element.velocityNq }}</td>
+  </ng-container>
+
+  <!-- Price Column -->
+  <ng-container matColumnDef="priceHq">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Price (HQ)</th>
+    <td mat-cell *matCellDef="let element">{{ element.priceHq }}</td>
+  </ng-container>
+
+  <!-- Price Column -->
+  <ng-container matColumnDef="velocityHq">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Velocity (HQ)</th>
+    <td mat-cell *matCellDef="let element">{{ element.velocityHq }}</td>
+  </ng-container>
+
+  <!-- Header and Row Declarations -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>

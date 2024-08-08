@@ -21,6 +21,7 @@ import { flipPrices } from './pages/flip/flip.reducers';
 import { gemstonePrices } from './pages/gemstone/gemstone.reducers';
 import { GemstonePriceEffects } from './pages/gemstone/gemstone.effects';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,11 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     StoreModule.forRoot({ settings, flipPrices, gemstonePrices }, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     EffectsModule.forRoot([FlipPriceEffects, GemstonePriceEffects]),
+    MatTableModule,
   ],
-  providers: [provideHttpClient(withInterceptorsFromDi()), provideAnimationsAsync()],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi()),
+    provideAnimationsAsync(),
+  ],
 })
 export class AppModule {}
