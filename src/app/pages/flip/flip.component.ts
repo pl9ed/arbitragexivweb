@@ -8,6 +8,7 @@ import { clearData, loadPrices, setCategory } from './flip.actions';
 import { selectCategory, selectItemRows } from './flip.selectors';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { format, emptyIfInvalid } from '../../utils/number-utils';
 
 @Component({
   selector: 'app-flip',
@@ -15,6 +16,9 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./flip.component.css'],
 })
 export class FlipComponent implements OnInit, OnDestroy {
+  format = format;
+  emptyIfInvalid = emptyIfInvalid;
+
   selectedIndex: number = 0;
   dropdownTextOptions: DropdownOptions[] = [
     { property: 'consumables', display: 'Raid Consumables' },
@@ -76,14 +80,6 @@ export class FlipComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       setCategory({ category: this.dropdownTextOptions[index].property }),
     );
-  }
-
-  format(num: number | null): string {
-    return num ? num.toFixed(2) : 'n/a';
-  }
-
-  emptyIfInvalid(num: number): number | null {
-    return Number.isNaN(num) || !Number.isFinite(num) ? null : num;
   }
 
   ngOnDestroy(): void {
