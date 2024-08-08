@@ -42,7 +42,7 @@ import { MatSortModule } from '@angular/material/sort';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     EffectsModule.forRoot([FlipPriceEffects, GemstonePriceEffects]),
     MatTableModule,
-    MatSortModule
+    MatSortModule,
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),

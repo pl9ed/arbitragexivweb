@@ -17,7 +17,12 @@
   </button>
 </div>
 
-<table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
+<table
+  mat-table
+  [dataSource]="dataSource"
+  matSort
+  (matSortChange)="announceSortChange($event)"
+>
   <!-- Name Column -->
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>

@@ -1,6 +1,6 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, OnInit } from '@angular/core';
-import { Sort } from '@angular/material/sort';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { mergeMap } from 'rxjs';
 import { Item } from 'src/app/models/Item';
@@ -13,7 +13,7 @@ import { XivAPIService } from 'src/app/services/xiv-api.service';
   templateUrl: './pricecheck.component.html',
   styleUrls: ['./pricecheck.component.css'],
 })
-export class PricecheckComponent implements OnInit {
+export class PricecheckComponent implements OnInit, AfterViewInit {
   static itemKey = 'PRICE_CHECK_ITEM';
 
   items: Item[] = [];
@@ -26,13 +26,7 @@ export class PricecheckComponent implements OnInit {
   ];
   dataSource = new MatTableDataSource<PriceCheckRow>([]);
 
-  headers = [
-    'Item',
-    'Price (NQ)',
-    'Velocity (NQ)',
-    'Price (HQ)',
-    'Velocity (HQ)',
-  ];
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private mbAPI: UniversalisService,
@@ -50,6 +44,10 @@ export class PricecheckComponent implements OnInit {
     } else {
       this.loadDefaults();
     }
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
   }
 
   async addItem(idString: string) {
