@@ -1,8 +1,14 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { mergeMap } from 'rxjs';
+import { mergeMap, Subject, takeUntil } from 'rxjs';
 import { Item } from 'src/app/models/Item';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
@@ -13,8 +19,10 @@ import { XivAPIService } from 'src/app/services/xiv-api.service';
   templateUrl: './pricecheck.component.html',
   styleUrls: ['./pricecheck.component.css'],
 })
-export class PricecheckComponent implements OnInit, AfterViewInit {
+export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
   static itemKey = 'PRICE_CHECK_ITEM';
+
+  private destroy$ = new Subject<void>();
 
   items: Item[] = [];
   displayedColumns: string[] = [
@@ -50,6 +58,11 @@ export class PricecheckComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   async addItem(idString: string) {
     const id = Number(idString);
     try {
@@ -59,6 +72,7 @@ export class PricecheckComponent implements OnInit, AfterViewInit {
 
         this.mbAPI
           .getAllItemsFor(this.settings.homeworld, id, 20)
+          .pipe(takeUntil(this.destroy$))
           .subscribe((response) => {
             this.items.push(item);
             this.dataSource.data = [

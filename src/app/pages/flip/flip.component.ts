@@ -1,12 +1,13 @@
-/* eslint-disable prettier/prettier */
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { map, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { SettingsService } from 'src/app/services/settings.service';
 import { DropdownOptions, ItemRow } from './flip.models';
 import { Store } from '@ngrx/store';
 import { clearData, loadPrices, setCategory } from './flip.actions';
 import { selectCategory, selectItemRows } from './flip.selectors';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-flip',
@@ -16,69 +17,78 @@ import { selectCategory, selectItemRows } from './flip.selectors';
 export class FlipComponent implements OnInit, OnDestroy {
   selectedIndex: number = 0;
   dropdownTextOptions: DropdownOptions[] = [
-    { property: "consumables", display: 'Raid Consumables' },
-    { property: 'craftingMats', display: 'Crafting Mats'},
+    { property: 'consumables', display: 'Raid Consumables' },
+    { property: 'craftingMats', display: 'Crafting Mats' },
     { property: 'craftingGear', display: 'Crafting Gear' },
     { property: 'materia', display: 'Materia' },
   ];
 
   headers = [
-    'Item',
-    'ROI (NQ)',
-    'Min Price (NQ)',
-    'Home Price (NQ)',
-    'Min Price World (NQ)',
-    'Velocity (NQ)',
-    'ROI (HQ)',
-    'Min Price (HQ)',
-    'Home Price (HQ)',
-    'Min Price World (HQ)',
-    'Velocity (HQ)',
+    'name',
+    'roiNq',
+    'minPriceNq',
+    'homePriceNq',
+    'worldNq',
+    'velocityNq',
+    'roiHq',
+    'minPriceHq',
+    'homePriceHq',
+    'worldHq',
+    'velocityHq',
   ];
 
-  selectedCategory$!: Observable<string>
+  selectedCategory$!: Observable<string>;
   selectedItems$!: Observable<number[]>;
+  rowData$!: Observable<ItemRow[]>;
+  dataSource = new MatTableDataSource<ItemRow>([]);
 
-  rowData$!: Observable<readonly ItemRow[]>
+  @ViewChild(MatSort) sort!: MatSort;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
-    private router: Router,
     private settings: SettingsService,
-    private store: Store
+    private store: Store,
   ) {}
 
-  ngOnInit() {
-    this.selectedCategory$ = this.store.select(selectCategory)
+  ngOnInit(): void {
+    this.selectedCategory$ = this.store.select(selectCategory);
 
-    this.selectedItems$ = this.settings.settingsConfig$.pipe(map(config => config.flip.itemLists.consumables))
-    this.selectedItems$.subscribe(items => {
-      items.forEach(item => {
-        this.store.dispatch(loadPrices({ itemId: item}))
-      })
-    })
+    this.selectedItems$ = this.settings.settingsConfig$.pipe(
+      map((config) => config.flip.itemLists.consumables),
+    );
 
-    this.rowData$ = this.store.select(selectItemRows)
+    this.selectedItems$.pipe(takeUntil(this.destroy$)).subscribe((items) => {
+      items.forEach((item) => {
+        this.store.dispatch(loadPrices({ itemId: item }));
+      });
+    });
+
+    this.rowData$ = this.store.select(selectItemRows);
+    this.rowData$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.dataSource.data = data;
+      this.dataSource.sort = this.sort;
+    });
   }
 
-  togglePrices(index: number) {
+  togglePrices(index: number): void {
     this.selectedIndex = index;
-    this.store.dispatch(setCategory({ category: this.dropdownTextOptions[index].property}))
+    this.store.dispatch(
+      setCategory({ category: this.dropdownTextOptions[index].property }),
+    );
   }
 
-  format(num: number | null) {
-    if (num) return num.toFixed(2)
-    return "n/a"
+  format(num: number | null): string {
+    return num ? num.toFixed(2) : 'n/a';
   }
 
-  emptyIfInvalid(num: number) {
-    if (Number.isNaN(num) || !Number.isFinite(num)) {
-      return null
-    } else {
-      return num
-    }
+  emptyIfInvalid(num: number): number | null {
+    return Number.isNaN(num) || !Number.isFinite(num) ? null : num;
   }
 
   ngOnDestroy(): void {
-      this.store.dispatch(clearData())
+    this.store.dispatch(clearData());
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
