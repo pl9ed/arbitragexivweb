@@ -5,9 +5,9 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { map, mergeMap, Observable, of, tap } from 'rxjs';
+import { map, mergeMap, Observable, of, Subject, tap } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { SettingsService } from 'src/app/services/settings.service';
 import { checkGemstonePrice, clearData } from './gemstone.actions';
 import { GemstoneItemPrice } from './gemstone.models';
@@ -22,7 +22,7 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./gemstone.component.css'],
 })
 export class GemstoneComponent implements OnInit, OnDestroy, AfterViewInit {
-  gemstoneHeaders = [
+  gemstoneHeaders: string[] = [
     'name',
     'unitCost',
     'minPriceNQ',
@@ -36,6 +36,8 @@ export class GemstoneComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns: string[] = this.gemstoneHeaders;
 
   @ViewChild(MatSort) sort!: MatSort;
+
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private settings: SettingsService,
@@ -61,15 +63,18 @@ export class GemstoneComponent implements OnInit, OnDestroy, AfterViewInit {
             );
           }
         }),
+        takeUntil(this.unsubscribe$)
       )
       .subscribe((item) => {
         this.store.dispatch(checkGemstonePrice({ item }));
       });
 
     this.gemstonePrices$ = this.store.select(selectGemstonePrices);
-    this.gemstonePrices$.subscribe((data) => {
-      this.dataSource.data = data;
-    });
+    this.gemstonePrices$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data) => {
+        this.dataSource.data = data;
+      });
   }
 
   ngAfterViewInit(): void {
@@ -77,8 +82,8 @@ export class GemstoneComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    // teardown subscriptions
-    // cache lookups? or maybe better to just update to get most recent prices
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
     this.store.dispatch(clearData());
   }
 }
