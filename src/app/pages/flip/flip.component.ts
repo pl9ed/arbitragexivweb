@@ -17,7 +17,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export class FlipComponent implements OnInit, OnDestroy {
   selectedIndex: number = 0;
   dropdownTextOptions: DropdownOptions[] = [
-    { property: "consumables", display: 'Raid Consumables' },
+    { property: 'consumables', display: 'Raid Consumables' },
     { property: 'craftingMats', display: 'Crafting Mats' },
     { property: 'craftingGear', display: 'Crafting Gear' },
     { property: 'materia', display: 'Materia' },
@@ -48,24 +48,24 @@ export class FlipComponent implements OnInit, OnDestroy {
 
   constructor(
     private settings: SettingsService,
-    private store: Store
+    private store: Store,
   ) {}
 
   ngOnInit(): void {
     this.selectedCategory$ = this.store.select(selectCategory);
 
     this.selectedItems$ = this.settings.settingsConfig$.pipe(
-      map(config => config.flip.itemLists.consumables)
+      map((config) => config.flip.itemLists.consumables),
     );
 
-    this.selectedItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
-      items.forEach(item => {
+    this.selectedItems$.pipe(takeUntil(this.destroy$)).subscribe((items) => {
+      items.forEach((item) => {
         this.store.dispatch(loadPrices({ itemId: item }));
       });
     });
 
     this.rowData$ = this.store.select(selectItemRows);
-    this.rowData$.pipe(takeUntil(this.destroy$)).subscribe(data => {
+    this.rowData$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       this.dataSource.data = data;
       this.dataSource.sort = this.sort;
     });
@@ -73,11 +73,13 @@ export class FlipComponent implements OnInit, OnDestroy {
 
   togglePrices(index: number): void {
     this.selectedIndex = index;
-    this.store.dispatch(setCategory({ category: this.dropdownTextOptions[index].property }));
+    this.store.dispatch(
+      setCategory({ category: this.dropdownTextOptions[index].property }),
+    );
   }
 
   format(num: number | null): string {
-    return num ? num.toFixed(2) : "n/a";
+    return num ? num.toFixed(2) : 'n/a';
   }
 
   emptyIfInvalid(num: number): number | null {

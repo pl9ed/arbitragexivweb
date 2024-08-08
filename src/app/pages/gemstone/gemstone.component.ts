@@ -63,7 +63,7 @@ export class GemstoneComponent implements OnInit, OnDestroy, AfterViewInit {
             );
           }
         }),
-        takeUntil(this.unsubscribe$)
+        takeUntil(this.unsubscribe$),
       )
       .subscribe((item) => {
         this.store.dispatch(checkGemstonePrice({ item }));
