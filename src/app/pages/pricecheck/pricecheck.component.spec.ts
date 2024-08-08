@@ -16,9 +16,16 @@ describe('PricecheckComponent', () => {
   let liveAnnouncerMock: any;
 
   beforeEach(async () => {
-    universalisServiceMock = jasmine.createSpyObj('UniversalisService', ['getAllItemsFor']);
-    settingsServiceMock = jasmine.createSpyObj('SettingsService', ['settingsConfig$']);
-    xivAPIServiceMock = jasmine.createSpyObj('XivAPIService', ['getName', 'getNames']);
+    universalisServiceMock = jasmine.createSpyObj('UniversalisService', [
+      'getAllItemsFor',
+    ]);
+    settingsServiceMock = jasmine.createSpyObj('SettingsService', [
+      'settingsConfig$',
+    ]);
+    xivAPIServiceMock = jasmine.createSpyObj('XivAPIService', [
+      'getName',
+      'getNames',
+    ]);
     liveAnnouncerMock = jasmine.createSpyObj('LiveAnnouncer', ['announce']);
 
     await TestBed.configureTestingModule({
@@ -44,7 +51,9 @@ describe('PricecheckComponent', () => {
   });
 
   it('should initialize with items from localStorage', () => {
-    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([{ name: 'Test Item', id: 1 }]));
+    spyOn(localStorage, 'getItem').and.returnValue(
+      JSON.stringify([{ name: 'Test Item', id: 1 }]),
+    );
     spyOn(component, 'populatePrices');
     component.ngOnInit();
     expect(component.items.length).toBe(1);
@@ -54,12 +63,14 @@ describe('PricecheckComponent', () => {
   it('should add item correctly', async () => {
     const mockItem = { name: 'Test Item', id: 1 };
     xivAPIServiceMock.getName.and.returnValue(Promise.resolve(mockItem));
-    universalisServiceMock.getAllItemsFor.and.returnValue(of({
-      minPriceNQ: 100,
-      nqSaleVelocity: 2,
-      minPriceHQ: 200,
-      hqSaleVelocity: 1,
-    }));
+    universalisServiceMock.getAllItemsFor.and.returnValue(
+      of({
+        minPriceNQ: 100,
+        nqSaleVelocity: 2,
+        minPriceHQ: 200,
+        hqSaleVelocity: 1,
+      }),
+    );
 
     await component.addItem('1');
     expect(component.items.length).toBe(1);
@@ -67,14 +78,30 @@ describe('PricecheckComponent', () => {
   });
 
   it('should remove item correctly', () => {
-    component.dataSource.data = [{ name: 'Test Item', priceNq: 100, velocityNq: 2, priceHq: 200, velocityHq: 1 }];
+    component.dataSource.data = [
+      {
+        name: 'Test Item',
+        priceNq: 100,
+        velocityNq: 2,
+        priceHq: 200,
+        velocityHq: 1,
+      },
+    ];
     component.removeItem(0);
     expect(component.dataSource.data.length).toBe(0);
   });
 
   it('should clear items correctly', () => {
     component.items = [{ name: 'Test Item', id: 1 }];
-    component.dataSource.data = [{ name: 'Test Item', priceNq: 100, velocityNq: 2, priceHq: 200, velocityHq: 1 }];
+    component.dataSource.data = [
+      {
+        name: 'Test Item',
+        priceNq: 100,
+        velocityNq: 2,
+        priceHq: 200,
+        velocityHq: 1,
+      },
+    ];
     component.clearItems();
     expect(component.items.length).toBe(0);
     expect(component.dataSource.data.length).toBe(0);

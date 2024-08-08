@@ -1,5 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { UniversalisService } from './universalis.service';
 import { ItemResponse } from '../models/ItemResponse';
 import { provideHttpClient } from '@angular/common/http';
@@ -10,7 +14,11 @@ describe('UniversalisService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [UniversalisService, provideHttpClient(), provideHttpClientTesting()]
+      providers: [
+        UniversalisService,
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
     });
 
     service = TestBed.inject(UniversalisService);
@@ -33,20 +41,20 @@ describe('UniversalisService', () => {
           pricePerUnit: 10,
           quantity: 5,
           worldName: 'world',
-          hq: false
+          hq: false,
         },
         {
           pricePerUnit: 10,
           quantity: 5,
           worldName: 'world',
-          hq: true
-        }
+          hq: true,
+        },
       ],
       minPriceNQ: 5,
       minPriceHQ: 10,
       nqSaleVelocity: 1,
       hqSaleVelocity: 2,
-      unitsForSale: 100
+      unitsForSale: 100,
     };
     const dataCenter = 'Aether';
     const id = 12345;
@@ -56,7 +64,9 @@ describe('UniversalisService', () => {
       expect(response).toEqual(dummyResponse);
     });
 
-    const req = httpMock.expectOne(`${service.BASE_URL}/api/v2/${dataCenter}/${id}?listings=${listings}`);
+    const req = httpMock.expectOne(
+      `${service.BASE_URL}/api/v2/${dataCenter}/${id}?listings=${listings}`,
+    );
     expect(req.request.method).toBe('GET');
     req.flush(dummyResponse);
   });

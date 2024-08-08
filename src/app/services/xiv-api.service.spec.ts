@@ -44,32 +44,34 @@ describe('XivAPIService', () => {
     req.flush(mockResult);
   });
 
-  it('should fetch multiple item names by ids', fakeAsync(inject([XivAPIService], async () => {
-    const mockResults = [
-      { ID: 1, Name: 'Test Item 1' },
-      { ID: 2, Name: 'Test Item 2' },
-    ];
-    const expectedItems: Item[] = [
-      { id: 1, name: 'Test Item 1' },
-      { id: 2, name: 'Test Item 2' },
-    ];
+  it('should fetch multiple item names by ids', fakeAsync(
+    inject([XivAPIService], async () => {
+      const mockResults = [
+        { ID: 1, Name: 'Test Item 1' },
+        { ID: 2, Name: 'Test Item 2' },
+      ];
+      const expectedItems: Item[] = [
+        { id: 1, name: 'Test Item 1' },
+        { id: 2, name: 'Test Item 2' },
+      ];
 
-    const promise = service.getNames([1, 2]);
+      const promise = service.getNames([1, 2]);
 
-    // Flush the requests in the order they are made
-    mockResults.forEach((mockResult) => {
-      const req = httpMock.expectOne((request) => {
-        console.log('Request URL:', request.url);
-        return request.url === `https://xivapi.com/item/${mockResult.ID}`;
+      // Flush the requests in the order they are made
+      mockResults.forEach((mockResult) => {
+        const req = httpMock.expectOne((request) => {
+          console.log('Request URL:', request.url);
+          return request.url === `https://xivapi.com/item/${mockResult.ID}`;
+        });
+        expect(req.request.method).toBe('GET');
+        req.flush(mockResult);
+        tick(10000);
       });
-      expect(req.request.method).toBe('GET');
-      req.flush(mockResult);
-      tick(10000)
-    });
 
-    const items = await promise;
-    expect(items).toEqual(expectedItems);
-  })));
+      const items = await promise;
+      expect(items).toEqual(expectedItems);
+    }),
+  ));
 
   it('should find first item by name', () => {
     const mockResult = { Results: [{ ID: 1, Name: 'Test Item' }] };
