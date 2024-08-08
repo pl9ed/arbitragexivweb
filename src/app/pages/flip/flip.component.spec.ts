@@ -43,7 +43,9 @@ describe('FlipComponent', () => {
   };
 
   beforeEach(async () => {
-    mockSettingsService = jasmine.createSpyObj('SettingsService', ['settingsConfig$']);
+    mockSettingsService = jasmine.createSpyObj('SettingsService', [
+      'settingsConfig$',
+    ]);
 
     await TestBed.configureTestingModule({
       declarations: [FlipComponent],
@@ -52,9 +54,12 @@ describe('FlipComponent', () => {
         provideMockStore({
           selectors: [
             { selector: selectCategory, value: 'consumables' },
-            { selector: selectItemRows, value: [{ name: 'item1' }, { name: 'item2' }] as ItemRow[] }
-          ]
-        })
+            {
+              selector: selectItemRows,
+              value: [{ name: 'item1' }, { name: 'item2' }] as ItemRow[],
+            },
+          ],
+        }),
       ],
       imports: [MatSortModule, MatTableModule, BrowserAnimationsModule],
     }).compileComponents();
@@ -83,30 +88,39 @@ describe('FlipComponent', () => {
         return of([{ name: 'item1' }, { name: 'item2' }] as ItemRow[]);
       }
       return of([]);
-    });    
+    });
     const dispatchSpy = spyOn(mockStore, 'dispatch').and.callThrough();
 
     component.ngOnInit();
 
     expect(selectSpy).toHaveBeenCalledWith(selectCategory);
-    expectedItems.forEach(item => {
+    expectedItems.forEach((item) => {
       expect(dispatchSpy).toHaveBeenCalledWith(loadPrices({ itemId: item }));
     });
     expect(selectSpy).toHaveBeenCalledWith(selectItemRows);
 
-    expect(await firstValueFrom(component.selectedCategory$)).toEqual(expectedCategory);
-    expect(await firstValueFrom(component.selectedItems$)).toEqual(expectedItems);
-    
-    component.rowData$.subscribe(data => console.log(data));  
-    
-    expect(await firstValueFrom(component.rowData$)).toEqual( [{ name: 'item1' }, { name: 'item2' }] as ItemRow[]);
+    expect(await firstValueFrom(component.selectedCategory$)).toEqual(
+      expectedCategory,
+    );
+    expect(await firstValueFrom(component.selectedItems$)).toEqual(
+      expectedItems,
+    );
+
+    component.rowData$.subscribe((data) => console.log(data));
+
+    expect(await firstValueFrom(component.rowData$)).toEqual([
+      { name: 'item1' },
+      { name: 'item2' },
+    ] as ItemRow[]);
   });
 
   it('should dispatch setCategory on togglePrices', () => {
     const spy = spyOn(mockStore, 'dispatch').and.callThrough();
     const index = 1;
     component.togglePrices(index);
-    expect(spy).toHaveBeenCalledWith(setCategory({ category: component.dropdownTextOptions[index].property }));
+    expect(spy).toHaveBeenCalledWith(
+      setCategory({ category: component.dropdownTextOptions[index].property }),
+    );
   });
 
   it('should clean up on ngOnDestroy', () => {
@@ -115,7 +129,7 @@ describe('FlipComponent', () => {
 
     component.ngOnDestroy();
 
-    mockStore.scannedActions$.subscribe(action => {
+    mockStore.scannedActions$.subscribe((action) => {
       expect(action).toEqual(clearData());
     });
 
