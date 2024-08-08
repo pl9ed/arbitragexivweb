@@ -16,6 +16,9 @@ export const initialSettingState: SettingsConfig = {
   },
   gemstoneItems: [],
   primal: [],
+  pricechecker: {
+    default: [],
+  },
 };
 
 export const settings = createReducer(
