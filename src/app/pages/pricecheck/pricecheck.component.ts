@@ -1,4 +1,6 @@
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit } from '@angular/core';
+import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { mergeMap } from 'rxjs';
 import { Item } from 'src/app/models/Item';
@@ -36,6 +38,7 @@ export class PricecheckComponent implements OnInit {
     private mbAPI: UniversalisService,
     private settings: SettingsService,
     private xivAPI: XivAPIService,
+    private liveAnnouncer: LiveAnnouncer,
   ) {}
 
   ngOnInit(): void {
@@ -128,6 +131,14 @@ export class PricecheckComponent implements OnInit {
           ];
         });
       await this.mbAPI.sleep(50);
+    }
+  }
+
+  announceSortChange(sortState: Sort) {
+    if (sortState.direction) {
+      this.liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this.liveAnnouncer.announce('Sorting cleared');
     }
   }
 }

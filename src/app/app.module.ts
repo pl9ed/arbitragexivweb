@@ -22,6 +22,7 @@ import { gemstonePrices } from './pages/gemstone/gemstone.reducers';
 import { GemstonePriceEffects } from './pages/gemstone/gemstone.effects';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { MatTableModule } from '@angular/material/table';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     EffectsModule.forRoot([FlipPriceEffects, GemstonePriceEffects]),
     MatTableModule,
+    MatSortModule
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
