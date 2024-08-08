@@ -13,4 +13,7 @@ export interface SettingsConfig {
     };
   };
   gemstoneItems: GemstoneItem[];
+  pricechecker: {
+    default: number[];
+  };
 }

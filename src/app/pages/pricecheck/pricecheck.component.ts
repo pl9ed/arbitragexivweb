@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { map } from 'rxjs';
-import { Constants } from 'src/app/models/Constants';
+import { mergeMap } from 'rxjs';
 import { Item } from 'src/app/models/Item';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
@@ -38,13 +37,9 @@ export class PricecheckComponent implements OnInit {
 
   ngOnInit(): void {
     const itemsString = localStorage.getItem(PricecheckComponent.itemKey);
-    try {
-      const itemArr = JSON.parse(itemsString!);
-      if (itemArr.length > 0) {
-        this.items = itemArr;
-      }
-    } catch (e) {
-      console.log(e);
+    const itemArr = JSON.parse(itemsString!);
+    if (itemArr.length > 0) {
+      this.items = itemArr;
     }
 
     this.populatePrices();
@@ -83,12 +78,18 @@ export class PricecheckComponent implements OnInit {
   }
 
   async loadDefaults() {
-    this.items = await this.xivAPI.getNames(Constants.DEFAULT_PRICECHECK_ITEMS);
-    localStorage.setItem(
-      PricecheckComponent.itemKey,
-      JSON.stringify(this.items),
-    );
-    this.populatePrices();
+    this.settings.settingsConfig$
+      .pipe(
+        mergeMap((config) => this.xivAPI.getNames(config.pricechecker.default)),
+      )
+      .subscribe((items) => {
+        this.items = items;
+        localStorage.setItem(
+          PricecheckComponent.itemKey,
+          JSON.stringify(this.items),
+        );
+        this.populatePrices();
+      });
   }
 
   clearItems() {
