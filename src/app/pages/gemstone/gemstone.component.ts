@@ -15,6 +15,7 @@ import { selectGemstonePrices } from './gemstone.selectors';
 import { XivAPIService } from '../../services/xiv-api.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { emptyIfInvalid, formatDecimal } from 'src/app/utils/number-utils';
 
 @Component({
   selector: 'app-gemstone',
@@ -22,6 +23,9 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./gemstone.component.css'],
 })
 export class GemstoneComponent implements OnInit, OnDestroy, AfterViewInit {
+  format = formatDecimal;
+  emptyIfInvalid = emptyIfInvalid;
+
   gemstoneHeaders: string[] = [
     'name',
     'unitCost',

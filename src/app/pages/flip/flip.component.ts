@@ -8,7 +8,7 @@ import { clearData, loadPrices, setCategory } from './flip.actions';
 import { selectCategory, selectItemRows } from './flip.selectors';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { format, emptyIfInvalid } from '../../utils/number-utils';
+import { formatDecimal, emptyIfInvalid } from '../../utils/number-utils';
 
 @Component({
   selector: 'app-flip',
@@ -16,7 +16,7 @@ import { format, emptyIfInvalid } from '../../utils/number-utils';
   styleUrls: ['./flip.component.css'],
 })
 export class FlipComponent implements OnInit, OnDestroy {
-  format = format;
+  format = formatDecimal;
   emptyIfInvalid = emptyIfInvalid;
 
   selectedIndex: number = 0;

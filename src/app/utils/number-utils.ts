@@ -1,4 +1,4 @@
-export function format(num: number | null): string {
+export function formatDecimal(num: number | null): string {
   return num ? num.toFixed(2) : 'n/a';
 }
 

@@ -38,7 +38,9 @@
   <!-- Price Column -->
   <ng-container matColumnDef="velocityNq">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Velocity (NQ)</th>
-    <td mat-cell *matCellDef="let element">{{ element.velocityNq }}</td>
+    <td mat-cell *matCellDef="let element">
+      {{ format(emptyIfInvalid(element.velocityNq)) }}
+    </td>
   </ng-container>
 
   <!-- Price Column -->
@@ -50,7 +52,9 @@
   <!-- Price Column -->
   <ng-container matColumnDef="velocityHq">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Velocity (HQ)</th>
-    <td mat-cell *matCellDef="let element">{{ element.velocityHq }}</td>
+    <td mat-cell *matCellDef="let element">
+      {{ format(emptyIfInvalid(element.velocityHq)) }}
+    </td>
   </ng-container>
 
   <!-- Header and Row Declarations -->
