@@ -13,6 +13,7 @@ import { Item } from 'src/app/models/Item';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
 import { XivAPIService } from 'src/app/services/xiv-api.service';
+import { emptyIfInvalid, formatDecimal } from 'src/app/utils/number-utils';
 
 @Component({
   selector: 'app-pricecheck',
@@ -20,6 +21,9 @@ import { XivAPIService } from 'src/app/services/xiv-api.service';
   styleUrls: ['./pricecheck.component.css'],
 })
 export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
+  format = formatDecimal;
+  emptyIfInvalid = emptyIfInvalid;
+
   static itemKey = 'PRICE_CHECK_ITEM';
 
   private destroy$ = new Subject<void>();
