@@ -24,7 +24,7 @@ export abstract class Constants {
   ];
 
   public static TOME_MATS: number[] = [
-    44143, 44144, 44145, 44146, 44141, 44142
+    44143, 44144, 44145, 44146, 44141, 44142,
   ];
 
   public static DEFAULT_PRICECHECK_ITEMS: number[] = Constants.TOME_MATS;

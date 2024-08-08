@@ -57,8 +57,9 @@ export class PricecheckComponent implements OnInit {
       if (id && itemName) {
         const item: Item = { name: itemName, id };
 
-        this.mbAPI.getAllItemsFor(this.settings.homeworld, id, 20).pipe(
-          map((response) => {
+        this.mbAPI
+          .getAllItemsFor(this.settings.homeworld, id, 20)
+          .subscribe((response) => {
             this.items.push(item);
             this.pricesNQ.push(response.minPriceNQ);
             this.veloNQ.push(response.nqSaleVelocity);
@@ -69,8 +70,7 @@ export class PricecheckComponent implements OnInit {
               JSON.stringify(this.items),
             );
             console.log(this.items);
-          }),
-        );
+          });
       }
     } catch (e) {
       console.log(`Unable to find item name for id ${id}`);
@@ -102,7 +102,9 @@ export class PricecheckComponent implements OnInit {
   async populatePrices() {
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i];
-      this.mbAPI.getAllItemsFor(this.settings.homeworld, item.id, 20).subscribe((prices) => {
+      this.mbAPI
+        .getAllItemsFor(this.settings.homeworld, item.id, 20)
+        .subscribe((prices) => {
           this.pricesNQ[i] = prices.minPriceNQ;
           this.veloNQ[i] = prices.nqSaleVelocity;
           this.pricesHQ[i] = prices.minPriceHQ;
