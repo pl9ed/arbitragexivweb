@@ -6,7 +6,7 @@ import { SettingsConfig } from './settings.models';
 import * as yaml from 'yaml';
 import { provideHttpClient } from '@angular/common/http';
 
-fdescribe('SettingsService', () => {
+describe('SettingsService', () => {
   let service: SettingsService;
   let httpMock: HttpTestingController;
 

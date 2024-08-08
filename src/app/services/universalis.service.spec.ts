@@ -4,7 +4,7 @@ import { UniversalisService } from './universalis.service';
 import { ItemResponse } from '../models/ItemResponse';
 import { provideHttpClient } from '@angular/common/http';
 
-fdescribe('UniversalisService', () => {
+describe('UniversalisService', () => {
   let service: UniversalisService;
   let httpMock: HttpTestingController;
 
