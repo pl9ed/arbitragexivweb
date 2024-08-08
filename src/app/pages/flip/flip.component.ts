@@ -1,6 +1,6 @@
-/* eslint-disable prettier/prettier */
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { SettingsService } from 'src/app/services/settings.service';
 import { DropdownOptions, ItemRow } from './flip.models';
 import { Store } from '@ngrx/store';
@@ -18,7 +18,7 @@ export class FlipComponent implements OnInit, OnDestroy {
   selectedIndex: number = 0;
   dropdownTextOptions: DropdownOptions[] = [
     { property: "consumables", display: 'Raid Consumables' },
-    { property: 'craftingMats', display: 'Crafting Mats'},
+    { property: 'craftingMats', display: 'Crafting Mats' },
     { property: 'craftingGear', display: 'Crafting Gear' },
     { property: 'materia', display: 'Materia' },
   ];
@@ -37,55 +37,56 @@ export class FlipComponent implements OnInit, OnDestroy {
     'velocityHq',
   ];
 
-  selectedCategory$!: Observable<string>
+  selectedCategory$!: Observable<string>;
   selectedItems$!: Observable<number[]>;
-
-  rowData$!: Observable<ItemRow[]>
+  rowData$!: Observable<ItemRow[]>;
   dataSource = new MatTableDataSource<ItemRow>([]);
 
   @ViewChild(MatSort) sort!: MatSort;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private settings: SettingsService,
     private store: Store
   ) {}
 
-  ngOnInit() {
-    this.selectedCategory$ = this.store.select(selectCategory)
+  ngOnInit(): void {
+    this.selectedCategory$ = this.store.select(selectCategory);
 
-    this.selectedItems$ = this.settings.settingsConfig$.pipe(map(config => config.flip.itemLists.consumables))
-    this.selectedItems$.subscribe(items => {
+    this.selectedItems$ = this.settings.settingsConfig$.pipe(
+      map(config => config.flip.itemLists.consumables)
+    );
+
+    this.selectedItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
       items.forEach(item => {
-        this.store.dispatch(loadPrices({ itemId: item}))
-      })
-    })
+        this.store.dispatch(loadPrices({ itemId: item }));
+      });
+    });
 
-    this.rowData$ = this.store.select(selectItemRows)
-    this.rowData$.subscribe(data => {
+    this.rowData$ = this.store.select(selectItemRows);
+    this.rowData$.pipe(takeUntil(this.destroy$)).subscribe(data => {
       this.dataSource.data = data;
       this.dataSource.sort = this.sort;
     });
   }
 
-  togglePrices(index: number) {
+  togglePrices(index: number): void {
     this.selectedIndex = index;
-    this.store.dispatch(setCategory({ category: this.dropdownTextOptions[index].property}))
+    this.store.dispatch(setCategory({ category: this.dropdownTextOptions[index].property }));
   }
 
-  format(num: number | null) {
-    if (num) return num.toFixed(2)
-    return "n/a"
+  format(num: number | null): string {
+    return num ? num.toFixed(2) : "n/a";
   }
 
-  emptyIfInvalid(num: number) {
-    if (Number.isNaN(num) || !Number.isFinite(num)) {
-      return null
-    } else {
-      return num
-    }
+  emptyIfInvalid(num: number): number | null {
+    return Number.isNaN(num) || !Number.isFinite(num) ? null : num;
   }
 
   ngOnDestroy(): void {
-      this.store.dispatch(clearData())
+    this.store.dispatch(clearData());
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
