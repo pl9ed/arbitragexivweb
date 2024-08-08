@@ -48,7 +48,7 @@ export class FlipComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  private destroy$ = new Subject<void>();
+  destroy$ = new Subject<void>();
 
   constructor(
     private settings: SettingsService,

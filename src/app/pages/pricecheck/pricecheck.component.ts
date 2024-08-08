@@ -50,7 +50,7 @@ export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     const itemsString = localStorage.getItem(PricecheckComponent.itemKey);
     const itemArr = JSON.parse(itemsString!);
-    if (itemArr.length > 0) {
+    if (itemArr && itemArr.length > 0) {
       this.items = itemArr;
       this.populatePrices();
     } else {
@@ -102,7 +102,8 @@ export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   removeItem(index: number) {
-    this.dataSource.data = this.dataSource.data.splice(index, 1);
+    this.dataSource.data.splice(index, 1);
+    this.dataSource.data = [...this.dataSource.data];
   }
 
   async loadDefaults() {

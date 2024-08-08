@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test",
+    "test": "ng test --no-watch --browsers=ChromeHeadless",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prettier": "npx prettier . --write"
@@ -28,6 +28,7 @@
     "eslint-plugin-import": "^2.25.2",
     "immer": "^10.1.1",
     "rxjs": "^7.8.1",
+    "typescript": "^5.4.5",
     "zone.js": "~0.14.7"
   },
   "devDependencies": {
@@ -59,7 +60,6 @@
     "protractor": "~7.0.0",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.3",
-    "typescript": "^5.4.5",
     "yaml": "^2.4.5"
   }
 }
