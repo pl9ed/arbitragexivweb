@@ -102,14 +102,12 @@ export class PricecheckComponent implements OnInit {
   async populatePrices() {
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i];
-      this.mbAPI.getAllItemsFor(this.settings.homeworld, item.id, 20).pipe(
-        map((prices) => {
+      this.mbAPI.getAllItemsFor(this.settings.homeworld, item.id, 20).subscribe((prices) => {
           this.pricesNQ[i] = prices.minPriceNQ;
           this.veloNQ[i] = prices.nqSaleVelocity;
           this.pricesHQ[i] = prices.minPriceHQ;
           this.veloHQ[i] = prices.hqSaleVelocity;
-        }),
-      );
+        });
 
       await this.mbAPI.sleep(50);
     }
