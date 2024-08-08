@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { mergeMap } from 'rxjs';
 import { Item } from 'src/app/models/Item';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -11,28 +13,26 @@ import { XivAPIService } from 'src/app/services/xiv-api.service';
   templateUrl: './pricecheck.component.html',
   styleUrls: ['./pricecheck.component.css'],
 })
-export class PricecheckComponent implements OnInit {
+export class PricecheckComponent implements OnInit, AfterViewInit {
   static itemKey = 'PRICE_CHECK_ITEM';
 
   items: Item[] = [];
-  pricesNQ: number[] = [];
-  veloNQ: number[] = [];
-  pricesHQ: number[] = [];
-  veloHQ: number[] = [];
-
-  headers = [
-    'Item',
-    'Price (NQ)',
-    'Velocity (NQ)',
-    'Price (HQ)',
-    'Velocity (HQ)',
+  displayedColumns: string[] = [
+    'name',
+    'priceNq',
+    'velocityNq',
+    'priceHq',
+    'velocityHq',
   ];
+  dataSource = new MatTableDataSource<PriceCheckRow>([]);
+
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private router: Router,
     private mbAPI: UniversalisService,
     private settings: SettingsService,
     private xivAPI: XivAPIService,
+    private liveAnnouncer: LiveAnnouncer,
   ) {}
 
   ngOnInit(): void {
@@ -40,9 +40,14 @@ export class PricecheckComponent implements OnInit {
     const itemArr = JSON.parse(itemsString!);
     if (itemArr.length > 0) {
       this.items = itemArr;
+      this.populatePrices();
+    } else {
+      this.loadDefaults();
     }
+  }
 
-    this.populatePrices();
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
   }
 
   async addItem(idString: string) {
@@ -56,25 +61,30 @@ export class PricecheckComponent implements OnInit {
           .getAllItemsFor(this.settings.homeworld, id, 20)
           .subscribe((response) => {
             this.items.push(item);
-            this.pricesNQ.push(response.minPriceNQ);
-            this.veloNQ.push(response.nqSaleVelocity);
-            this.pricesHQ.push(response.minPriceHQ);
-            this.veloHQ.push(response.hqSaleVelocity);
+            this.dataSource.data = [
+              ...this.dataSource.data,
+              {
+                name: itemName,
+                priceNq: response.minPriceNQ,
+                velocityNq: response.nqSaleVelocity,
+                priceHq: response.minPriceHQ,
+                velocityHq: response.hqSaleVelocity,
+              },
+            ];
             localStorage.setItem(
               PricecheckComponent.itemKey,
               JSON.stringify(this.items),
             );
-            console.log(this.items);
           });
       }
     } catch (e) {
       console.log(`Unable to find item name for id ${id}`);
-      console.log(e);
+      throw e;
     }
   }
 
   removeItem(index: number) {
-    this.items.splice(index, 1);
+    this.dataSource.data = this.dataSource.data.splice(index, 1);
   }
 
   async loadDefaults() {
@@ -94,6 +104,7 @@ export class PricecheckComponent implements OnInit {
 
   clearItems() {
     this.items = [];
+    this.dataSource.data = [];
     localStorage.setItem(
       PricecheckComponent.itemKey,
       JSON.stringify(this.items),
@@ -106,13 +117,34 @@ export class PricecheckComponent implements OnInit {
       this.mbAPI
         .getAllItemsFor(this.settings.homeworld, item.id, 20)
         .subscribe((prices) => {
-          this.pricesNQ[i] = prices.minPriceNQ;
-          this.veloNQ[i] = prices.nqSaleVelocity;
-          this.pricesHQ[i] = prices.minPriceHQ;
-          this.veloHQ[i] = prices.hqSaleVelocity;
+          this.dataSource.data = [
+            ...this.dataSource.data,
+            {
+              name: item.name,
+              priceNq: prices.minPriceNQ,
+              velocityNq: prices.nqSaleVelocity,
+              priceHq: prices.minPriceHQ,
+              velocityHq: prices.hqSaleVelocity,
+            },
+          ];
         });
-
       await this.mbAPI.sleep(50);
     }
   }
+
+  announceSortChange(sortState: Sort) {
+    if (sortState.direction) {
+      this.liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this.liveAnnouncer.announce('Sorting cleared');
+    }
+  }
+}
+
+interface PriceCheckRow {
+  name: string;
+  priceNq: number;
+  velocityNq: number;
+  priceHq: number;
+  velocityHq: number;
 }
