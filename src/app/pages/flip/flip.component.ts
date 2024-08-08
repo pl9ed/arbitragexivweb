@@ -1,12 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { DropdownOptions, ItemRow } from './flip.models';
 import { Store } from '@ngrx/store';
 import { clearData, loadPrices, setCategory } from './flip.actions';
 import { selectCategory, selectItemRows } from './flip.selectors';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-flip',
@@ -23,26 +24,28 @@ export class FlipComponent implements OnInit, OnDestroy {
   ];
 
   headers = [
-    'Item',
-    'ROI (NQ)',
-    'Min Price (NQ)',
-    'Home Price (NQ)',
-    'Min Price World (NQ)',
-    'Velocity (NQ)',
-    'ROI (HQ)',
-    'Min Price (HQ)',
-    'Home Price (HQ)',
-    'Min Price World (HQ)',
-    'Velocity (HQ)',
+    'name',
+    'roiNq',
+    'minPriceNq',
+    'homePriceNq',
+    'worldNq',
+    'velocityNq',
+    'roiHq',
+    'minPriceHq',
+    'homePriceHq',
+    'worldHq',
+    'velocityHq',
   ];
 
   selectedCategory$!: Observable<string>
   selectedItems$!: Observable<number[]>;
 
-  rowData$!: Observable<readonly ItemRow[]>
+  rowData$!: Observable<ItemRow[]>
+  dataSource = new MatTableDataSource<ItemRow>([]);
+
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private router: Router,
     private settings: SettingsService,
     private store: Store
   ) {}
@@ -58,6 +61,10 @@ export class FlipComponent implements OnInit, OnDestroy {
     })
 
     this.rowData$ = this.store.select(selectItemRows)
+    this.rowData$.subscribe(data => {
+      this.dataSource.data = data;
+      this.dataSource.sort = this.sort;
+    });
   }
 
   togglePrices(index: number) {
