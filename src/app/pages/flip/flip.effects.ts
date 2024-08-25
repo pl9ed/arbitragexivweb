@@ -87,35 +87,7 @@ export class FlipPriceEffects {
             of(item),
           ),
           map(([homePrices, dcPrices, item]) => {
-            const cheapestNq = dcPrices.listings.find((listing) => !listing.hq);
-            const cheapestHq = dcPrices.listings.find((listing) => listing.hq);
-
-            if (cheapestNq?.pricePerUnit !== dcPrices.minPriceNQ) {
-              console.log(
-                `cheapest HQ item price and minPriceNQ don't match! nq listing price: ${cheapestNq?.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceNQ}`,
-              );
-            }
-
-            if (cheapestHq?.pricePerUnit !== dcPrices.minPriceHQ) {
-              console.log(
-                `cheapest HQ item price and minPriceHQ don't match! hq listing listing price: ${cheapestHq?.pricePerUnit}, minPriceHQ: ${dcPrices.minPriceHQ}`,
-              );
-            }
-
-            const row: ItemRow = {
-              name: item.name,
-              roiNq: homePrices.minPriceNQ / dcPrices.minPriceNQ,
-              homePriceNq: homePrices.minPriceNQ,
-              minPriceNq: dcPrices.minPriceNQ,
-              worldNq: cheapestNq?.worldName ?? '',
-              velocityNq: homePrices.nqSaleVelocity,
-              roiHq: homePrices.minPriceHQ / dcPrices.minPriceHQ,
-              homePriceHq: homePrices.minPriceHQ,
-              minPriceHq: dcPrices.minPriceHQ,
-              worldHq: cheapestHq?.worldName ?? '',
-              velocityHq: homePrices.hqSaleVelocity,
-            };
-            return row;
+            return this.universalisService.createRow(homePrices, dcPrices, item);
           }),
         ),
       ),
