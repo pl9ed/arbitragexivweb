@@ -19,6 +19,9 @@ export const initialSettingState: SettingsConfig = {
   pricechecker: {
     default: [],
   },
+  crafting: {
+    items: []
+  }
 };
 
 export const settings = createReducer(
