@@ -1,3 +1,4 @@
+import { CraftingItem } from '../models/Crafting';
 import { GemstoneItem } from '../pages/gemstone/gemstone.models';
 
 export interface SettingsConfig {
@@ -16,4 +17,7 @@ export interface SettingsConfig {
   pricechecker: {
     default: number[];
   };
+  crafting: {
+    items: CraftingItem[]
+  }
 }

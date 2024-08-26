@@ -136,3 +136,21 @@ pricechecker:
     - 41779
     - 41780
     - 41778
+
+crafting:
+  items:
+    - id: 44162
+      amount: 3
+      ingredients:
+        - id: 44146
+          amount: 1
+          ingredients: []
+        - id: 44051
+          amount: 1
+          ingredients: []
+        - id: 44039
+          amount: 1
+          ingredients: []
+        - id: 44035
+          amount: 1
+          ingredients: []

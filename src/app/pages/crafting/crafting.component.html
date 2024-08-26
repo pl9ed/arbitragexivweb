@@ -1,0 +1,60 @@
+<div>
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    (matSortChange)="announceSortChange($event)"
+  >
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <!-- Cost Column -->
+    <ng-container matColumnDef="cost">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Cost</th>
+      <td mat-cell *matCellDef="let element">{{ element.cost }}</td>
+    </ng-container>
+
+    <!-- Min Price NQ Column -->
+    <ng-container matColumnDef="minPriceNq">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Min Price (NQ)</th>
+      <td mat-cell *matCellDef="let element">{{ element.minPriceNq }}</td>
+    </ng-container>
+
+    <!-- ROI NQ Column -->
+    <ng-container matColumnDef="roiNq">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ROI (NQ)</th>
+      <td mat-cell *matCellDef="let element">{{ format(emptyIfInvalid(element.roiNq)) }}</td>
+    </ng-container>
+
+    <!-- Velocity NQ Column -->
+    <ng-container matColumnDef="velocityNq">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Velocity (NQ)</th>
+      <td mat-cell *matCellDef="let element">{{ format(emptyIfInvalid(element.velocityNq)) }}</td>
+    </ng-container>
+
+    <!-- Min Price HQ Column -->
+    <ng-container matColumnDef="minPriceHq">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Min Price (HQ)</th>
+      <td mat-cell *matCellDef="let element">{{ element.minPriceHq }}</td>
+    </ng-container>
+
+    <!-- ROI HQ Column -->
+    <ng-container matColumnDef="roiHq">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ROI (HQ)</th>
+      <td mat-cell *matCellDef="let element">{{ format(emptyIfInvalid(element.roiHq)) }}</td>
+    </ng-container>
+
+    <!-- Velocity HQ Column -->
+    <ng-container matColumnDef="velocityHq">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Velocity (HQ)</th>
+      <td mat-cell *matCellDef="let element">{{ format(emptyIfInvalid(element.velocityHq)) }}</td>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
