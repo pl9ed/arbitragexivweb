@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { map, mergeMap, Observable, switchMap, toArray } from 'rxjs';
+import { combineLatest, delay, forkJoin, map, mergeMap, Observable, switchMap, toArray } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from '../../services/universalis.service';
 import { CraftingItem, CraftingRow } from 'src/app/models/Crafting';
+import { XivAPIService } from 'src/app/services/xiv-api.service';
 
 @Component({
   selector: 'app-crafting',
@@ -17,7 +18,11 @@ export class CraftingComponent implements OnInit {
   items$: Observable<CraftingItem[]>
   row$: Observable<CraftingRow[]> | undefined
 
-  constructor(private settings: SettingsService, private universalisService: UniversalisService) {
+  constructor(
+    private settings: SettingsService, 
+    private universalisService: UniversalisService,
+    private xivApiService: XivAPIService
+  ) {
     this.items$ = this.settings.settingsConfig$.pipe(map(config => config.crafting.items))
     this.homeworld = this.settings.homeworld
   }
@@ -25,16 +30,50 @@ export class CraftingComponent implements OnInit {
   ngOnInit() {
     this.row$ = this.items$.pipe(
       mergeMap(items => items),
-      switchMap(item => this.createRow(item)),
+      delay(200),
+      switchMap(item => this.mapToCraftingRow(item)),
       toArray()
     );
   }
 
-  private createRow(item: CraftingItem): Observable<CraftingRow> {
-    return this.universalisService.getAllItemsFor(this.homeworld, item.id, 20).pipe(
-      map(response => {
+  private mapToCraftingRow(item: CraftingItem): Observable<CraftingRow> {
+    const costs$ = item.ingredients.map(ingredient => {
+      return this.universalisService.getAllItemsFor(this.homeworld, ingredient.id, 20).pipe(
+        map(response => {
+          return {
+            nqCost: response.minPriceNQ * ingredient.amount,
+            hqCost: response.minPriceHQ * ingredient.amount
+          }
+        }
+      ))
+    });
+
+    const costTotal$ = forkJoin(costs$).pipe(
+      map(prices => {
+        const totalNqCost = prices.reduce((sum, price) => sum + price.nqCost, 0);
+        const totalHqCost = prices.reduce((sum, price) => sum + price.hqCost, 0);
+        return { totalNqCost, totalHqCost };
+      })
+    );
+
+    const itemName$ = this.xivApiService.getName(item.id)
+
+    return combineLatest([itemName$, costTotal$, this.universalisService.getAllItemsFor(this.homeworld, item.id, 20)]).pipe(
+      map(([name, cost, response]) => {
         // stub
-        return {} as CraftingRow
+        return {
+          id: item.id,
+          name: name.name,
+          costNq: cost.totalNqCost,
+          minPriceNq: response.minPriceNQ,
+          roiNq: (item.amount * response.minPriceNQ) / cost.totalNqCost,
+          velocityNq: response.nqSaleVelocity,
+          costHq: cost.totalHqCost,
+          minPriceHq: response.minPriceHQ,
+          roiHq: (item.amount * response.minPriceHQ) / cost.totalHqCost,
+          velocityHq: response.hqSaleVelocity,
+          recipe: [] // stub
+        }
       })
     )
   }
