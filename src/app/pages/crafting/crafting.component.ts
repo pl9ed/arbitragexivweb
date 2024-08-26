@@ -1,27 +1,45 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { combineLatest, delay, forkJoin, map, mergeMap, Observable, switchMap, toArray } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from '../../services/universalis.service';
 import { CraftingItem, CraftingRow } from 'src/app/models/Crafting';
 import { XivAPIService } from 'src/app/services/xiv-api.service';
+import { MatSort, Sort } from '@angular/material/sort';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-crafting',
-  standalone: true,
-  imports: [],
   templateUrl: './crafting.component.html',
   styleUrl: './crafting.component.css'
 })
-export class CraftingComponent implements OnInit {
+export class CraftingComponent implements OnInit, AfterViewInit {
+
+  displayedColumns: string[] = [
+    'name',
+    'costNq',
+    'minPriceNq',
+    'roiNq',
+    'velocityNq',
+    'costHq',
+    'minPriceHq',
+    'roiHq',
+    'velocityHq'
+  ];
 
   homeworld: string
   items$: Observable<CraftingItem[]>
-  row$: Observable<CraftingRow[]> | undefined
+  row$: Observable<CraftingRow[]>
+
+  dataSource = new MatTableDataSource<CraftingRow>([]);
+  @ViewChild(MatSort) sort!: MatSort;
+
 
   constructor(
     private settings: SettingsService, 
     private universalisService: UniversalisService,
-    private xivApiService: XivAPIService
+    private xivApiService: XivAPIService,
+    private liveAnnouncer: LiveAnnouncer
   ) {
     this.items$ = this.settings.settingsConfig$.pipe(map(config => config.crafting.items))
     this.homeworld = this.settings.homeworld
@@ -34,6 +52,18 @@ export class CraftingComponent implements OnInit {
       switchMap(item => this.mapToCraftingRow(item)),
       toArray()
     );
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
+  announceSortChange(sortState: Sort) {
+    if (sortState.direction) {
+      this.liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this.liveAnnouncer.announce('Sorting cleared');
+    }
   }
 
   private mapToCraftingRow(item: CraftingItem): Observable<CraftingRow> {

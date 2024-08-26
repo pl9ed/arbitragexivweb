@@ -23,6 +23,7 @@ import { GemstonePriceEffects } from './pages/gemstone/gemstone.effects';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { CraftingComponent } from './pages/crafting/crafting.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { MatSortModule } from '@angular/material/sort';
     NavbarComponent,
     HomeComponent,
     PricecheckComponent,
+    CraftingComponent
   ],
   bootstrap: [AppComponent],
   imports: [
