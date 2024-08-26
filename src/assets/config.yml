@@ -198,7 +198,7 @@ crafting:
           ingredients: []
         - id: 44035 # sungilt aethersand
           amount: 1
-          ingredients: []    
+          ingredients: []
     - id: 44051 # sanctified water
       amount: 3
       ingredients:

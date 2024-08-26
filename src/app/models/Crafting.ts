@@ -4,6 +4,7 @@ export interface CraftingItem {
   id: number;
   name: string;
   amount: number;
+  cost: number;
   ingredients: CraftingItem[];
 }
 

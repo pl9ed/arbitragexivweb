@@ -32,6 +32,7 @@ export class CraftingComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = [
     'name',
+    'recipe',
     'cost',
     'minPriceNq',
     'roiNq',
@@ -39,7 +40,6 @@ export class CraftingComponent implements OnInit, AfterViewInit {
     'minPriceHq',
     'roiHq',
     'velocityHq',
-    'recipe'
   ];
 
   homeworld: string;
@@ -69,7 +69,6 @@ export class CraftingComponent implements OnInit, AfterViewInit {
         concatMap((row) => this.getRecipeNames(row)),
       )
       .subscribe((data) => {
-        console.log('Updating data:', data);
         this.dataSource.data = [...this.dataSource.data, data];
       });
   }
@@ -87,46 +86,55 @@ export class CraftingComponent implements OnInit, AfterViewInit {
   }
 
   private mapToCraftingRow(item: CraftingItem): Observable<CraftingRow> {
-    const costTotal$ = forkJoin(
+    const costs$: Observable<CraftingItem[]> = forkJoin(
       item.ingredients.map((ingredient, index) =>
         of(ingredient).pipe(
           delay(index * 200),
-          mergeMap(() =>
-            this.universalisService
-              .getAllItemsFor(this.homeworld, ingredient.id, 20)
-              .pipe(
-                map(
-                  (response) =>
-                    Math.max(response.minPriceNQ, response.minPriceHQ) *
-                    ingredient.amount,
-                ),
-              ),
-          ),
+          mergeMap(() => this.getIngredientData(ingredient)),
         ),
       ),
-    ).pipe(map((costs) => costs.reduce((acc, cost) => acc + cost, 0)));
+    );
 
     const itemName$ = this.xivApiService.getName(item.id);
 
     return combineLatest([
       itemName$,
-      costTotal$,
+      costs$,
       this.universalisService
         .getAllItemsFor(this.homeworld, item.id, 20)
         .pipe(delay(200)),
     ]).pipe(
       map(([name, cost, response]) => {
+        const totalCost = cost
+          .map((ingredient) => ingredient.cost * ingredient.amount)
+          .reduce((a, b) => a + b, 0);
         return {
           id: item.id,
           name: name.name,
-          cost: cost,
+          cost: totalCost,
           minPriceNq: response.minPriceNQ,
-          roiNq: (item.amount * response.minPriceNQ) / cost,
+          roiNq: (item.amount * response.minPriceNQ) / totalCost,
           velocityNq: response.nqSaleVelocity,
           minPriceHq: response.minPriceHQ,
-          roiHq: (item.amount * response.minPriceHQ) / cost,
+          roiHq: (item.amount * response.minPriceHQ) / totalCost,
           velocityHq: response.hqSaleVelocity,
-          recipe: item.ingredients,
+          recipe: cost,
+        };
+      }),
+    );
+  }
+
+  private getIngredientData(item: CraftingItem): Observable<CraftingItem> {
+    // populate name + cost from apis
+    return forkJoin([
+      this.xivApiService.getName(item.id),
+      this.universalisService.getAllItemsFor(this.homeworld, item.id, 20),
+    ]).pipe(
+      map(([name, response]) => {
+        return {
+          ...item,
+          name: name.name,
+          cost: Math.max(response.minPriceNQ, response.minPriceHQ),
         };
       }),
     );
@@ -134,9 +142,7 @@ export class CraftingComponent implements OnInit, AfterViewInit {
 
   private getRecipeNames(row: CraftingRow): Observable<CraftingRow> {
     return combineLatest(
-      row.recipe.map((ingredient) =>
-        this.xivApiService.getName(ingredient.id),
-      ),
+      row.recipe.map((ingredient) => this.xivApiService.getName(ingredient.id)),
     ).pipe(
       map((names) => {
         return {
