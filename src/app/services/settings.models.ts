@@ -1,3 +1,4 @@
+import { CraftingItem } from '../models/Crafting';
 import { GemstoneItem } from '../pages/gemstone/gemstone.models';
 
 export interface SettingsConfig {
@@ -17,6 +18,6 @@ export interface SettingsConfig {
     default: number[];
   };
   crafting: {
-    items: number[]
+    items: CraftingItem[]
   }
 }
