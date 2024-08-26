@@ -66,7 +66,6 @@ export class CraftingComponent implements OnInit, AfterViewInit {
         mergeMap((items) => items),
         delay(200),
         concatMap((item) => this.mapToCraftingRow(item)),
-        concatMap((row) => this.getRecipeNames(row)),
       )
       .subscribe((data) => {
         this.dataSource.data = [...this.dataSource.data, data];
@@ -140,19 +139,4 @@ export class CraftingComponent implements OnInit, AfterViewInit {
     );
   }
 
-  private getRecipeNames(row: CraftingRow): Observable<CraftingRow> {
-    return combineLatest(
-      row.recipe.map((ingredient) => this.xivApiService.getName(ingredient.id)),
-    ).pipe(
-      map((names) => {
-        return {
-          ...row,
-          recipe: names.map((name, index) => ({
-            ...row.recipe[index],
-            name: name.name,
-          })),
-        };
-      }),
-    );
-  }
 }
