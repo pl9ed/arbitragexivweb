@@ -1,9 +1,17 @@
 import { ItemResponse } from "./ItemResponse";
 
-export interface CraftingItem {
+export interface CraftingRecipe {
     id: number,
-    name: string,
-    itemResponse: ItemResponse,
-    ingredients: CraftingItem[]
+    ingredients: CraftingRecipe[]
 }
 
+export interface CraftingRow {
+    id: number,
+    name: string,
+    minPriceNq: number,
+    roiNq: number,
+    velocityNq: number,
+    minPriceHq: number,
+    roiHq: number,
+    velocityHq: number,
+}
