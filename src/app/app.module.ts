@@ -33,7 +33,7 @@ import { CraftingComponent } from './pages/crafting/crafting.component';
     NavbarComponent,
     HomeComponent,
     PricecheckComponent,
-    CraftingComponent
+    CraftingComponent,
   ],
   bootstrap: [AppComponent],
   imports: [

@@ -26,13 +26,17 @@
     <!-- ROI NQ Column -->
     <ng-container matColumnDef="roiNq">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>ROI (NQ)</th>
-      <td mat-cell *matCellDef="let element">{{ format(emptyIfInvalid(element.roiNq)) }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ format(emptyIfInvalid(element.roiNq)) }}
+      </td>
     </ng-container>
 
     <!-- Velocity NQ Column -->
     <ng-container matColumnDef="velocityNq">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Velocity (NQ)</th>
-      <td mat-cell *matCellDef="let element">{{ format(emptyIfInvalid(element.velocityNq)) }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ format(emptyIfInvalid(element.velocityNq)) }}
+      </td>
     </ng-container>
 
     <!-- Min Price HQ Column -->
@@ -44,13 +48,17 @@
     <!-- ROI HQ Column -->
     <ng-container matColumnDef="roiHq">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>ROI (HQ)</th>
-      <td mat-cell *matCellDef="let element">{{ format(emptyIfInvalid(element.roiHq)) }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ format(emptyIfInvalid(element.roiHq)) }}
+      </td>
     </ng-container>
 
     <!-- Velocity HQ Column -->
     <ng-container matColumnDef="velocityHq">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Velocity (HQ)</th>
-      <td mat-cell *matCellDef="let element">{{ format(emptyIfInvalid(element.velocityHq)) }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ format(emptyIfInvalid(element.velocityHq)) }}
+      </td>
     </ng-container>
 
     <!-- Header and Row Declarations -->

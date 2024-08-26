@@ -27,7 +27,11 @@ export class UniversalisService {
     return this.http.get<ItemResponse>(url);
   }
 
-  createRow(homePrices: ItemResponse, dcPrices: ItemResponse, item: Item): ItemRow {
+  createRow(
+    homePrices: ItemResponse,
+    dcPrices: ItemResponse,
+    item: Item,
+  ): ItemRow {
     const cheapestNq = dcPrices.listings.find((listing) => !listing.hq);
     const cheapestHq = dcPrices.listings.find((listing) => listing.hq);
 

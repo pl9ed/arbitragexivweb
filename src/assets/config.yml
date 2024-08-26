@@ -139,18 +139,120 @@ pricechecker:
 
 crafting:
   items:
-    - id: 44162
+    - id: 44162 # str pot
       amount: 3
       ingredients:
-        - id: 44146
+        - id: 44146 # glossy dried aether
           amount: 1
           ingredients: []
-        - id: 44051
+        - id: 44051 # sanctified water
           amount: 1
           ingredients: []
-        - id: 44039
+        - id: 44039 # wind parsley
           amount: 1
           ingredients: []
-        - id: 44035
+        - id: 44035 # sungilt aethersand
+          amount: 1
+          ingredients: []
+    - id: 44165 # int pot
+      amount: 3
+      ingredients:
+        - id: 44146 # glossy dried aether
+          amount: 1
+          ingredients: []
+        - id: 44051 # sanctified water
+          amount: 1
+          ingredients: []
+        - id: 44042 # eucalyptus
+          amount: 1
+          ingredients: []
+        - id: 44035 # sungilt aethersand
+          amount: 1
+          ingredients: []
+    - id: 44166 # mind pot
+      amount: 3
+      ingredients:
+        - id: 44146 # glossy dried aether
+          amount: 1
+          ingredients: []
+        - id: 44051 # sanctified water
+          amount: 1
+          ingredients: []
+        - id: 44043 # pearl grass
+          amount: 1
+          ingredients: []
+        - id: 44035 # sungilt aethersand
+          amount: 1
+          ingredients: []
+    - id: 44163 # dex pot
+      amount: 3
+      ingredients:
+        - id: 44146 # glossy dried aether
+          amount: 1
+          ingredients: []
+        - id: 44051 # sanctified water
+          amount: 1
+          ingredients: []
+        - id: 44040 # Kozama'uka Chamomile
+          amount: 1
+          ingredients: []
+        - id: 44035 # sungilt aethersand
+          amount: 1
+          ingredients: []    
+    - id: 44051 # sanctified water
+      amount: 3
+      ingredients:
+        - id: 44034 # yak t'el spring water
+          amount: 2
+          ingredients: []
+        - id: 44071 # sanctified water
+          amount: 2
+          ingredients: []
+    - id: 42890 # picto weapon
+      amount: 1
+      ingredients:
+        - id: 44148 # sterling silver ingot
+          amount: 3
+          ingredients: []
+        - id: 44150 # blackseed cotton cloth
+          amount: 2
+          ingredients: []
+        - id: 44050 # tungsten ink
+          amount: 1
+          ingredients: []
+        - id: 44155 # grade 2 gemsap of intelligence
+          amount: 2
+          ingredients: []
+        - id: 44038 # mythbrine aethersand
+          amount: 1
+          ingredients: []
+    - id: 44155 # grade 2 gemsap of intelligence
+      amount: 1
+      ingredients:
+        - id: 44140 # nopaliflower
+          amount: 1
+          ingredients: []
+        - id: 44034 # yak t'el spring water
+          amount: 1
+          ingredients: []
+        - id: 44042 # eucalyptus
+          amount: 1
+          ingredients: []
+        - id: 44035 # sungilt aethersand
+          amount: 1
+          ingredients: []
+    - id: 44152 # grade 2 gemsap of strength
+      amount: 1
+      ingredients:
+        - id: 44140 # nopaliflower
+          amount: 1
+          ingredients: []
+        - id: 44034 # yak t'el spring water
+          amount: 1
+          ingredients: []
+        - id: 44039 # wind parsley
+          amount: 1
+          ingredients: []
+        - id: 44035 # sungilt aethersand
           amount: 1
           ingredients: []

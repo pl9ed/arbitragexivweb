@@ -20,8 +20,8 @@ export const initialSettingState: SettingsConfig = {
     default: [],
   },
   crafting: {
-    items: []
-  }
+    items: [],
+  },
 };
 
 export const settings = createReducer(
