@@ -1,11 +1,13 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
   combineLatest,
+  concatMap,
   delay,
   forkJoin,
   map,
   mergeMap,
   Observable,
+  of,
   reduce,
   switchMap,
   toArray,
@@ -41,7 +43,6 @@ export class CraftingComponent implements OnInit, AfterViewInit {
 
   homeworld: string;
   items$: Observable<CraftingItem[]>;
-  row$!: Observable<CraftingRow[]>;
 
   dataSource = new MatTableDataSource<CraftingRow>([]);
   @ViewChild(MatSort) sort!: MatSort;
@@ -59,14 +60,16 @@ export class CraftingComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.row$ = this.items$.pipe(
-      mergeMap((items) => items),
-      delay(200),
-      switchMap((item) => this.mapToCraftingRow(item)),
-      toArray(),
-    );
-
-    this.row$.subscribe((data) => (this.dataSource.data = data));
+    this.items$
+      .pipe(
+        mergeMap((items) => items),
+        delay(200),
+        concatMap((item) => this.mapToCraftingRow(item)),
+      )
+      .subscribe((data) => {
+        console.log('Updating data:', data);
+        this.dataSource.data = [...this.dataSource.data, data];
+      });
   }
 
   ngAfterViewInit() {
@@ -83,16 +86,21 @@ export class CraftingComponent implements OnInit, AfterViewInit {
 
   private mapToCraftingRow(item: CraftingItem): Observable<CraftingRow> {
     const costTotal$ = forkJoin(
-      item.ingredients.map((ingredient) =>
-        this.universalisService
-          .getAllItemsFor(this.homeworld, ingredient.id, 20)
-          .pipe(
-            map(
-              (response) =>
-                Math.max(response.minPriceNQ, response.minPriceHQ) *
-                ingredient.amount,
-            ),
+      item.ingredients.map((ingredient, index) =>
+        of(ingredient).pipe(
+          delay(index * 200),
+          mergeMap(() =>
+            this.universalisService
+              .getAllItemsFor(this.homeworld, ingredient.id, 20)
+              .pipe(
+                map(
+                  (response) =>
+                    Math.max(response.minPriceNQ, response.minPriceHQ) *
+                    ingredient.amount,
+                ),
+              ),
           ),
+        ),
       ),
     ).pipe(map((costs) => costs.reduce((acc, cost) => acc + cost, 0)));
 
@@ -101,7 +109,9 @@ export class CraftingComponent implements OnInit, AfterViewInit {
     return combineLatest([
       itemName$,
       costTotal$,
-      this.universalisService.getAllItemsFor(this.homeworld, item.id, 20),
+      this.universalisService
+        .getAllItemsFor(this.homeworld, item.id, 20)
+        .pipe(delay(200)),
     ]).pipe(
       map(([name, cost, response]) => {
         return {
@@ -114,7 +124,7 @@ export class CraftingComponent implements OnInit, AfterViewInit {
           minPriceHq: response.minPriceHQ,
           roiHq: (item.amount * response.minPriceHQ) / cost,
           velocityHq: response.hqSaleVelocity,
-          recipe: [], 
+          recipe: [],
         };
       }),
     );
