@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { combineLatest, delay, forkJoin, map, mergeMap, Observable, switchMap, toArray } from 'rxjs';
+import { combineLatest, delay, forkJoin, map, mergeMap, Observable, reduce, switchMap, toArray } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from '../../services/universalis.service';
 import { CraftingItem, CraftingRow } from 'src/app/models/Crafting';
@@ -17,11 +17,10 @@ export class CraftingComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = [
     'name',
-    'costNq',
+    'cost',
     'minPriceNq',
     'roiNq',
     'velocityNq',
-    'costHq',
     'minPriceHq',
     'roiHq',
     'velocityHq'
@@ -53,8 +52,7 @@ export class CraftingComponent implements OnInit, AfterViewInit {
       toArray()
     );
 
-    this.settings.settingsConfig$.subscribe(config => console.log(config))
-    this.row$.subscribe(data => console.log(data)) // debug, remove later
+    this.row$.subscribe(data => this.dataSource.data = data)
   }
 
   ngAfterViewInit() {
@@ -70,23 +68,14 @@ export class CraftingComponent implements OnInit, AfterViewInit {
   }
 
   private mapToCraftingRow(item: CraftingItem): Observable<CraftingRow> {
-    const costs$ = item.ingredients.map(ingredient => {
-      return this.universalisService.getAllItemsFor(this.homeworld, ingredient.id, 20).pipe(
-        map(response => {
-          return {
-            nqCost: response.minPriceNQ * ingredient.amount,
-            hqCost: response.minPriceHQ * ingredient.amount
-          }
-        }
-      ))
-    });
-
-    const costTotal$ = forkJoin(costs$).pipe(
-      map(prices => {
-        const totalNqCost = prices.reduce((sum, price) => sum + price.nqCost, 0);
-        const totalHqCost = prices.reduce((sum, price) => sum + price.hqCost, 0);
-        return { totalNqCost, totalHqCost };
-      })
+    const costTotal$ = forkJoin(
+      item.ingredients.map(ingredient => 
+        this.universalisService.getAllItemsFor(this.homeworld, ingredient.id, 20).pipe(
+          map(response => Math.max(response.minPriceNQ, response.minPriceHQ) * ingredient.amount)
+        )
+      )
+    ).pipe(
+      map(costs => costs.reduce((acc, cost) => acc + cost, 0)) 
     );
 
     const itemName$ = this.xivApiService.getName(item.id)
@@ -97,13 +86,12 @@ export class CraftingComponent implements OnInit, AfterViewInit {
         return {
           id: item.id,
           name: name.name,
-          costNq: cost.totalNqCost,
+          cost: cost,
           minPriceNq: response.minPriceNQ,
-          roiNq: (item.amount * response.minPriceNQ) / cost.totalNqCost,
+          roiNq: (item.amount * response.minPriceNQ) / cost,
           velocityNq: response.nqSaleVelocity,
-          costHq: cost.totalHqCost,
           minPriceHq: response.minPriceHQ,
-          roiHq: (item.amount * response.minPriceHQ) / cost.totalHqCost,
+          roiHq: (item.amount * response.minPriceHQ) / cost,
           velocityHq: response.hqSaleVelocity,
           recipe: [] // stub
         }

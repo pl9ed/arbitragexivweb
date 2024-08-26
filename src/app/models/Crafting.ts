@@ -9,11 +9,10 @@ export interface CraftingItem {
 export interface CraftingRow {
     id: number,
     name: string,
-    costNq: number,
+    cost: number,
     minPriceNq: number,
     roiNq: number,
     velocityNq: number,
-    costHq: number,
     minPriceHq: number,
     roiHq: number,
     velocityHq: number,
