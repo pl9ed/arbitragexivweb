@@ -208,3 +208,21 @@ crafting:
         - id: 44071 # sanctified water
           amount: 2
           ingredients: []
+    - id: 42890 # picto weapon
+      amount: 1
+      ingredients:
+        - id: 44148 # sterling silver ingot
+          amount: 3
+          ingredients: []
+        - id: 44150 # blackseed cotton cloth
+          amount: 2
+          ingredients: []
+        - id: 44050 # tungsten ink
+          amount: 1
+          ingredients: []
+        - id: 44155 # grade 2 gemsap of intelligence
+          amount: 2
+          ingredients: []
+        - id: 44038 # mythbrine aethersand
+          amount: 1
+          ingredients: []
