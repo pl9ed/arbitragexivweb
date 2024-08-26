@@ -39,6 +39,7 @@ export class CraftingComponent implements OnInit, AfterViewInit {
     'minPriceHq',
     'roiHq',
     'velocityHq',
+    'recipe'
   ];
 
   homeworld: string;
@@ -65,6 +66,7 @@ export class CraftingComponent implements OnInit, AfterViewInit {
         mergeMap((items) => items),
         delay(200),
         concatMap((item) => this.mapToCraftingRow(item)),
+        concatMap((row) => this.getRecipeNames(row)),
       )
       .subscribe((data) => {
         console.log('Updating data:', data);
@@ -124,7 +126,25 @@ export class CraftingComponent implements OnInit, AfterViewInit {
           minPriceHq: response.minPriceHQ,
           roiHq: (item.amount * response.minPriceHQ) / cost,
           velocityHq: response.hqSaleVelocity,
-          recipe: [],
+          recipe: item.ingredients,
+        };
+      }),
+    );
+  }
+
+  private getRecipeNames(row: CraftingRow): Observable<CraftingRow> {
+    return combineLatest(
+      row.recipe.map((ingredient) =>
+        this.xivApiService.getName(ingredient.id),
+      ),
+    ).pipe(
+      map((names) => {
+        return {
+          ...row,
+          recipe: names.map((name, index) => ({
+            ...row.recipe[index],
+            name: name.name,
+          })),
         };
       }),
     );
