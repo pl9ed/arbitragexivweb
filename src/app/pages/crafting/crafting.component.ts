@@ -7,6 +7,7 @@ import { XivAPIService } from 'src/app/services/xiv-api.service';
 import { MatSort, Sort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
+import { emptyIfInvalid, formatDecimal } from 'src/app/utils/number-utils';
 
 @Component({
   selector: 'app-crafting',
@@ -14,6 +15,8 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrl: './crafting.component.css'
 })
 export class CraftingComponent implements OnInit, AfterViewInit {
+  format = formatDecimal;
+  emptyIfInvalid = emptyIfInvalid;
 
   displayedColumns: string[] = [
     'name',
