@@ -198,7 +198,7 @@ crafting:
           ingredients: []
         - id: 44035 # sungilt aethersand
           amount: 1
-          ingredients: []    
+          ingredients: []
     - id: 44051 # sanctified water
       amount: 3
       ingredients:
@@ -255,4 +255,19 @@ crafting:
           ingredients: []
         - id: 44035 # sungilt aethersand
           amount: 1
+          ingredients: []
+    - id: 44169 # cunning craftsman's tisane
+      amount: 3
+      ingredients:
+        - id: 44034 # yak t'el spring water
+          amount: 2
+          ingredients: []
+        - id: 44071 # tumbleclaw weeds
+          amount: 2
+          ingredients: []
+        - id: 44043 # pearl grass
+          amount: 2
+          ingredients: []
+        - id: 27836 # peppermint
+          amount: 2
           ingredients: []

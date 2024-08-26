@@ -1,0 +1,21 @@
+.fixed-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.name-column {
+  width: 70%;
+}
+
+.cost-column {
+  width: 20%;
+}
+
+.amount-column {
+  width: 5%;
+}
+
+.recipe-container {
+  max-width: 400px; 
+  text-align: left;
+}
