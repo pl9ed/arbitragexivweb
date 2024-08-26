@@ -62,7 +62,7 @@ export class CraftingComponent implements OnInit, AfterViewInit {
     this.items$
       .pipe(
         mergeMap((items) => items),
-        delay(200),
+        delay(50),
         concatMap((item) => this.mapToCraftingRow(item)),
       )
       .subscribe((data) => {
@@ -87,7 +87,7 @@ export class CraftingComponent implements OnInit, AfterViewInit {
     const itemName$ = this.xivApiService.getName(item.id);
     const itemData$ = this.universalisService
       .getAllItemsFor(this.homeworld, item.id, 20)
-      .pipe(delay(200));
+      .pipe(delay(50));
 
     return combineLatest([itemName$, costs$, itemData$]).pipe(
       map(([name, cost, response]) => {
@@ -115,7 +115,7 @@ export class CraftingComponent implements OnInit, AfterViewInit {
     return forkJoin(
       item.ingredients.map((ingredient, index) =>
         of(ingredient).pipe(
-          delay(index * 200),
+          delay(index * 50),
           mergeMap(() => this.getIngredientData(ingredient)),
         ),
       ),
