@@ -8,9 +8,7 @@ import {
   mergeMap,
   Observable,
   of,
-  reduce,
   switchMap,
-  toArray,
 } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from '../../services/universalis.service';
@@ -85,28 +83,18 @@ export class CraftingComponent implements OnInit, AfterViewInit {
   }
 
   private mapToCraftingRow(item: CraftingItem): Observable<CraftingRow> {
-    const costs$: Observable<CraftingItem[]> = forkJoin(
-      item.ingredients.map((ingredient, index) =>
-        of(ingredient).pipe(
-          delay(index * 200),
-          mergeMap(() => this.getIngredientData(ingredient)),
-        ),
-      ),
-    );
-
+    const costs$ = this.getIngredientCosts(item);
     const itemName$ = this.xivApiService.getName(item.id);
+    const itemData$ = this.universalisService
+      .getAllItemsFor(this.homeworld, item.id, 20)
+      .pipe(delay(200));
 
-    return combineLatest([
-      itemName$,
-      costs$,
-      this.universalisService
-        .getAllItemsFor(this.homeworld, item.id, 20)
-        .pipe(delay(200)),
-    ]).pipe(
+    return combineLatest([itemName$, costs$, itemData$]).pipe(
       map(([name, cost, response]) => {
-        const totalCost = cost
-          .map((ingredient) => ingredient.cost * ingredient.amount)
-          .reduce((a, b) => a + b, 0);
+        const totalCost = cost.reduce(
+          (acc, ingredient) => acc + ingredient.cost * ingredient.amount,
+          0,
+        );
         return {
           id: item.id,
           name: name.name,
@@ -123,20 +111,27 @@ export class CraftingComponent implements OnInit, AfterViewInit {
     );
   }
 
+  private getIngredientCosts(item: CraftingItem): Observable<CraftingItem[]> {
+    return forkJoin(
+      item.ingredients.map((ingredient, index) =>
+        of(ingredient).pipe(
+          delay(index * 200),
+          mergeMap(() => this.getIngredientData(ingredient)),
+        ),
+      ),
+    );
+  }
+
   private getIngredientData(item: CraftingItem): Observable<CraftingItem> {
-    // populate name + cost from apis
     return forkJoin([
       this.xivApiService.getName(item.id),
       this.universalisService.getAllItemsFor(this.homeworld, item.id, 20),
     ]).pipe(
-      map(([name, response]) => {
-        return {
-          ...item,
-          name: name.name,
-          cost: Math.max(response.minPriceNQ, response.minPriceHQ),
-        };
-      }),
+      map(([name, response]) => ({
+        ...item,
+        name: name.name,
+        cost: Math.max(response.minPriceNQ, response.minPriceHQ),
+      })),
     );
   }
-
 }
