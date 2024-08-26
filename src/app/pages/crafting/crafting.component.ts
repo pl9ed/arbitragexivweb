@@ -29,7 +29,7 @@ export class CraftingComponent implements OnInit, AfterViewInit {
 
   homeworld: string
   items$: Observable<CraftingItem[]>
-  row$: Observable<CraftingRow[]>
+  row$!: Observable<CraftingRow[]>;
 
   dataSource = new MatTableDataSource<CraftingRow>([]);
   @ViewChild(MatSort) sort!: MatSort;
@@ -52,6 +52,9 @@ export class CraftingComponent implements OnInit, AfterViewInit {
       switchMap(item => this.mapToCraftingRow(item)),
       toArray()
     );
+
+    this.settings.settingsConfig$.subscribe(config => console.log(config))
+    this.row$.subscribe(data => console.log(data)) // debug, remove later
   }
 
   ngAfterViewInit() {
