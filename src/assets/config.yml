@@ -184,3 +184,27 @@ crafting:
         - id: 44035 # sungilt aethersand
           amount: 1
           ingredients: []
+    - id: 44163 # dex pot
+      amount: 3
+      ingredients:
+        - id: 44146 # glossy dried aether
+          amount: 1
+          ingredients: []
+        - id: 44051 # sanctified water
+          amount: 1
+          ingredients: []
+        - id: 44040 # Kozama'uka Chamomile
+          amount: 1
+          ingredients: []
+        - id: 44035 # sungilt aethersand
+          amount: 1
+          ingredients: []    
+    - id: 44051 # sanctified water
+      amount: 3
+      ingredients:
+        - id: 44034 # yak t'el spring water
+          amount: 2
+          ingredients: []
+        - id: 44071 # sanctified water
+          amount: 2
+          ingredients: []
