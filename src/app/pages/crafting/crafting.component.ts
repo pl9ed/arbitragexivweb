@@ -1,5 +1,15 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { combineLatest, delay, forkJoin, map, mergeMap, Observable, reduce, switchMap, toArray } from 'rxjs';
+import {
+  combineLatest,
+  delay,
+  forkJoin,
+  map,
+  mergeMap,
+  Observable,
+  reduce,
+  switchMap,
+  toArray,
+} from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from '../../services/universalis.service';
 import { CraftingItem, CraftingRow } from 'src/app/models/Crafting';
@@ -12,7 +22,7 @@ import { emptyIfInvalid, formatDecimal } from 'src/app/utils/number-utils';
 @Component({
   selector: 'app-crafting',
   templateUrl: './crafting.component.html',
-  styleUrl: './crafting.component.css'
+  styleUrl: './crafting.component.css',
 })
 export class CraftingComponent implements OnInit, AfterViewInit {
   format = formatDecimal;
@@ -26,36 +36,37 @@ export class CraftingComponent implements OnInit, AfterViewInit {
     'velocityNq',
     'minPriceHq',
     'roiHq',
-    'velocityHq'
+    'velocityHq',
   ];
 
-  homeworld: string
-  items$: Observable<CraftingItem[]>
+  homeworld: string;
+  items$: Observable<CraftingItem[]>;
   row$!: Observable<CraftingRow[]>;
 
   dataSource = new MatTableDataSource<CraftingRow>([]);
   @ViewChild(MatSort) sort!: MatSort;
 
-
   constructor(
-    private settings: SettingsService, 
+    private settings: SettingsService,
     private universalisService: UniversalisService,
     private xivApiService: XivAPIService,
-    private liveAnnouncer: LiveAnnouncer
+    private liveAnnouncer: LiveAnnouncer,
   ) {
-    this.items$ = this.settings.settingsConfig$.pipe(map(config => config.crafting.items))
-    this.homeworld = this.settings.homeworld
+    this.items$ = this.settings.settingsConfig$.pipe(
+      map((config) => config.crafting.items),
+    );
+    this.homeworld = this.settings.homeworld;
   }
 
   ngOnInit() {
     this.row$ = this.items$.pipe(
-      mergeMap(items => items),
+      mergeMap((items) => items),
       delay(200),
-      switchMap(item => this.mapToCraftingRow(item)),
-      toArray()
+      switchMap((item) => this.mapToCraftingRow(item)),
+      toArray(),
     );
 
-    this.row$.subscribe(data => this.dataSource.data = data)
+    this.row$.subscribe((data) => (this.dataSource.data = data));
   }
 
   ngAfterViewInit() {
@@ -72,20 +83,27 @@ export class CraftingComponent implements OnInit, AfterViewInit {
 
   private mapToCraftingRow(item: CraftingItem): Observable<CraftingRow> {
     const costTotal$ = forkJoin(
-      item.ingredients.map(ingredient => 
-        this.universalisService.getAllItemsFor(this.homeworld, ingredient.id, 20).pipe(
-          map(response => Math.max(response.minPriceNQ, response.minPriceHQ) * ingredient.amount)
-        )
-      )
-    ).pipe(
-      map(costs => costs.reduce((acc, cost) => acc + cost, 0)) 
-    );
+      item.ingredients.map((ingredient) =>
+        this.universalisService
+          .getAllItemsFor(this.homeworld, ingredient.id, 20)
+          .pipe(
+            map(
+              (response) =>
+                Math.max(response.minPriceNQ, response.minPriceHQ) *
+                ingredient.amount,
+            ),
+          ),
+      ),
+    ).pipe(map((costs) => costs.reduce((acc, cost) => acc + cost, 0)));
 
-    const itemName$ = this.xivApiService.getName(item.id)
+    const itemName$ = this.xivApiService.getName(item.id);
 
-    return combineLatest([itemName$, costTotal$, this.universalisService.getAllItemsFor(this.homeworld, item.id, 20)]).pipe(
+    return combineLatest([
+      itemName$,
+      costTotal$,
+      this.universalisService.getAllItemsFor(this.homeworld, item.id, 20),
+    ]).pipe(
       map(([name, cost, response]) => {
-        // stub
         return {
           id: item.id,
           name: name.name,
@@ -96,9 +114,9 @@ export class CraftingComponent implements OnInit, AfterViewInit {
           minPriceHq: response.minPriceHQ,
           roiHq: (item.amount * response.minPriceHQ) / cost,
           velocityHq: response.hqSaleVelocity,
-          recipe: [] // stub
-        }
-      })
-    )
+          recipe: [], 
+        };
+      }),
+    );
   }
 }

@@ -139,18 +139,48 @@ pricechecker:
 
 crafting:
   items:
-    - id: 44162
+    - id: 44162 # str pot
       amount: 3
       ingredients:
-        - id: 44146
+        - id: 44146 # glossy dried aether
           amount: 1
           ingredients: []
-        - id: 44051
+        - id: 44051 # sanctified water
           amount: 1
           ingredients: []
-        - id: 44039
+        - id: 44039 # wind parsley
           amount: 1
           ingredients: []
-        - id: 44035
+        - id: 44035 # sungilt aethersand
+          amount: 1
+          ingredients: []
+    - id: 44165 # int pot
+      amount: 3
+      ingredients:
+        - id: 44146 # glossy dried aether
+          amount: 1
+          ingredients: []
+        - id: 44051 # sanctified water
+          amount: 1
+          ingredients: []
+        - id: 44042 # eucalyptus
+          amount: 1
+          ingredients: []
+        - id: 44035 # sungilt aethersand
+          amount: 1
+          ingredients: []
+    - id: 44166 # mind pot
+      amount: 3
+      ingredients:
+        - id: 44146 # glossy dried aether
+          amount: 1
+          ingredients: []
+        - id: 44051 # sanctified water
+          amount: 1
+          ingredients: []
+        - id: 44043 # pearl grass
+          amount: 1
+          ingredients: []
+        - id: 44035 # sungilt aethersand
           amount: 1
           ingredients: []

@@ -87,7 +87,11 @@ export class FlipPriceEffects {
             of(item),
           ),
           map(([homePrices, dcPrices, item]) => {
-            return this.universalisService.createRow(homePrices, dcPrices, item);
+            return this.universalisService.createRow(
+              homePrices,
+              dcPrices,
+              item,
+            );
           }),
         ),
       ),

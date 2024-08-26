@@ -18,6 +18,6 @@ export interface SettingsConfig {
     default: number[];
   };
   crafting: {
-    items: CraftingItem[]
-  }
+    items: CraftingItem[];
+  };
 }
