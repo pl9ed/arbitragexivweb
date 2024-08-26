@@ -16,4 +16,7 @@ export interface SettingsConfig {
   pricechecker: {
     default: number[];
   };
+  crafting: {
+    items: number[]
+  }
 }
