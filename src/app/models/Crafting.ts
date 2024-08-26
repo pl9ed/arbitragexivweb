@@ -17,4 +17,5 @@ export interface CraftingRow {
     minPriceHq: number,
     roiHq: number,
     velocityHq: number,
+    recipe: CraftingRow[]
 }
