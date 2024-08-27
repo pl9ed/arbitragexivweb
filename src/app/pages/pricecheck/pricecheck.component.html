@@ -1,9 +1,10 @@
 <div id="newItem">
   <input
     #itemID
-    type="number"
+    size="40"
+    type="string"
     (keyup.enter)="addItem(itemID.value)"
-    placeholder="Item ID"
+    placeholder="Item name or id"
   />
   <button id="clearBtn" class="btn btn-secondary btn-sm" (click)="clearItems()">
     Clear Items

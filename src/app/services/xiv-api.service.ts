@@ -27,6 +27,12 @@ export class XivAPIService {
     return retArr;
   }
 
+  search(term: string): Observable<PaginatedResult<SearchResult>> {
+    return this.http.get<PaginatedResult<SearchResult>>(
+      `${this.BASE_URL}/search?string=${term}`,
+    );
+  }
+
   findFirstByName(name: string): Observable<number> {
     return this.http
       .get<
