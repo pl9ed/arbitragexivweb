@@ -8,8 +8,17 @@ import {
 } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { mergeMap, Subject, takeUntil } from 'rxjs';
+import {
+  concatMap,
+  forkJoin,
+  map,
+  mergeMap,
+  Observable,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 import { Item } from 'src/app/models/Item';
+import { ItemResponse } from 'src/app/models/ItemResponse';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from 'src/app/services/universalis.service';
 import { XivAPIService } from 'src/app/services/xiv-api.service';
@@ -67,38 +76,62 @@ export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  async addItem(idString: string) {
-    const id = Number(idString);
-    try {
-      const itemName = (await this.xivAPI.getName(id)).name;
-      if (id && itemName) {
-        const item: Item = { name: itemName, id };
+  async addItem(searchTerm: any) {
+    let prices$: Observable<[Item, ItemResponse]>;
 
-        this.mbAPI
-          .getAllItemsFor(this.settings.homeworld, id, 20)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((response) => {
-            this.items.push(item);
-            this.dataSource.data = [
-              ...this.dataSource.data,
-              {
-                name: itemName,
-                priceNq: response.minPriceNQ,
-                velocityNq: response.nqSaleVelocity,
-                priceHq: response.minPriceHQ,
-                velocityHq: response.hqSaleVelocity,
-              },
-            ];
-            localStorage.setItem(
-              PricecheckComponent.itemKey,
-              JSON.stringify(this.items),
-            );
-          });
-      }
-    } catch (e) {
-      console.log(`Unable to find item name for id ${id}`);
-      throw e;
+    if (parseInt(searchTerm)) {
+      prices$ = this.addById(searchTerm);
+    } else {
+      prices$ = this.addByName(searchTerm);
     }
+
+    prices$.subscribe(([item, response]) => {
+      this.items.push(item);
+      this.dataSource.data = [
+        ...this.dataSource.data,
+        {
+          name: item.name,
+          priceNq: response.minPriceNQ,
+          velocityNq: response.nqSaleVelocity,
+          priceHq: response.minPriceHQ,
+          velocityHq: response.hqSaleVelocity,
+        },
+      ];
+      localStorage.setItem(
+        PricecheckComponent.itemKey,
+        JSON.stringify(this.items),
+      );
+    });
+  }
+
+  private addById(id: number): Observable<[Item, ItemResponse]> {
+    return forkJoin([
+      this.xivAPI.getName(id),
+      this.mbAPI.getAllItemsFor(this.settings.homeworld, id, 20),
+    ]).pipe(
+      takeUntil(this.destroy$),
+      map(([item, response]) => [item, response]),
+    );
+  }
+
+  private addByName(name: string): Observable<[Item, ItemResponse]> {
+    return this.xivAPI
+      .search(name)
+      .pipe(
+        map((result) => {
+          return {
+            id: result.Results[0].ID,
+            name: result.Results[0].Name,
+          } as Item;
+        }),
+      )
+      .pipe(
+        mergeMap((item) =>
+          this.mbAPI
+            .getAllItemsFor(this.settings.homeworld, item.id, 20)
+            .pipe(map((response) => [item, response] as [Item, ItemResponse])),
+        ),
+      );
   }
 
   removeItem(index: number) {

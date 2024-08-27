@@ -17,9 +17,9 @@
       <td mat-cell *matCellDef="let element" class="recipe-container">
         <table class="fixed-table">
           <tr *ngFor="let item of element.recipe">
-          <td class="fixed-column name-column">{{ item.name }}</td>
-          <td class="fixed-column cost-column">{{ item.cost }}</td>
-          <td class="fixed-column amount-column">({{ item.amount }})</td>
+            <td class="fixed-column name-column">{{ item.name }}</td>
+            <td class="fixed-column cost-column">{{ item.cost }}</td>
+            <td class="fixed-column amount-column">({{ item.amount }})</td>
           </tr>
         </table>
       </td>
