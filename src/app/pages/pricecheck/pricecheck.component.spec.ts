@@ -7,7 +7,7 @@ import { SettingsService } from 'src/app/services/settings.service';
 import { XivAPIService } from 'src/app/services/xiv-api.service';
 import { of } from 'rxjs';
 
-fdescribe('PricecheckComponent', () => {
+describe('PricecheckComponent', () => {
   let component: PricecheckComponent;
   let fixture: ComponentFixture<PricecheckComponent>;
   let universalisServiceMock: any;
