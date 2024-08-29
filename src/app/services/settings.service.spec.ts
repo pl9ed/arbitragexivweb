@@ -37,6 +37,9 @@ describe('SettingsService', () => {
     pricechecker: {
       default: [1, 2, 3, 4, 5],
     },
+    crafting: {
+      items: [],
+    },
   };
 
   beforeEach(() => {

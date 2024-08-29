@@ -24,6 +24,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { CraftingComponent } from './pages/crafting/crafting.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { CraftingComponent } from './pages/crafting/crafting.component';
     EffectsModule.forRoot([FlipPriceEffects, GemstonePriceEffects]),
     MatTableModule,
     MatSortModule,
+    MatIconModule,
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
