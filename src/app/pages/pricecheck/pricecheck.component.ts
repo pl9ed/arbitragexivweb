@@ -8,15 +8,7 @@ import {
 } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import {
-  concatMap,
-  forkJoin,
-  map,
-  mergeMap,
-  Observable,
-  Subject,
-  takeUntil,
-} from 'rxjs';
+import { forkJoin, map, mergeMap, Observable, Subject, takeUntil } from 'rxjs';
 import { Item } from 'src/app/models/Item';
 import { ItemResponse } from 'src/app/models/ItemResponse';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -164,7 +156,7 @@ export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
       this.dataSource.data.findIndex((item) => item.name === name),
       1,
     );
-    this.dataSource.data = this.dataSource.data;
+    this.dataSource.data = [...this.dataSource.data];
     localStorage.setItem(
       PricecheckComponent.itemKey,
       JSON.stringify(this.items),

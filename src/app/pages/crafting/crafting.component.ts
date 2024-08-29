@@ -8,7 +8,6 @@ import {
   mergeMap,
   Observable,
   of,
-  switchMap,
 } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UniversalisService } from '../../services/universalis.service';

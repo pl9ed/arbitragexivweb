@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { UniversalisService } from '../../services/universalis.service';
-import { settings } from '../../services/settings.reducers';
 import { SettingsService } from 'src/app/services/settings.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { checkGemstonePrice, gemstonePriceLoaded } from './gemstone.actions';

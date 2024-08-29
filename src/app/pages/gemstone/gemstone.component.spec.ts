@@ -3,7 +3,7 @@ import { GemstoneComponent } from './gemstone.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { XivAPIService } from '../../services/xiv-api.service';
 import { selectGemstonePrices } from './gemstone.selectors';
