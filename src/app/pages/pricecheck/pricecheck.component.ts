@@ -156,7 +156,13 @@ export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   remove(index: number) {
-    
+    this.items.splice(index, 1);
+    this.dataSource.data.splice(index, 1);
+    this.dataSource.data = [...this.dataSource.data];
+    localStorage.setItem(
+      PricecheckComponent.itemKey,
+      JSON.stringify(this.items),
+    );
   }
 
   clearItems() {
