@@ -7,7 +7,7 @@ import { SettingsService } from 'src/app/services/settings.service';
 import { XivAPIService } from 'src/app/services/xiv-api.service';
 import { of } from 'rxjs';
 
-describe('PricecheckComponent', () => {
+fdescribe('PricecheckComponent', () => {
   let component: PricecheckComponent;
   let fixture: ComponentFixture<PricecheckComponent>;
   let universalisServiceMock: any;
@@ -110,5 +110,42 @@ describe('PricecheckComponent', () => {
   it('should announce sort change correctly', () => {
     component.announceSortChange({ active: 'name', direction: 'asc' });
     expect(liveAnnouncerMock.announce).toHaveBeenCalledWith('Sorted ascending');
+  });
+
+  it('should remove item correctly by name', () => {
+    // Arrange
+    const testItem1 = { name: 'Test Item 1', id: 1 };
+    const testItem2 = { name: 'Test Item 2', id: 2 };
+    component.items = [testItem1, testItem2];
+    component.dataSource.data = [
+      {
+        name: 'Test Item 1',
+        priceNq: 100,
+        velocityNq: 2,
+        priceHq: 200,
+        velocityHq: 1,
+      },
+      {
+        name: 'Test Item 2',
+        priceNq: 150,
+        velocityNq: 3,
+        priceHq: 250,
+        velocityHq: 2,
+      },
+    ];
+    spyOn(localStorage, 'setItem');
+
+    // Act
+    component.remove('Test Item 1');
+
+    // Assert
+    expect(component.items.length).toBe(1);
+    expect(component.items[0].name).toBe('Test Item 2');
+    expect(component.dataSource.data.length).toBe(1);
+    expect(component.dataSource.data[0].name).toBe('Test Item 2');
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      PricecheckComponent.itemKey,
+      JSON.stringify([testItem2]),
+    );
   });
 });
