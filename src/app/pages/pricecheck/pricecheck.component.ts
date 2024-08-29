@@ -44,6 +44,7 @@ export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
     'velocityNq',
     'priceHq',
     'velocityHq',
+    'actions'
   ];
   dataSource = new MatTableDataSource<PriceCheckRow>([]);
 
@@ -152,6 +153,10 @@ export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
         );
         this.populatePrices();
       });
+  }
+
+  remove(index: number) {
+    
   }
 
   clearItems() {
