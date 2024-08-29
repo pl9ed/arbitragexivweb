@@ -44,7 +44,7 @@ export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
     'velocityNq',
     'priceHq',
     'velocityHq',
-    'actions'
+    'actions',
   ];
   dataSource = new MatTableDataSource<PriceCheckRow>([]);
 
@@ -155,10 +155,16 @@ export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  remove(index: number) {
-    this.items.splice(index, 1);
-    this.dataSource.data.splice(index, 1);
-    this.dataSource.data = [...this.dataSource.data];
+  remove(name: string) {
+    this.items.splice(
+      this.items.findIndex((item) => item.name === name),
+      1,
+    );
+    this.dataSource.data.splice(
+      this.dataSource.data.findIndex((item) => item.name === name),
+      1,
+    );
+    this.dataSource.data = this.dataSource.data;
     localStorage.setItem(
       PricecheckComponent.itemKey,
       JSON.stringify(this.items),
@@ -180,16 +186,22 @@ export class PricecheckComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mbAPI
         .getAllItemsFor(this.settings.homeworld, item.id, 20)
         .subscribe((prices) => {
-          this.dataSource.data = [
-            ...this.dataSource.data,
-            {
-              name: item.name,
-              priceNq: prices.minPriceNQ,
-              velocityNq: prices.nqSaleVelocity,
-              priceHq: prices.minPriceHQ,
-              velocityHq: prices.hqSaleVelocity,
-            },
-          ];
+          const existingIndex = this.dataSource.data.findIndex(
+            (dataItem) => dataItem.name === item.name,
+          );
+          const updatedItem: PriceCheckRow = {
+            name: item.name,
+            priceNq: prices.minPriceNQ,
+            velocityNq: prices.nqSaleVelocity,
+            priceHq: prices.minPriceHQ,
+            velocityHq: prices.hqSaleVelocity,
+          };
+
+          if (existingIndex !== -1) {
+            this.dataSource.data[existingIndex] = updatedItem;
+          } else {
+            this.dataSource.data = [...this.dataSource.data, updatedItem];
+          }
         });
       await this.mbAPI.sleep(50);
     }

@@ -46,7 +46,7 @@ import { MatIconModule } from '@angular/material/icon';
     EffectsModule.forRoot([FlipPriceEffects, GemstonePriceEffects]),
     MatTableModule,
     MatSortModule,
-    MatIconModule
+    MatIconModule,
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
